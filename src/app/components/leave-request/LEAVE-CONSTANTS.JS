@@ -1,0 +1,1 @@
+export const { Options1 } = ['Dashboard', 'Calendar', 'Reports', 'Settings'];
