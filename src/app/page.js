@@ -1,9 +1,10 @@
 import React from 'react'
-import HomePage from '@/app/components/home-page'
+import Login from './components/login/login'
 function page() {
   return (
     <>
-      <HomePage />
+      {/* <HomePage /> */}
+      <Login />
     </>
   )
 }

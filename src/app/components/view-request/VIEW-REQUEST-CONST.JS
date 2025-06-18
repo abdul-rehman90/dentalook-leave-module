@@ -1,0 +1,58 @@
+
+const leaveRequests = [
+    {
+        name: 'Dr. Test',
+        date: 'Wed, April 16 2025',
+        type: { label: 'Emergency', color: 'bg-red-500' },
+        decision: { label: 'Approved', color: 'bg-green-500' },
+        coverageNeeded: { label: 'Yes', color: 'bg-red-500' },
+        coverageDetails: 'External',
+        coveringProvider: 'Dr. Surya',
+    },
+    {
+        name: 'Dr. Test',
+        date: 'Wed, April 16 2025',
+        type: { label: 'Planned', color: 'bg-green-500' },
+        decision: { label: 'Decline', color: 'bg-red-500' },
+        coverageNeeded: { label: 'Yes', color: 'bg-red-500' },
+        coverageDetails: 'Looking for Coverage',
+        coveringProvider: 'Looking for Coverage',
+    },
+    {
+        name: 'Dr. Test',
+        date: 'Wed, April 16 2025',
+        type: { label: 'Planned', color: 'bg-green-500' },
+        decision: { label: 'Approved', color: 'bg-green-500' },
+        coverageNeeded: null,
+        coverageDetails: null,
+        coveringProvider: null,
+    },
+    {
+        name: 'Dr. Test',
+        date: 'Wed, April 16 2025',
+        type: { label: 'Emergency', color: 'bg-red-500' },
+        decision: { label: 'Decline', color: 'bg-red-500' },
+        coverageNeeded: { label: 'No', color: 'bg-orange-400' },
+        coverageDetails: null,
+        coveringProvider: null,
+    },
+    {
+        name: 'Dr. Test',
+        date: 'Wed, April 16 2025',
+        type: { label: 'Planned', color: 'bg-green-500' },
+        decision: { label: 'Approved', color: 'bg-green-500' },
+        coverageNeeded: null,
+        coverageDetails: 'No Coverage Needed',
+        coveringProvider: 'No Coverage Needed',
+    },
+    {
+        name: 'Dr. Test',
+        date: 'Wed, April 16 2025',
+        type: { label: 'Planned', color: 'bg-green-500' },
+        decision: { label: 'Approved', color: 'bg-green-500' },
+        coverageNeeded: { label: 'No', color: 'bg-orange-400' },
+        coverageDetails: 'No Coverage Needed',
+        coveringProvider: 'No Coverage Needed',
+    },
+]
+export { leaveRequests }

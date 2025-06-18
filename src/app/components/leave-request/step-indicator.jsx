@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Check } from "lucide-react";
-import { notcompleted, completed, Done } from '@/common/assets/images'
 import Image from "next/image";
+import { Done, completed, notcompleted } from "../../../common/assets/images"
 
 
 const StepIndicator = ({ stepTitles, currentStep }) => {

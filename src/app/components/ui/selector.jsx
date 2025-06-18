@@ -1,9 +1,9 @@
 
 'use client'
 import React, { useState, useRef, useEffect } from 'react';
-import { ChevronDown } from '@/common/assets/icons'; // Or use any other icon lib
+import { ChevronDown } from '../../../common/assets/icons';
 
-const CustomSelector = ({ options, onChange, label, placeholder = 'Select an option' }) => {
+const CustomSelector = ({ options, onChange, label, placeholder = 'Select an option', selectorstyle }) => {
     const [selected, setSelected] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [leaveType, setLeaveType] = useState('');
@@ -32,9 +32,9 @@ const CustomSelector = ({ options, onChange, label, placeholder = 'Select an opt
                 <button
                     type='button'
                     onClick={() => setIsOpen(!isOpen)}
-                    className="w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-xl px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F] focus:ring-0"
+                    className={`w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-xl px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F] focus:ring-0 ${selectorstyle ? selectorstyle : ''}`}
                 >
-                    <span>{selected || placeholder}</span>
+                    <span className='text-[#1f1f1fa9]'>{selected || placeholder}</span>
                     <ChevronDown className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} size={18} />
                 </button>
 

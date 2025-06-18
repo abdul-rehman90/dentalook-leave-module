@@ -15,14 +15,30 @@ function StepThree() {
     const leaveOptions = ['Dashboard', 'Calendar', 'Reports', 'Settings'];
     return (
         <div className='relative'>
-            <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-6">
+            <div className="">
                 <div>
                     <Heading
                         title='Provider Requiring Coverage'
                         subtitle='Please complete the form below to initiate the provider requiring coverages'
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-                        <div>
+                        <div className='col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6'>
+                            <div className='w-full'>
+                                <CustomSelector
+                                    onChange={(value) => setLeaveType(value)}
+                                    label='Provider Title'
+                                    options={leaveOptions}
+                                    placeholder="Select Provider Title"
+                                />
+                            </div>
+                            <div className='w-full'>
+                                <Input
+                                    placeholder='Provider’s Name'
+                                    label='Provider Name'
+                                />
+                            </div>
+                        </div>
+                        <div className='col-span-3 md:col-span-1'>
                             <CustomSelector
                                 onChange={(value) => setLeaveType(value)}
                                 label='Province'
@@ -30,7 +46,13 @@ function StepThree() {
                                 placeholder="Province"
                             />
                         </div>
-                        <div>
+                        <div className='col-span-3 md:col-span-1'>
+                            <Input
+                                placeholder='Surya Rana'
+                                label='Regional Manager'
+                            />
+                        </div>
+                        <div className='col-span-3 md:col-span-1'>
                             <CustomSelector
                                 onChange={(value) => setLeaveType(value)}
                                 label='Clinic'
@@ -38,24 +60,6 @@ function StepThree() {
                                 placeholder="Province"
                             />
                         </div>
-                        <div>
-                            <Input
-                                placeholder='Surya Rana'
-                                label='Regional Manager'
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                label='Provider Title'
-                                options={leaveOptions}
-                                placeholder="Province"
-                            />
-                        </div>
-                        <Input
-                            placeholder='Provider’s Name'
-                            label='Provider Name'
-                        />
                     </div>
                     <div className="flex flex-wrap md:flex-nowrap gap-4 w-full items-center justify-between py-4">
                         <Heading
@@ -64,7 +68,7 @@ function StepThree() {
                         <button
                             type='button'
                             onClick={() => setOpen(true)}
-                            className="rounded-xl border flex items-center px-2.5 py-2 gap-3 border-[#D0D5DD] ">
+                            className="rounded-xl border flex cursor-pointer items-center px-2.5 py-2 gap-3 w-full md:w-fit border-[#D0D5DD] ">
                             <Plus className="text-[#7DB02D] hidden md:block" />
                             <p>Add Provider Details</p>
                         </button>
@@ -85,9 +89,11 @@ function StepThree() {
                                 placeholder='Select' />
                         </div>
                         <div>
-                            <Input
+                            <CustomSelector
                                 label='Coverage Needed'
                                 placeholder='Enter Reason'
+                                options={leaveOptions}
+                                onChange={(value) => setLeaveType(value)}
                             />
                         </div>
                         <div>
@@ -121,8 +127,10 @@ function StepThree() {
                                 placeholder='Select' />
                         </div>
                         <div>
-                            <Input
+                            <CustomSelector
                                 placeholder='Enter Reason'
+                                options={leaveOptions}
+                                onChange={(value) => setLeaveType(value)}
                             />
                         </div>
                         <div>

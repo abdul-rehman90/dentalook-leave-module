@@ -32,10 +32,10 @@ export default function RootLayout({ children }) {
       >
         <div className='flex min-h-screen relative'>
           <Sidebar />
-          <div className='flex-1'>
+          <div className='flex-1 max-w-full'>
             <Header />
             <div className='!z-0'>
-              <main>{children}</main>
+              <main className="w-full">{children}</main>
             </div>
           </div>
         </div>

@@ -9,49 +9,54 @@ import Button from '../ui/button'
 
 function StepOne() {
     const [leaveType, setLeaveType] = useState('')
+    const leaveOptions = ['Dashboard', 'Calendar', 'Reports', 'Settings'];
     return (
         <div>
-            <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-6">
+            <div className=" rounded-2xl">
                 <div>
                     <Heading
                         title='New Provider Leave Request Form'
                         subtitle='Please complete the form below to initiate the provider leave request process'
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-                        <div>
+                        <div className='col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6'>
+                            <div className='w-full'>
+                                <CustomSelector
+                                    onChange={(value) => setLeaveType(value)}
+                                    label='Provider Title'
+                                    options={leaveOptions}
+                                    placeholder="Select Provider Title"
+                                />
+                            </div>
+                            <div className='w-full'>
+                                <Input
+                                    placeholder='Provider’s Name'
+                                    label='Provider Name'
+                                />
+                            </div>
+                        </div>
+                        <div className='col-span-3 md:col-span-1'>
                             <CustomSelector
                                 onChange={(value) => setLeaveType(value)}
-                                label='Proince'
-                                options={['Dashboard', 'Calendar', 'Reports', 'Settings']}
+                                label='Province'
+                                options={leaveOptions}
                                 placeholder="Province"
                             />
                         </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                label='Clinic'
-                                options={['Dashboard', 'Calendar', 'Reports', 'Settings']}
-                                placeholder="Province"
-                            />
-                        </div>
-                        <div>
+                        <div className='col-span-3 md:col-span-1'>
                             <Input
                                 placeholder='Surya Rana'
                                 label='Regional Manager'
                             />
                         </div>
-                        <div>
+                        <div className='col-span-3 md:col-span-1'>
                             <CustomSelector
                                 onChange={(value) => setLeaveType(value)}
-                                label='Provider Title'
-                                options={['Dashboard', 'Calendar', 'Reports', 'Settings']}
+                                label='Clinic'
+                                options={leaveOptions}
                                 placeholder="Province"
                             />
                         </div>
-                        <Input
-                            placeholder='Provider’s Name'
-                            label='Provider Name'
-                        />
                     </div>
                     <div className="flex w-full items-center justify-between py-5">
                         <Heading

@@ -3,15 +3,13 @@
 import React, { useEffect, useState } from "react";
 import StepIndicator from "./step-indicator";
 import Button from "../ui/button";
-import Heading from "../ui/heading";
-import CustomSelector from "../ui/selector";
-import Input from "../ui/input";
-import { Plus } from "lucide-react";
-import DateInput from "../ui/date-input";
 import StepOne from "./step-one";
 import StepTwo from "./step-two";
 import StepThree from "./step-three";
 import StepFour from "./step-four";
+import Link from "next/link";
+import Heading from "../ui/heading";
+import { ArrowRight } from "lucide-react";
 
 
 
@@ -22,9 +20,9 @@ const stepTitles = [
     "Process Completed",
 
 ];
-
 const LeaveRequest = () => {
     const [currentStep, setCurrentStep] = useState(0);
+    console.log(currentStep, 'my current step')
     const handleFileChange = (e) => {
         const files = e.target.files;
         if (!files || files.length === 0) return;
@@ -60,26 +58,21 @@ const LeaveRequest = () => {
         }
     };
 
-
-
-
-
-
     const renderStep = () => {
         switch (currentStep) {
             case 0:
                 return (
                     <>
                         <StepOne />
-                        <div className="flex justify-end gap-3.5 py-4 mt-5">
-                            <Button
+                        <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">
+                            {/* <Button
                                 text='Cancel'
                                 textcolor={true}
                                 border={true}
-                                // onClick={() => setCurrentStep(currentStep - 1)}
-                                href='/leave-request'
+                                onClick={() => setCurrentStep(currentStep - 1)}
+                                href='/view-request'
                                 type='button'
-                            />
+                            /> */}
                             <Button
                                 text='Next'
                                 bgcolor={true}
@@ -93,20 +86,29 @@ const LeaveRequest = () => {
                 return (
                     <>
                         <StepTwo />
-                        <div className="flex justify-end gap-3.5 py-4 mt-5">
-                            <Button
-                                text='Cancel'
-                                textcolor={true}
-                                border={true}
-                                onClick={() => setCurrentStep(currentStep - 1)}
+                        <div className="flex flex-wrap md:flex-nowrap justify-between w-full items-center gap-3.5 md:py-4 mt-5">
+                            <button
                                 type='button'
-                            />
-                            <Button
-                                text='Next'
-                                bgcolor={true}
-                                type='submit'
+                                className='w-full md:w-fit py-[6px] md:py-[11px] rounded-xl text-base text-[#335679] font-medium px-[75px] cursor-pointer border border-[#D0D5DD]'
+                                onClick={() => setCurrentStep(currentStep - 1)}
 
-                            />
+                            >Edit Request</button>
+                            <div className='flex flex-wrap md:flex-nowrap items-center gap-2'>
+                                <Button
+                                    text='Cancel'
+                                    textcolor={true}
+                                    border={true}
+                                    onClick={() => setCurrentStep(currentStep - 1)}
+                                    type='button'
+                                    className='w-full md:w-fit'
+                                />
+                                <Button
+                                    text='Next'
+                                    bgcolor={true}
+                                    type='submit'
+                                    className='w-full md:w-fit'
+                                />
+                            </div>
                         </div>
                     </>
                 );
@@ -115,7 +117,7 @@ const LeaveRequest = () => {
                 return (
                     <>
                         <StepThree />
-                        <div className="flex flex-wrap md:flex-nowrap justify-center md:justify-end gap-3.5 py-4 mt-5">
+                        <div className="flex flex-wrap md:flex-nowrap justify-center md:justify-end gap-3.5 py-4 mt-0 md:mt-5">
                             <Button
                                 className='!text-[#335679] w-full md:!w-fit text-nowrap !px-6'
                                 text='No Coverage Secured'
@@ -145,21 +147,61 @@ const LeaveRequest = () => {
             case 3:
                 return (
                     <>
-                        <StepFour />
-                        <div className="flex justify-end gap-3.5 py-4 mt-5">
+                        <div className='flex items-center flex-col justify-center'>
+                            <Heading
+                                titleClass='font-medium text-center text-2xl text-black group-hover:text-[#335679] font-jakarta transition-colors duration-300'
+                                title='We have recieved your Leave Request'
+                            />
+                            <div>
+                                <button onClick={() => setCurrentStep(0)}
+
+                                    className='!p-0'>
+                                    <div className='group w-full hover:shadow-lg max-w-md mx-auto mt-6 px-6 py-12 border-2 relative rounded-2xl shadow border-white hover:border-[#335679] transition-all duration-300 ease-in-out'>
+                                        <Heading
+                                            titleClass='font-medium text-lg text-black group-hover:text-[#335679] font-jakarta transition-colors duration-300'
+                                            title='Submit Provider Leave Request'
+
+                                        />
+                                        <div className='absolute hidden group-hover:block top-3 right-3 group-hover:text-[#335679] -rotate-45'>
+                                            <ArrowRight />
+                                        </div>
+                                    </div>
+                                </button>
+
+
+                                <Link href='/view-request'>
+                                    <div className='group w-full relative hover:shadow-lg max-w-md mx-auto mt-6 px-6 py-12 border-2 rounded-2xl shadow border-white hover:border-[#335679] transition-all duration-300 ease-in-out'>
+                                        <Heading
+                                            titleClass='font-medium text-center text-lg text-black group-hover:text-[#335679] font-jakarta transition-colors duration-300'
+                                            title='View Leave Requests'
+
+                                        />
+                                        <div className='absolute hidden group-hover:block top-3 right-3 group-hover:text-[#335679] -rotate-45'>
+                                            <ArrowRight />
+                                        </div>
+                                    </div>
+                                </Link>
+                            </div>
+                        </div>
+                        {/* <StepFour /> */}
+                        {/* <div className="flex flex-wrap md:flex-nowrap justify-end gap-3.5 py-4 mt-0 md:mt-5">
                             <Button
                                 text='Cancel'
                                 textcolor={true}
                                 border={true}
                                 type='button'
                                 onClick={() => setCurrentStep(currentStep - 1)}
+                                className='w-full md:w-fit'
                             />
-                            <Button
-                                text='Next'
-                                bgcolor={true}
-                                type='submit'
-                            />
-                        </div>
+                            <Link className="w-full md:w-fit" href='/view-request'>
+                                <Button
+                                    className='w-full md:w-fit'
+                                    text='Next'
+                                    bgcolor={true}
+                                    type='button'
+                                />
+                            </Link>
+                        </div> */}
                     </>
                 );
 
@@ -178,7 +220,7 @@ const LeaveRequest = () => {
                             currentStep={currentStep}
                         />
                     </div>
-                    <form onSubmit={handleSubmit} className="w-full">
+                    <form onSubmit={handleSubmit} className="w-full p-5 border border-[#E6EAEE] rounded-2xl mt-6">
                         {renderStep()}
                     </form>
                 </div>

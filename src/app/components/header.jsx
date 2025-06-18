@@ -2,8 +2,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import { BellNotification, userAvatar } from '@/common/assets/images'
-import Sidebar from './Sidebar'
+import { BellNotification, userAvatar } from '../../common/assets/images'
+import Sidebar from './sidebar'
 import { usePathname } from 'next/navigation'
 
 function Header() {
@@ -12,7 +12,7 @@ function Header() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 0)
+        const handleScroll = () => setIsScrolled(window.scrollY > 30)
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
     }, [])
@@ -21,7 +21,13 @@ function Header() {
         document.body.style.overflow = isSidebarOpen ? 'hidden' : 'auto'
     }, [isSidebarOpen])
 
-    if (pathname === '/') return null
+    useEffect(() => {
+        if (pathname === '/select-role' || pathname === '/') {
+        }
+    }, [pathname])
+
+    if (pathname === '/select-role' || pathname === '/') return null;
+
 
     return (
         <>
@@ -40,7 +46,7 @@ function Header() {
                     </button>
 
                     <div className='flex items-center gap-3'>
-                        <Image height={40} width={40} src={BellNotification} alt='bell icon' />
+                        {/* <Image height={40} width={40} src={BellNotification} alt='bell icon' /> */}
                         <Image height={40} width={40} src={userAvatar} alt='avatar' />
                         <div className='hidden md:flex flex-col'>
                             <p className='text-sm font-bold'>Olivia Ryne</p>

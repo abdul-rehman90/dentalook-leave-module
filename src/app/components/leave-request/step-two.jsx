@@ -74,7 +74,7 @@ function StepTwo() {
     ];
 
     return (
-        <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-6">
+        <div className="">
             <Heading
                 title='Review Leave Request'
                 subtitle='Please review the leave request before taking any action'
@@ -83,7 +83,7 @@ function StepTwo() {
                 <div className='flex justify-between flex-col h-full gap-8'>
                     <div>
 
-                        <div className="grid grid-cols-2 w-full justify-between">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full justify-start">
                             {providerInfo.map((item, index) => (
                                 <div className='flex flex-col gap-2' key={index}>
                                     <p className='font-medium text-[#979797] text-sm'>{item.label}</p>
@@ -133,13 +133,13 @@ function StepTwo() {
                         </div>
                     </div>
 
-                    <Button
+                    {/* <Button
                         type='button'
                         className='md:w-fit'
                         textcolor={true}
                         border={true}
                         text='Edit Request'
-                    />
+                    /> */}
                 </div>
 
                 <div className='bg-[#F8F8F8] p-4.5 rounded-xl'>

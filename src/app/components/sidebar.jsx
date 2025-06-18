@@ -1,29 +1,35 @@
 'use client'
-import React from 'react'
-import { Mainlogo } from '@/common/assets/images'
+import React, { useEffect } from 'react'
+import { Mainlogo } from '../../common/assets/images'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Calendar, Home, Mail, Profile } from '@/common/assets/icons'
-import Settings from '@/common/assets/icons/settings'
-import Logout from '@/common/assets/icons/logout'
+import { Calendar, Home, Mail, Profile } from '../../common/assets/icons'
+// import Settings from '../../../common/assets/icons/settings'
+// import Logout from '../../../common/assets/icons/logout'
 import { usePathname } from 'next/navigation'
 
 function Sidebar({ isSidebarOpen = false, onClose = () => { } }) {
     const pathname = usePathname()
 
     const sidebarData = [
-        { SideIcon: Home, sideLink: '/dashboard', Sideitem: 'Dashboard' },
-        { SideIcon: Calendar, sideLink: '/calendar', Sideitem: 'Calendar' },
+        { SideIcon: Home, sideLink: '/view-request', Sideitem: 'Dashboard' },
+        // { SideIcon: Calendar, sideLink: '/calendar', Sideitem: 'Calendar' },
         { SideIcon: Mail, sideLink: '/reports', Sideitem: 'Reports' },
         { SideIcon: Profile, sideLink: '/leave-request', Sideitem: 'Leave Request' },
     ]
 
     const logout = [
-        { SideIcon: Settings, sideLink: '#', Sideitem: 'Settings' },
-        { SideIcon: Logout, sideLink: '#', Sideitem: 'Logout' },
+        // { SideIcon: Settings, sideLink: '#', Sideitem: 'Settings' },
+        // { SideIcon: Logout, sideLink: '/', Sideitem: 'Logout' },
     ]
 
-    if (pathname === '/') return null
+    useEffect(() => {
+        if (pathname === '/select-role' || pathname === '/') {
+            // console.log('Do something OR return early 💅');
+        }
+    }, [pathname])
+
+    if (pathname === '/select-role' || pathname === '/') return null;
 
     return (
         <>

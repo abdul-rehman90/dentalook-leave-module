@@ -1,4 +1,4 @@
-import React from 'react'
+
 import Mainlogo from './main-logo.svg'
 import BellNotification from './bellNotification.svg'
 import userAvatar from './useravatar.svg'
