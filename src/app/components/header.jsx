@@ -26,7 +26,7 @@ function Header() {
         }
     }, [pathname])
 
-    if (pathname === '/select-role' || pathname === '/') return null;
+    if (pathname === '/select-role' || pathname === '/' || pathname === '/forgot-password') return null;
 
 
     return (

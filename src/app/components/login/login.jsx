@@ -78,13 +78,22 @@ const Login = () => {
                 </div>
 
                 {/* Submit */}
-                <Link
-                    href='/select-role'
-                    type="submit"
-                    className="w-full bg-[#335679] text-white py-2 px-6 rounded-md hover:bg-[#334779] transition-all duration-300"
-                >
-                    Log In
-                </Link>
+                <div className='w-full items-center flex justify-between'>
+                    <Link
+                        href='/select-role'
+                        type="submit"
+                        className="w-fit bg-[#335679] text-white py-2 px-6 rounded-md hover:bg-[#334779] transition-all duration-300"
+                    >
+                        Log In
+                    </Link>
+                    <Link
+                        href='/forgot-password'
+                        type="submit"
+                        className=""
+                    >
+                        Forgot Password?
+                    </Link>
+                </div>
             </form>
         </div>
     );
