@@ -1,12 +1,16 @@
 'use client'
+import axios from 'axios';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { use, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const Login = () => {
+    const router = useRouter();
     const [formData, setFormData] = useState({
-        email: '',
+        name: '',
         password: '',
-        showPassword: false,
+        // showPassword: false,
     });
 
     const handleChange = (e) => {
@@ -18,15 +22,23 @@ const Login = () => {
         setFormData(prev => ({ ...prev, showPassword: !prev.showPassword }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.email || !formData.password) {
-            alert('Please enter email and password 🥺');
-            return;
-        }
+        // if (!formData.email || !formData.password) {
+        //     alert('Please enter email and password 🥺');
+        //     return;
+        // }
 
-        console.log('Form submitted:', formData);
-        // Do your login API call here 💻
+        try{
+                const res = await axios.post('https://6da8-39-53-116-251.ngrok-free.app/api/v1/login/', formData);
+                if (res.status === 200) {
+                    toast.success('Login successful!');
+                    router.push('/view-request');
+                } 
+        }
+        catch{
+            console.log(error)
+        }
     };
 
     return (
@@ -43,12 +55,10 @@ const Login = () => {
                         Email
                     </label>
                     <input
-                        type="email"
-                        id="email"
-                        name="email"
+                        type="text"
+                        name="name"
                         value={formData.email}
                         onChange={handleChange}
-                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
                         placeholder="you@example.com"
                     />
@@ -78,13 +88,12 @@ const Login = () => {
                 </div>
 
                 {/* Submit */}
-                <Link
-                    href='/select-role'
+                <button
                     type="submit"
                     className="w-full bg-[#335679] text-white py-2 px-6 rounded-md hover:bg-[#334779] transition-all duration-300"
                 >
                     Log In
-                </Link>
+                </button>
             </form>
         </div>
     );
