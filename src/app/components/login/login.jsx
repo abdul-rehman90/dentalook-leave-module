@@ -4,11 +4,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { use, useState } from 'react';
 import toast from 'react-hot-toast';
+import loader from "../../../common/assets/icons/loader.svg"
+import Image from 'next/image';
 
 const Login = () => {
     const router = useRouter();
+    const [isError, setIsError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({
-        name: '',
+        email: '',
         password: '',
         // showPassword: false,
     });
@@ -24,11 +28,10 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // if (!formData.email || !formData.password) {
-        //     alert('Please enter email and password 🥺');
-        //     return;
-        // }
-
+        if (!formData.email || !formData.password) {
+            return setIsError(true);
+        }
+        setIsLoading(true);
         try{
                 const res = await axios.post('https://6da8-39-53-116-251.ngrok-free.app/api/v1/login/', formData);
                 if (res.status === 200) {
@@ -36,8 +39,11 @@ const Login = () => {
                     router.push('/view-request');
                 } 
         }
-        catch{
-            console.log(error)
+        catch(error){
+            toast.error(error.response?.data?.detail);
+        }
+        finally{
+            setIsLoading(false);
         }
     };
 
@@ -56,12 +62,17 @@ const Login = () => {
                     </label>
                     <input
                         type="text"
-                        name="name"
+                        name="email"
                         value={formData.email}
                         onChange={handleChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
                         placeholder="you@example.com"
                     />
+                    {
+                        isError && !formData.email && (
+                            <p className="text-red-500 text-sm mt-1">Name is required</p>
+                        )
+                    }
                 </div>
 
                 {/* Password */}
@@ -75,7 +86,6 @@ const Login = () => {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"
                         placeholder="••••••••"
                     />
@@ -85,15 +95,27 @@ const Login = () => {
                     >
                         {formData.showPassword ? 'Hide' : 'Show'}
                     </span>
+                    {
+                        isError && !formData.password && (
+                            <p className="text-red-500 text-sm mt-1">Password is required</p>
+                        )
+                    }
                 </div>
 
                 {/* Submit */}
                 <button
                     type="submit"
-                    className="w-full bg-[#335679] text-white py-2 px-6 rounded-md hover:bg-[#334779] transition-all duration-300"
+                    disabled={isLoading}
+                    className="w-full bg-[#335679] disabled:opacity-50 disabled:cursor-not-allowed text-center text-white py-2 px-6 rounded-md hover:bg-[#334779] transition-all duration-300"
                 >
-                    Log In
+                   {isLoading ? <Image src={loader} width={24} height={24} alt="" className='mx-auto' /> : 'Login'}
                 </button>
+                 <Link
+                        href='/forgot-password'
+                        className=""
+                    >
+                        Forgot Password?
+                    </Link>
             </form>
         </div>
     );
