@@ -1,10 +1,12 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { BellNotification, userAvatar } from '../../common/assets/images'
 import Sidebar from './sidebar'
 import { usePathname } from 'next/navigation'
+import { ChevronDown } from 'lucide-react'
+import { Router } from 'next/router'
 
 function Header() {
     const pathname = usePathname()
@@ -20,6 +22,26 @@ function Header() {
     useEffect(() => {
         document.body.style.overflow = isSidebarOpen ? 'hidden' : 'auto'
     }, [isSidebarOpen])
+    const [open, setOpen] = useState(false);
+    const dropdownRef = useRef();
+
+
+    const handleLogout = () => {
+        router.push('/')
+        setOpen(false);
+    };
+
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
 
     useEffect(() => {
         if (pathname === '/select-role' || pathname === '/') {
@@ -47,7 +69,32 @@ function Header() {
 
                     <div className='flex items-center gap-3'>
                         {/* <Image height={40} width={40} src={BellNotification} alt='bell icon' /> */}
-                        <Image height={40} width={40} src={userAvatar} alt='avatar' />
+                        <div ref={dropdownRef} className="relative inline-block text-left">
+                            <div
+                                className="cursor-pointer select-none"
+                                onClick={() => setOpen((prev) => !prev)}
+                            >
+                                <Image
+                                    height={40}
+                                    width={40}
+                                    src={userAvatar}
+                                    alt="avatar"
+                                    className="rounded-full border"
+                                />
+
+                            </div>
+
+                            {open && (
+                                <div className="absolute right-0 mt-2 w-40 bg-[#030E25] border border-[#041432] rounded-lg shadow-md z-20 overflow-hidden">
+                                    <button
+                                        onClick={handleLogout}
+                                        className="w-full text-left px-4 py-2 text-[#CECFD2] hover:bg-[#041432] transition-colors"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                         <div className='hidden md:flex flex-col'>
                             <p className='text-sm font-bold'>Olivia Ryne</p>
                             <p className='text-sm'>oliviryneee@gmail.com</p>
