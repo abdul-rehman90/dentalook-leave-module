@@ -1,64 +1,131 @@
-'use client'
-import Image from 'next/image'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { BellNotification, userAvatar } from '../../common/assets/images'
-import Sidebar from './sidebar'
-import { usePathname } from 'next/navigation'
+"use client";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
+import { BellNotification, userAvatar } from "../../common/assets/images";
+import Sidebar from "./sidebar";
+import { usePathname, useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 function Header() {
-    const pathname = usePathname()
-    const [isScrolled, setIsScrolled] = useState(false)
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-    const [isToggle, setIsToggle] = useState(false)
+    const router = useRouter()
+  const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isToggle, setIsToggle] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 30)
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    useEffect(() => {
-        document.body.style.overflow = isSidebarOpen ? 'hidden' : 'auto'
-    }, [isSidebarOpen])
+  useEffect(() => {
+    document.body.style.overflow = isSidebarOpen ? "hidden" : "auto";
+  }, [isSidebarOpen]);
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef();
 
-    useEffect(() => {
-        if (pathname === '/select-role' || pathname === '/') {
-        }
-    }, [pathname])
+  const handleLogout = () => {
+    Cookies.remove("access-token");
+    Cookies.remove("refresh-token");
+    router.push('/');
+    setOpen(false);
+  };
 
-    if (pathname === '/select-role' || pathname === '/' || pathname === '/forgot-password') return null;
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
+  useEffect(() => {
+    if (pathname === "/select-role" || pathname === "/") {
+    }
+  }, [pathname]);
 
-    return (
-        <>
-            <div className='block md:hidden'>
-                <Sidebar isSidebarOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-            </div>
+  if (
+    pathname === "/select-role" ||
+    pathname === "/" ||
+    pathname === "/forgot-password"
+  )
+    return null;
 
-            <div className={`sticky top-0 z-50 transition-all duration-300 ${isScrolled ? 'py-0 px-0 md:px-6' : 'py-0 md:py-6 px-0 md:px-6'}`}>
-                <div className={`bg-white px-6 py-3 flex items-center justify-between w-full ${isScrolled ? 'shadow rounded-t-0 rounded-b-2xl' : 'rounded-2xl'}`}>
-                    <Link href='/' className='font-bold text-lg hidden md:block'>
-                        Submit Provider Leave Request
-                    </Link>
+  return (
+    <>
+      <div className="block md:hidden">
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+      </div>
 
-                    <button onClick={() => setIsSidebarOpen(true)} className='text-xl font-bold md:hidden'>
-                        ☰
-                    </button>
+      <div
+        className={`sticky top-0 z-50 transition-all duration-300 ${
+          isScrolled ? "py-0 px-0 md:px-6" : "py-0 md:py-6 px-0 md:px-6"
+        }`}
+      >
+        <div
+          className={`bg-white px-6 py-3 flex items-center justify-between w-full ${
+            isScrolled ? "shadow rounded-t-0 rounded-b-2xl" : "rounded-2xl"
+          }`}
+        >
+          <Link href="/" className="font-bold text-lg hidden md:block">
+            Submit Provider Leave Request
+          </Link>
 
-                    <div className='flex items-center gap-3'>
-                        <Image height={40} width={40} src={userAvatar} alt='avatar' />
-                        <div className='hidden md:flex flex-col relative'>
-                            <div className='cursor-pointer'>
-                                <p className='text-sm font-bold'>Olivia Ryne</p>
-                                <p className='text-sm'>oliviryneee@gmail.com</p>
-                            </div>
-                        </div>
-                    </div>
+          <button
+            onClick={() => setIsSidebarOpen(true)}
+            className="text-xl font-bold md:hidden"
+          >
+            ☰
+          </button>
+          <div className="relative" ref={dropdownRef}>
+
+          
+            <div
+                
+                className="flex items-center gap-3 cursor-pointer "
+                onClick={() => setOpen((prev) => !prev)}
+            >
+                {/* <Image height={40} width={40} src={BellNotification} alt='bell icon' /> */}
+                <div  className=" inline-block text-left">
+                <div className="cursor-pointer select-none">
+                    <Image
+                    height={40}
+                    width={40}
+                    src={userAvatar}
+                    alt="avatar"
+                    className="rounded-full border"
+                    />
+                </div>
+                </div>
+                <div className="hidden md:flex flex-col">
+                <p className="text-sm font-bold">Olivia Ryne</p>
+                <p className="text-sm">oliviryneee@gmail.com</p>
                 </div>
             </div>
-        </>
-    )
+
+            {open && (
+                <div className="absolute right-0 bottom-[-50px] mt-2 w-40 bg-[#030E25] border border-[#041432] rounded-lg shadow-md z-20 overflow-hidden">
+                <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="w-full cursor-pointer text-left px-4 py-2 text-[#CECFD2] hover:bg-[#041432] transition-colors"
+                >
+                    Logout
+                </button>
+                </div>
+            )}
+            </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
-export default Header
+export default Header;

@@ -6,12 +6,13 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import loader from "../../../common/assets/icons/loader.svg"
 import Image from 'next/image';
+import logo from "../../../common/assets/images/main-logo.svg"
 
 const ForgotPasswordFlow = () => {
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [email, setEmail] = useState('');
-    const [otp, setOtp] = useState([]); 
+   const [otp, setOtp] = useState(Array(6).fill(''));
     const [otpValue, setOtpValue] = useState(''); 
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');    
@@ -43,7 +44,7 @@ const ForgotPasswordFlow = () => {
 
     const handleOtpSubmit = (e) => {
         e.preventDefault();
-        setOtpValue(otp.join(""));
+        setOtpValue(otp.join(''));
         nextStep();
     };
 
@@ -77,7 +78,7 @@ const ForgotPasswordFlow = () => {
 
     return (
         <div className="max-w-md mx-auto p-6 bg-white shadow-xl rounded-xl mt-10">
-            <div className="flex justify-between mb-8">
+            {/* <div className="flex justify-between mb-8">
                 {['Email', 'OTP', 'New Password'].map((label, index) => (
                     <div
                         key={index}
@@ -87,6 +88,9 @@ const ForgotPasswordFlow = () => {
                         {label}
                     </div>
                 ))}
+            </div> */}
+            <div>
+                <Image src={logo} alt="" width={150} height={150} className='mx-auto' />
             </div>
 
             {step === 1 && (
@@ -107,11 +111,11 @@ const ForgotPasswordFlow = () => {
 
             {step === 2 && (
                 <form onSubmit={handleOtpSubmit} className="space-y-4">
-                    
+                    <h6 className='text-center my-2 text-[18px]'>OTP Verification</h6>
                     <Otpconfirmation setOtp={setOtp} otp={otp} />
                     <div className="flex items-center justify-between">
                         <button type="button" onClick={prevStep} className="text-blue-500">Back</button>
-                        <button type="submit" className="w-fit bg-[#00465F] text-white py-2 px-4 rounded">
+                        <button type="submit" disabled={otp.some(digit => digit === '')} className="w-fit disabled:cursor-not-allowed cursor-pointer bg-[#00465F] text-white py-2 px-4 rounded">
 
                             Verify</button>
 
@@ -141,7 +145,7 @@ const ForgotPasswordFlow = () => {
 
                     <div className="flex justify-between">
                         <button type="button" onClick={prevStep} className="text-blue-500">Back</button>
-                        <button type="submit" disabled={isLoading} className="bg-green-600 opacity-[0.5] disabled:cursor-not-allowed text-white px-4 py-2 rounded">
+                        <button type="submit" disabled={isLoading} className="bg-[#00465F] cursor-pointer disabled:opacity-[0.5] disabled:cursor-not-allowed text-white px-4 py-2 rounded">
                             {isLoading ? <Image src={loader} alt="" width={24} height={24} className="mx-auto" /> : 'Reset Password'}
                         </button>
                     </div>

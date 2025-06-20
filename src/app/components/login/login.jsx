@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import loader from "../../../common/assets/icons/loader.svg"
 import Image from 'next/image';
 import Cookies from "js-cookie";
+import logo from "../../../common/assets/images/main-logo.svg"
 
 const Login = () => {
     const router = useRouter();
@@ -56,7 +57,8 @@ const Login = () => {
                 onSubmit={handleSubmit}
                 className="bg-white shadow-xl rounded-2xl p-6 w-full max-w-sm"
             >
-                <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+                <Image src={logo} alt="" width={150} height={150} className='mx-auto' />
+                <h2 className="text-2xl font-bold text-center mb-5 mt-5">Login</h2>
 
                 {/* Email */}
                 <div className="mb-4">
@@ -115,7 +117,7 @@ const Login = () => {
                 </button>
                  <Link
                         href='/forgot-password'
-                        className=""
+                        className="mt-3 block"
                     >
                         Forgot Password?
                     </Link>
