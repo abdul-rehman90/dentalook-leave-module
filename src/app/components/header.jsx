@@ -10,6 +10,7 @@ function Header() {
     const pathname = usePathname()
     const [isScrolled, setIsScrolled] = useState(false)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+    const [isToggle, setIsToggle] = useState(false)
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 30)
@@ -46,11 +47,12 @@ function Header() {
                     </button>
 
                     <div className='flex items-center gap-3'>
-                        {/* <Image height={40} width={40} src={BellNotification} alt='bell icon' /> */}
                         <Image height={40} width={40} src={userAvatar} alt='avatar' />
-                        <div className='hidden md:flex flex-col'>
-                            <p className='text-sm font-bold'>Olivia Ryne</p>
-                            <p className='text-sm'>oliviryneee@gmail.com</p>
+                        <div className='hidden md:flex flex-col relative'>
+                            <div className='cursor-pointer'>
+                                <p className='text-sm font-bold'>Olivia Ryne</p>
+                                <p className='text-sm'>oliviryneee@gmail.com</p>
+                            </div>
                         </div>
                     </div>
                 </div>

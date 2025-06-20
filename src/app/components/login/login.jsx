@@ -6,6 +6,7 @@ import React, { use, useState } from 'react';
 import toast from 'react-hot-toast';
 import loader from "../../../common/assets/icons/loader.svg"
 import Image from 'next/image';
+import Cookies from "js-cookie";
 
 const Login = () => {
     const router = useRouter();
@@ -33,11 +34,13 @@ const Login = () => {
         }
         setIsLoading(true);
         try{
-                const res = await axios.post('https://6da8-39-53-116-251.ngrok-free.app/api/v1/login/', formData);
-                if (res.status === 200) {
-                    toast.success('Login successful!');
-                    router.push('/view-request');
-                } 
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/login/`, formData);
+            if (res.status === 200) {
+                toast.success('Login successful!');
+                Cookies.set('access-token', res?.data?.access);
+                Cookies.set('refresh-token', res?.data?.refresh);
+                router.push('/view-request');
+            } 
         }
         catch(error){
             toast.error(error.response?.data?.detail);

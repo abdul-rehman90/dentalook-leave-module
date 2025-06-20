@@ -27,9 +27,8 @@ const ForgotPasswordFlow = () => {
             email : email
         }
         try{
-            const res = await axios.post('https://6da8-39-53-116-251.ngrok-free.app/api/v1/forgot-password/', payload);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/forgot-password/`, payload);
             if (res.status === 200) {
-                console.log(res, "...res")
                 toast.success(res.data.message);
                 nextStep();
             } 
@@ -62,7 +61,7 @@ const ForgotPasswordFlow = () => {
             confirm_password: confirmPassword
         }
         try{
-            const res = await axios.post('https://6da8-39-53-116-251.ngrok-free.app/api/v1/reset-password/', payload);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/reset-password/`, payload);
                 if (res.status === 200) {
                     toast.success(res.data.message);
                     router.push("/")
