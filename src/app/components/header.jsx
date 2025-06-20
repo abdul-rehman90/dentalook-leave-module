@@ -6,7 +6,6 @@ import { BellNotification, userAvatar } from '../../common/assets/images'
 import Sidebar from './sidebar'
 import { usePathname } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
-import { Router } from 'next/router'
 
 function Header() {
     const pathname = usePathname()
@@ -27,7 +26,7 @@ function Header() {
 
 
     const handleLogout = () => {
-        router.push('/')
+        alert('Logging out... 💨');
         setOpen(false);
     };
 
