@@ -1,35 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Heading from '../ui/heading'
 import CustomSelector from '../ui/selector'
 import Input from '../ui/input'
 import { Plus } from 'lucide-react'
 import DateInput from '../ui/date-input'
 import Button from '../ui/button'
+import useSteptwo from "./use-steptwo.hook"
 
 function StepTwo() {
     const [leaveType, setLeaveType] = useState('');
     const [formData, setFormData] = useState({});
 
-    const formFields = [
-        { type: 'date', label: 'Leave Date', name: 'leaveDate' },
-        {
-            type: 'select',
-            label: 'Leave Type',
-            name: 'leaveType',
-            options: ['Dashboard', 'Calendar', 'Reports', 'Settings'],
-            placeholder: 'Leave Type'
-        },
-        { type: 'text', label: 'Reason', name: 'reason', placeholder: 'Reason' },
-        { type: 'date', label: 'End Date', name: 'endDate' },
-        {
-            type: 'select',
-            label: 'Category',
-            name: 'category',
-            options: ['Sick', 'Annual', 'Unpaid'],
-            placeholder: 'Category'
-        },
-        { type: 'text', label: 'Comment', name: 'comment', placeholder: 'Comment' }
-    ];
+    const {getData} = useSteptwo();
+    console.log(getData, "..getData")
+
+    const [daysFields, setDaysFields] = useState([]);
+
+    useEffect(() => {
+        // If your API puts the array in getData.days
+        const days = getData?.days || [];
+        if (days?.length > 0) {
+            // Map API fields to your form fields
+            const mapped = days?.map(day => ([
+                { type: 'date', label: 'Leave Date', name: 'leave_date', value: day.leave_date },
+                { type: 'select', label: 'Leave Type', name: 'leave_type', options: ['emergency', 'annual', 'sick'], value: day.leave_type },
+                { type: 'text', label: 'Reason', name: 'reason', placeholder: 'Reason', value: day.reason }
+            ])).flat();
+            setDaysFields(mapped);
+
+            // Set initial formData
+            setFormData({
+                leave_date: days[0].leave_date,
+                leave_type: days[0].leave_type,
+                reason: days[0].reason
+            });
+        }
+    }, [getData]);
 
     const handleChange = (name, value) => {
         setFormData({ ...formData, [name]: value });
@@ -64,13 +70,13 @@ function StepTwo() {
 
     const providerInfo = [
         { label: 'Provider Title', value: 'Dental Look' },
-        { label: 'Provider’s Name', value: 'Mahmoud Tayem' },
+        { label: 'Provider’s Name', value: getData?.provider_name },
     ];
 
     const locationInfo = [
-        { label: 'Province', value: 'Ontario' },
-        { label: 'Regional Manager', value: 'Surya Rana' },
-        { label: 'Clinic', value: 'Test Clinic' },
+        { label: 'Province', value: getData?.province },
+        { label: 'Regional Manager', value: getData?.regional_manager },
+        { label: 'Clinic', value: getData?.clinic_name },
     ];
 
     return (
@@ -84,7 +90,7 @@ function StepTwo() {
                     <div>
 
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full justify-start">
-                            {providerInfo.map((item, index) => (
+                            {providerInfo?.map((item, index) => (
                                 <div className='flex flex-col gap-2' key={index}>
                                     <p className='font-medium text-[#979797] text-sm'>{item.label}</p>
                                     <h2 className='font-medium text-base'>{item.value}</h2>
@@ -103,33 +109,42 @@ function StepTwo() {
 
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2 md:py-5">
-                            {formFields.map((field, index) => (
-                                <div key={index}>
-                                    {field.type === 'text' && (
-                                        <Input
-                                            label={field.label}
-                                            placeholder={field.placeholder}
-                                            value={formData[field.name] || ''}
-                                            onChange={(e) => handleChange(field.name, e.target.value)}
-                                        />
-                                    )}
-                                    {field.type === 'date' && (
-                                        <DateInput
-                                            label={field.label}
-                                            value={formData[field.name]}
-                                            onChange={(date) => handleChange(field.name, date)}
-                                        />
-                                    )}
-                                    {field.type === 'select' && (
-                                        <CustomSelector
-                                            label={field.label}
-                                            placeholder={field.placeholder}
-                                            options={field.options}
-                                            onChange={(value) => handleChange(field.name, value)}
-                                        />
-                                    )}
-                                </div>
-                            ))}
+                            {daysFields.map((field, index) => (
+                <div key={index}>
+                    {field.type === 'text' && (
+                        <Input
+                            label={field.label}
+                            placeholder={field.placeholder}
+                            value={formData[field.name] || ''}
+                            onChange={(e) => handleChange(field.name, e.target.value)}
+                        />
+                    )}
+                    {field.type === 'date' && (
+                        // <DateInput
+                        //     label={field.label}
+                        //     value={formData[field.name]}
+                        //     onChange={(date) => handleChange(field.name, date)}
+                        // />
+
+                        <Input
+                            label={field.label}
+                            placeholder={field.placeholder}
+                            value={formData[field.name] || ''}
+                            onChange={(e) => handleChange(field.name, e.target.value)}
+                            
+                        />
+                    )}
+                    {field.type === 'select' && (
+                        <CustomSelector
+                            label={field.label}
+                            placeholder={field.placeholder}
+                            options={field.options}
+                            value={formData[field.name]}
+                            onChange={(value) => handleChange(field.name, value)}
+                        />
+                    )}
+                </div>
+            ))}
                         </div>
                     </div>
 
