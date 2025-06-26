@@ -109,6 +109,29 @@ function StepOne({ onSubmit, onNext }) {
                         subtitle="Please complete the form below to initiate the provider leave request process"
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
+                         <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
+                        <div className="w-full">
+                            <CustomSelector
+                                onChange={(value) => setDocName(value)}
+                                label="Provider Name"
+                                options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
+                                placeholder="Select Provider Name"
+                                labelKey="name"
+                                value={docName}
+                            />
+                        </div>
+                        <div className="w-full">
+                            <CustomSelector
+                                onChange={(value) => setProviderId(value)}
+                                label="Provider Title"
+                                options={allProviders}
+                                placeholder="Select Provider Title"
+                                labelKey="name"
+                                valueKey="id"
+                                value={providerId}
+                            />
+                        </div>
+                        </div>
                         <div className="col-span-3 md:col-span-1">
                         <CustomSelector
                             onChange={(value) => {
@@ -146,29 +169,7 @@ function StepOne({ onSubmit, onNext }) {
                             />
                         </div>
 
-                        <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
-                        <div className="w-full">
-                            <CustomSelector
-                                onChange={(value) => setDocName(value)}
-                                label="Provider Name"
-                                options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
-                                placeholder="Select Provider Name"
-                                labelKey="name"
-                                value={docName}
-                            />
-                        </div>
-                        <div className="w-full">
-                            <CustomSelector
-                                onChange={(value) => setProviderId(value)}
-                                label="Provider Title"
-                                options={allProviders}
-                                placeholder="Select Provider Title"
-                                labelKey="name"
-                                valueKey="id"
-                                value={providerId}
-                            />
-                        </div>
-                        </div>
+                       
                     </div>
                    
                     {/* Plus Button */}
