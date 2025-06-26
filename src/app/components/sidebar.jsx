@@ -58,7 +58,7 @@ function Sidebar({ isSidebarOpen = false, onClose = () => { } }) {
 
                 <div className="flex flex-col justify-between gap-4 h-[calc(100vh-109px)]">
                     <div>
-                        <p className="text-xs font-medium">MAIN</p>
+                        
                         <div className="flex flex-col gap-2">
                             {sidebarData.map((items, index) => (
                                 <Link

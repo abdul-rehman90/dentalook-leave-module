@@ -1,12 +1,13 @@
 import React from 'react'
 
-function Button({ bgcolor, border, text, textcolor, type, onClick, className, href, ...props }) {
+function Button({ bgcolor, border, text, textcolor, type, onClick, className, name, href, ...props }) {
     return (
         <button
             type={type}
             href={href}
             {...props}
             onClick={onClick}
+            name={name}
             className={`py-[6px] md:py-[11px] rounded-xl text-base font-medium px-[75px] cursor-pointer 
                 ${className ? className : ''}
         ${bgcolor ? 'bg-[#335679]' : 'bg-transparent'}

@@ -19,9 +19,9 @@ function HomPage() {
                     <button className='cursor-pointer p-2 border rounded-lg border-[#E6EAEE] shadow'>
                         <Settings className='text-[#5D606D]' />
                     </button> */}
-                    <button className='cursor-pointer'>
+                    {/* <button className='cursor-pointer'>
                         <Image height={40} width={40} src={userAvatar} alt='avatar' />
-                    </button>
+                    </button> */}
 
                 </div>
             </div>

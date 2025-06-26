@@ -4,18 +4,22 @@ import Heading from "../ui/heading";
 import CustomSelector from "../ui/selector";
 import Input from "../ui/input";
 import { Plus } from "lucide-react";
-import DateInput from "../ui/date-input";
 import useLeaveReq from "./use-leave-req.hook";
 import Button from "../ui/button";
 import axios from "axios";
 import Cookies from "js-cookie";
 import loading from "../../../common/assets/icons/loader.svg"
 import Image from "next/image";
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import toast from "react-hot-toast";
+import { format } from "date-fns";
 
 function StepOne({ onSubmit, onNext }) {
     const [leaveType, setLeaveType] = useState("");
     const token = Cookies.get('access-token');
     const [isLoading, setIsLoading] = useState(false);
+    const [docName, setDocName] = useState('');
     const {
         allProvinces,
         setProvinceId,
@@ -25,14 +29,16 @@ function StepOne({ onSubmit, onNext }) {
         allProviders,
         rows,
         setRows,
-        providerId, setProviderId
+        providerId, 
+        setProviderId,
+        provinceId
     } = useLeaveReq();
 
     const [regVlaue, setRegValue] = useState("");
     useEffect(() => {
         if (clinicId) {
-        const data = allClinics?.find((item) => item.clinic_id === clinicId);
-        setRegValue(data?.regional_managers?.[0]?.name || "");
+            const data = allClinics?.find((item) => item.clinic_id === clinicId);
+            setRegValue(data?.regional_managers?.[0]?.name || "");
         }
     }, [clinicId, allClinics]);
 
@@ -43,16 +49,11 @@ function StepOne({ onSubmit, onNext }) {
         setRows(newRows);
     };
 
-    // Check if last row is fully filled
-    // const isLastRowComplete = () => {
-    //     const lastRow = rows[rows.length - 1];
-    //     return lastRow.leaveDate && lastRow.reason;
-    // };
-
     const handleAddRow = () => {
         setRows([...rows, { leave_date: "", leave_type: "", reason: "" }]);
     };
-
+    const lastRow = rows[rows.length - 1];
+    const canAddRow = lastRow.leave_date && lastRow.leave_type && lastRow.reason;
     const handleSubmit = async (e) =>{
         e.preventDefault();
         setIsLoading(true);
@@ -78,7 +79,20 @@ function StepOne({ onSubmit, onNext }) {
             }
         }
         catch(error){
-            console.log(error)
+            const errors = error?.response?.data?.leave_requests;
+            if (Array.isArray(errors)) {
+                errors.forEach(errObj => {
+                    Object.values(errObj).forEach(msgArr => {
+                        if (Array.isArray(msgArr)) {
+                            msgArr.forEach(msg => toast.error(msg));
+                        } else {
+                            toast.error(msgArr);
+                        }
+                    });
+                });
+            } else {
+                toast.error("An error occurred");
+            }
         }
         finally{
             setIsLoading(false);
@@ -98,51 +112,61 @@ function StepOne({ onSubmit, onNext }) {
                         <div className="col-span-3 md:col-span-1">
                         <CustomSelector
                             onChange={(value) => {
-                            setProvinceId(value);
+                                setProvinceId(value);
                             }}
                             label="Province"
                             options={allProvinces}
                             placeholder="Select Provider Title"
                             labelKey="name"
                             valueKey="id"
+                            value={provinceId}
                         />
                         </div>
                         <div className="col-span-3 md:col-span-1">
                         <CustomSelector
                             onChange={(value) => {
-                            setClinicId(value);
+                                setClinicId(value);
                             }}
                             label="Clinic"
                             options={allClinics}
                             placeholder="Province"
                             labelKey="clinic_name"
                             valueKey="clinic_id"
+                            value={clinicId}
                         />
                         </div>
                         <div className="col-span-3 md:col-span-1">
-                        <Input
-                            placeholder="Surya Rana"
-                            label="Regional Manager"
-                            value={regVlaue}
-                            onChange={(e) => console.log(e.target.value)}
-                            readOnly
-                            className="cursor-not-allowed"
-                        />
+                            <Input
+                                placeholder="Surya Rana"
+                                label="Regional Manager"
+                                value={regVlaue}
+                                onChange={(e) => console.log(e.target.value)}
+                                readOnly
+                                className="cursor-not-allowed"
+                            />
                         </div>
 
                         <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
                         <div className="w-full">
                             <CustomSelector
-                            onChange={(value) => setProviderId(value)}
-                            label="Provider Title"
-                            options={allProviders}
-                            placeholder="Select Provider Title"
-                            labelKey="name"
-                            valueKey="id"
+                                onChange={(value) => setDocName(value)}
+                                label="Provider Name"
+                                options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
+                                placeholder="Select Provider Name"
+                                labelKey="name"
+                                value={docName}
                             />
                         </div>
                         <div className="w-full">
-                            <Input placeholder="Provider's Name" label="Provider Name" />
+                            <CustomSelector
+                                onChange={(value) => setProviderId(value)}
+                                label="Provider Title"
+                                options={allProviders}
+                                placeholder="Select Provider Title"
+                                labelKey="name"
+                                valueKey="id"
+                                value={providerId}
+                            />
                         </div>
                         </div>
                     </div>
@@ -153,7 +177,10 @@ function StepOne({ onSubmit, onNext }) {
                             title='Add Leave Details'
                         />
                         <div className="p-2 rounded-xl border border-[#D0D5DD] ">
-                            <Plus className="text-[#7DB02D]" onClick={handleAddRow} />
+                            <Plus 
+                                className={`${canAddRow ? 'cursor-pointer' : 'cursor-not-allowed'} text-[#7DB02D]`}                               
+                                onClick={canAddRow ? handleAddRow : undefined}
+                            />
                         </div>
                     </div>
                 
@@ -163,39 +190,44 @@ function StepOne({ onSubmit, onNext }) {
                             key={index}
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5"
                         >
-                            <div>
+                            <div className="flex flex-col gap-2">
                                
-                                <Input
-                                    label="Leave Date"
+                                <label className="text-[13px] text-[#373940] font-medium block">Leave Date</label>
+                                <DatePicker
+                                    selected={row.leave_date ? new Date(row.leave_date) : null}
+                                    minDate={new Date()}
+                                    showMonthDropdown
+                                    showYearDropdown
+                                    dropdownMode="select"
+                                    dateFormat='YYYY-MM-dd'
+                                    className='py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]'
                                     name="leave_date"
-                                    type="date"
-                                    value={row.leave_date}
-                                    onChange={(e) =>
-                                        handleChange(index, "leave_date", e.target.value)
-                                    }
+                                    onChange={(date) => {
+                                        const formatted = date ? format(date, "yyyy-MM-dd") : "";
+                                        handleChange(index, "leave_date", formatted);
+                                    }}
+                                />
+                               
+                            </div>
+                            <div>
+                                <CustomSelector
+                                    label="Leave Type"
+                                    options={[{name:"Emergency", value:"emergency"},{name:"Planned", value:"planned"}]}
+                                    placeholder="Select Leave Type"
+                                    value={row.leave_type}
+                                    onChange={(value) => handleChange(index, "leave_type", value)}
+                                    labelKey="name"
+                                    valueKey="value"
                                 />
                             </div>
                             <div>
-                            <CustomSelector
-                                label="Leave Type"
-                                options={[{name:"Emergency", value:"emergency"},{name:"Planned", value:"planned"}]}
-                                placeholder="Select Leave Type"
-                                value={row.leave_type}
-                                onChange={(value) => handleChange(index, "leave_type", value)}
-                                labelKey="name"
-                                valueKey="value"
-                            />
-                            </div>
-                            <div>
-                            <Input
-                                label="Reason"
-                                placeholder="Enter Reason"
-                                name="reason"
-                                value={row.reason}
-                                onChange={(e) =>
-                                handleChange(index, "reason", e.target.value)
-                                }
-                            />
+                                <Input
+                                    label="Reason"
+                                    placeholder="Enter Reason"
+                                    name="reason"
+                                    value={row.reason}
+                                    onChange={(e) =>handleChange(index, "reason", e.target.value)}
+                                />
                             </div>
                         </div>
                         ))}
@@ -204,7 +236,7 @@ function StepOne({ onSubmit, onNext }) {
 
                     <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">
                         <Button
-                            text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Next"}
+                            text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Submit"}
                             bgcolor={true}
                             disabled={isLoading}
                             className="disabled:opacity-[0.5] disabled:cursor-not-allowed"

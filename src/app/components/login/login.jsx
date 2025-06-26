@@ -8,8 +8,11 @@ import loader from "../../../common/assets/icons/loader.svg"
 import Image from 'next/image';
 import Cookies from "js-cookie";
 import logo from "../../../common/assets/images/main-logo.svg"
+import { useAuth } from '../../utils/AuthContext';
+
 
 const Login = () => {
+    const { setUserData } = useAuth();
     const router = useRouter();
     const [isError, setIsError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,7 +43,8 @@ const Login = () => {
                 toast.success('Login successful!');
                 Cookies.set('access-token', res?.data?.access);
                 Cookies.set('refresh-token', res?.data?.refresh);
-                router.push('/view-request');
+                router.push('/select-role');
+                setUserData(res.data.user); 
             } 
         }
         catch(error){

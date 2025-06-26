@@ -6,7 +6,7 @@ export function middleware(req) {
 
   // If token exists and user tries to access "/", redirect to /view-request
   if (token && pathname === "/") {
-    return NextResponse.redirect(new URL("/view-request", req.url));
+    return NextResponse.redirect(new URL("/select-role", req.url));
   }
 
   // If token exists and user tries to access "/forgot-password", redirect to /
@@ -27,5 +27,5 @@ export function middleware(req) {
 }
 
 export const config = {
-  matcher: ["/", "/view-request", "/reports", "/leave-request", "/forgot-password", "/((?!_next|favicon.ico|assets|api).*)"],
+  matcher: ["/", "/view-request", "/select-role", "/reports", "/leave-request", "/forgot-password", "/((?!_next|favicon.ico|assets|api).*)"],
 };

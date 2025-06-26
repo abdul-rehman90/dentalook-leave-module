@@ -6,6 +6,9 @@ import { BellNotification, userAvatar } from "../../common/assets/images";
 import Sidebar from "./sidebar";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { useAuth } from "../utils/AuthContext";
+import { FaCircleUser } from "react-icons/fa6";
+
 
 function Header() {
     const router = useRouter()
@@ -13,6 +16,8 @@ function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isToggle, setIsToggle] = useState(false);
+  const { userData } = useAuth();
+  console.log(userData, "..userData")
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 30);
@@ -29,6 +34,7 @@ function Header() {
   const handleLogout = () => {
     Cookies.remove("access-token");
     Cookies.remove("refresh-token");
+    localStorage.clear();
     router.push('/');
     setOpen(false);
   };
@@ -86,29 +92,32 @@ function Header() {
           </button>
           <div className="relative" ref={dropdownRef}>
 
-          
-            <div
-                
-                className="flex items-center gap-3 cursor-pointer "
-                onClick={() => setOpen((prev) => !prev)}
-            >
-                {/* <Image height={40} width={40} src={BellNotification} alt='bell icon' /> */}
-                <div  className=" inline-block text-left">
-                <div className="cursor-pointer select-none">
-                    <Image
-                    height={40}
-                    width={40}
-                    src={userAvatar}
-                    alt="avatar"
-                    className="rounded-full border"
-                    />
-                </div>
-                </div>
-                <div className="hidden md:flex flex-col">
-                <p className="text-sm font-bold">Olivia Ryne</p>
-                <p className="text-sm">oliviryneee@gmail.com</p>
-                </div>
-            </div>
+            {
+              userData ? 
+            
+              <div
+                  
+                  className="flex items-center gap-3 cursor-pointer "
+                  onClick={() => setOpen((prev) => !prev)}
+              >
+                  <div  className=" inline-block text-left">
+                    <div className="cursor-pointer select-none">
+                        {/* <Image
+                        height={40}
+                        width={40}
+                        src={userAvatar}
+                        alt="avatar"
+                        className="rounded-full border"
+                        /> */}
+                        <FaCircleUser className="text-[30px]" />
+                    </div>
+                  </div>
+                  <div className="hidden md:flex flex-col">
+                    <p className="text-sm font-bold">{userData.name}</p>
+                    <p className="text-sm">{userData.email}</p>
+                  </div>
+              </div> : ""
+            }
 
             {open && (
                 <div className="absolute right-0 bottom-[-50px] mt-2 w-40 bg-[#030E25] border border-[#041432] rounded-lg shadow-md z-20 overflow-hidden">
