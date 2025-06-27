@@ -46,13 +46,7 @@ function ViewRequest() {
                                 placeholder="Province"
                             />
                         </div>
-                        <div>
-                            <Input
-                                placeholder='Provider’s Name'
-                                label='Provider Name'
-                            />
-                        </div>
-                        <div>
+                         <div>
                             <CustomSelector
                                 onChange={(value) => setLeaveType(value)}
                                 label='Provider Title'
@@ -60,6 +54,13 @@ function ViewRequest() {
                                 placeholder="Province"
                             />
                         </div>
+                        <div>
+                            <Input
+                                placeholder='Provider’s Name'
+                                label='Provider Name'
+                            />
+                        </div>
+                       
                         
                         
                        

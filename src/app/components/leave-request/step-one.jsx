@@ -164,7 +164,16 @@ function StepOne({ onSubmit, onNext }) {
                         
 
                         <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
-                            
+                            <div className="w-full">
+                                <CustomSelector
+                                    onChange={(value) => setDocName(value)}
+                                    label="Provider Title"
+                                    options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
+                                    placeholder="Select Provider Name"
+                                    labelKey="name"
+                                    value={docName || getData?.provider_type}
+                                />
+                            </div>
                             <div className="w-full">
                                 <CustomSelector
                                     onChange={(value) => setProviderId(value)}
@@ -174,16 +183,6 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="name"
                                     valueKey="id"
                                     value={providerId}
-                                />
-                            </div>
-                            <div className="w-full">
-                                <CustomSelector
-                                    onChange={(value) => setDocName(value)}
-                                    label="Provider Title"
-                                    options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
-                                    placeholder="Select Provider Name"
-                                    labelKey="name"
-                                    value={docName || getData?.provider_type}
                                 />
                             </div>
                         </div>
