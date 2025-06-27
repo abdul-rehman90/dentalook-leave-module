@@ -21,46 +21,9 @@ function ViewRequest() {
                             title='Provider Requiring Coverage'
                             subtitle='Review all the leave requests submitted here'
                         />
-                        <div className="flex flex-wrap md:flex-nowrap justify-center md:justify-end gap-3.5">
-                            <Button
-                                className='!text-[#335679] w-full md:!w-fit text-nowrap !px-6'
-                                text='Add Leave Days'
-                                textcolor={true}
-                                border={true}
-                                // onClick={() => setCurrentStep(currentStep - 1)}
-                                type='button'
-                            />
-                            <Button
-                                className='!text-red-600 w-full md:!w-fit text-nowrap !bg-transparent !border !border-red-600 !px-6'
-                                text='Add Coverage Days'
-                                bgcolor={true}
-                                type='submit'
-
-                            />
-                            <Button
-                                className='w-full md:!w-fit text-nowrap !px-6'
-                                text='Add  No Coverage Days'
-                                bgcolor={true}
-                                type='submit'
-
-                            />
-                        </div>
+                       
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                label='Provider Title'
-                                options={leaveOptions}
-                                placeholder="Province"
-                            />
-                        </div>
-                        <div>
-                            <Input
-                                placeholder='Provider’s Name'
-                                label='Provider Name'
-                            />
-                        </div>
                         <div>
                             <CustomSelector
                                 onChange={(value) => setLeaveType(value)}
@@ -83,6 +46,24 @@ function ViewRequest() {
                                 placeholder="Province"
                             />
                         </div>
+                        <div>
+                            <Input
+                                placeholder='Provider’s Name'
+                                label='Provider Name'
+                            />
+                        </div>
+                        <div>
+                            <CustomSelector
+                                onChange={(value) => setLeaveType(value)}
+                                label='Provider Title'
+                                options={leaveOptions}
+                                placeholder="Province"
+                            />
+                        </div>
+                        
+                        
+                       
+                        
                     </div>
                     <div className="overflow-auto">
                         <DataTabel />

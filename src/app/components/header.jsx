@@ -34,6 +34,7 @@ function Header() {
   const handleLogout = () => {
     Cookies.remove("access-token");
     Cookies.remove("refresh-token");
+    Cookies.remove("role");
     localStorage.clear();
     router.push('/');
     setOpen(false);
@@ -81,7 +82,11 @@ function Header() {
           }`}
         >
           <Link href="/" className="font-bold text-lg hidden md:block">
-            Submit Provider Leave Request
+            {
+              pathname === "/reports" ? "Dental Look Leave Reports" : 
+              pathname === "/view-request" ? "Leave req dashboard" : 
+              pathname === "/leave-request" ? "Dental Look Provider Leave Request Application" : ""
+            }
           </Link>
 
           <button

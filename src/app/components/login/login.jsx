@@ -43,6 +43,7 @@ const Login = () => {
                 toast.success('Login successful!');
                 Cookies.set('access-token', res?.data?.access);
                 Cookies.set('refresh-token', res?.data?.refresh);
+                Cookies.set('role', res?.data?.user?.role);
                 router.push('/select-role');
                 setUserData(res.data.user); 
             } 

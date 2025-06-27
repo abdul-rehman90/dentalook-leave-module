@@ -6,12 +6,18 @@ export default function useLeaveReq() {
     const [provinceId, setProvinceId] = useState('');
     const [allProvinces, setAllProvinces] = useState([]);
     const token = Cookies.get('access-token');
+    
 
     const [allClinics, setAllClinics] = useState([]);
     const [clinicId, setClinicId] = useState('');
     
     const [allProviders, setAllProviders] = useState([]);
     const [providerId, setProviderId] = useState('');
+
+    const [regionalManagers, setRegionalManagers] = useState([]);
+    const [regionalManagersId, setRegionalManagersId] = useState('');
+    console.log(provinceId, "..provinceId")
+    console.log(clinicId, "..clinicId")
 
     // get province
     const getProvinces = async () => {
@@ -34,27 +40,55 @@ export default function useLeaveReq() {
         getProvinces();
     }, [token]);
 
-    // get clinic
-    const getClinics = async () => {
-        try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/province-data/${provinceId}`, {
+    // get reg and clinic
+    const clinicByRegionalManager = async () => {
+        try{
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/clinic-by-regional-manager/${provinceId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "ngrok-skip-browser-warning": "true"
                 }
             });
             if(response.status === 200) {
-               setAllClinics(response?.data?.clinics);
+                setRegionalManagers(response?.data?.regional_managers);
+                setAllClinics(response?.data?.regional_managers[0]?.clinics);
             }
-        } catch (error) {
-            console.error("Error fetching clinics:", error);
+        }
+        catch (error) {
+            console.error("Error fetching provinces:", error);
         }
     }
-    useEffect(() => {
+    useEffect(()=>{
         if (provinceId) {
-            getClinics();
+            clinicByRegionalManager();
         }
+        
     }, [provinceId]);
+
+   
+
+
+    // get clinic
+    // const getClinics = async () => {
+    //     try {
+    //         const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/province-data/${provinceId}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //                 "ngrok-skip-browser-warning": "true"
+    //             }
+    //         });
+    //         if(response.status === 200) {
+    //         //    setAllClinics(response?.data?.clinics);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching clinics:", error);
+    //     }
+    // }
+    // useEffect(() => {
+    //     if (provinceId) {
+    //         getClinics();
+    //     }
+    // }, [provinceId]);
 
     // get providers
     const getProviders = async () => {
@@ -82,6 +116,39 @@ export default function useLeaveReq() {
         { leave_date: '', leave_type:'', reason: '' }
     ]);
 
+    // get patch method for update step 1
+    const [getData, setGetData] = useState('');
+    const getLeaveDeatils = async (id) => {
+        // setIsLoading(true);
+        try {
+        const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/leave-requests/${id}`,
+            {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "ngrok-skip-browser-warning": "true",
+            },
+            }
+        );
+        if (response.status === 200) {
+            setGetData(response?.data);
+        }
+        } catch (error) {
+            console.log(error);
+        }
+        finally{
+        // setIsLoading(false);
+        }
+    };
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const getId = localStorage.getItem("leaveRequestId");
+            if (getId) {
+                getLeaveDeatils(getId);
+            }
+        }
+    }, []);
+
     return {
         allProvinces,
         setProvinceId,
@@ -93,6 +160,9 @@ export default function useLeaveReq() {
         setRows,
         providerId, 
         setProviderId,
-        provinceId
+        provinceId,
+        getData,
+        regionalManagers,
+        regionalManagersId, setRegionalManagersId
     }
 }

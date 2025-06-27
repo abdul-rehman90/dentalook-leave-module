@@ -31,16 +31,20 @@ function StepOne({ onSubmit, onNext }) {
         setRows,
         providerId, 
         setProviderId,
-        provinceId
+        provinceId,
+        getData,
+
+        regionalManagers,
+        regionalManagersId, setRegionalManagersId
     } = useLeaveReq();
 
     const [regVlaue, setRegValue] = useState("");
-    useEffect(() => {
-        if (clinicId) {
-            const data = allClinics?.find((item) => item.clinic_id === clinicId);
-            setRegValue(data?.regional_managers?.[0]?.name || "");
-        }
-    }, [clinicId, allClinics]);
+    // useEffect(() => {
+    //     if (clinicId) {
+    //         const data = allClinics?.find((item) => item.clinic_id === clinicId);
+    //         setRegValue(data?.regional_managers?.[0]?.name || "");
+    //     }
+    // }, [clinicId, allClinics]);
 
     // Update field values
     const handleChange = (index, field, value) => {
@@ -109,64 +113,79 @@ function StepOne({ onSubmit, onNext }) {
                         subtitle="Please complete the form below to initiate the provider leave request process"
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-                         <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
-                        <div className="w-full">
+                       
+                        <div className="col-span-3 md:col-span-1">
                             <CustomSelector
-                                onChange={(value) => setDocName(value)}
-                                label="Provider Name"
-                                options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
-                                placeholder="Select Provider Name"
-                                labelKey="name"
-                                value={docName}
-                            />
-                        </div>
-                        <div className="w-full">
-                            <CustomSelector
-                                onChange={(value) => setProviderId(value)}
-                                label="Provider Title"
-                                options={allProviders}
+                                onChange={(value) => {
+                                    setProvinceId(value);
+                                }}
+                                label="Province"
+                                options={allProvinces}
                                 placeholder="Select Provider Title"
                                 labelKey="name"
                                 valueKey="id"
-                                value={providerId}
+                                value={provinceId}
                             />
                         </div>
-                        </div>
                         <div className="col-span-3 md:col-span-1">
-                        <CustomSelector
-                            onChange={(value) => {
-                                setProvinceId(value);
-                            }}
-                            label="Province"
-                            options={allProvinces}
-                            placeholder="Select Provider Title"
-                            labelKey="name"
-                            valueKey="id"
-                            value={provinceId}
-                        />
-                        </div>
-                        <div className="col-span-3 md:col-span-1">
-                        <CustomSelector
-                            onChange={(value) => {
-                                setClinicId(value);
-                            }}
-                            label="Clinic"
-                            options={allClinics}
-                            placeholder="Province"
-                            labelKey="clinic_name"
-                            valueKey="clinic_id"
-                            value={clinicId}
-                        />
-                        </div>
-                        <div className="col-span-3 md:col-span-1">
-                            <Input
+                            {/* <Input
                                 placeholder="Surya Rana"
                                 label="Regional Manager"
                                 value={regVlaue}
                                 onChange={(e) => console.log(e.target.value)}
                                 readOnly
                                 className="cursor-not-allowed"
+                            /> */}
+                            <CustomSelector
+                                onChange={(value) => {
+                                    setRegionalManagersId(value);
+                                }}
+                                label="Regional Manager"
+                                options={regionalManagers}
+                                placeholder="Surya Rana"
+                                labelKey="name"
+                                valueKey="id"
+                                value={regionalManagersId}
                             />
+                        </div>
+                        <div className="col-span-3 md:col-span-1">
+                            <CustomSelector
+                                onChange={(value) => {
+                                    setClinicId(value);
+                                }}
+                                label="Clinic"
+                                options={allClinics}
+                                placeholder="Province"
+                                labelKey="clinic_name"
+                                valueKey="clinic_id"
+                                value={clinicId}
+                            />
+                        </div>
+                        
+
+                        <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
+                            
+                            <div className="w-full">
+                                <CustomSelector
+                                    onChange={(value) => setProviderId(value)}
+                                    label="Provider Name"
+                                    options={allProviders}
+                                    placeholder="Select Provider Title"
+                                    labelKey="name"
+                                    valueKey="id"
+                                    value={providerId}
+                                />
+                            </div>
+                            <div className="w-full">
+                                <CustomSelector
+                                    onChange={(value) => setDocName(value)}
+                                    label="Provider Title"
+                                    options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
+                                    placeholder="Select Provider Name"
+                                    labelKey="name"
+                                    value={docName || getData?.provider_type}
+                                />
+                            </div>
                         </div>
 
                        
