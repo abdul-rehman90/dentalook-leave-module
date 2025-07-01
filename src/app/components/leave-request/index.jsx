@@ -245,7 +245,7 @@ const stepTitles = [
 ];
 
 const LeaveRequest = () => {
-    const [currentStep, setCurrentStep] = useState(0);
+    const [currentStep, setCurrentStep] = useState(2);
 
     // Example submit handlers for each step
     const handleStepOneSubmit = (e) => {

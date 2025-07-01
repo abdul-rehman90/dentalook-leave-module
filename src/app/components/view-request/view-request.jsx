@@ -6,12 +6,31 @@ import Button from "../ui/button";
 import CustomSelector from "../ui/selector";
 import Input from "../ui/input";
 import DataTabel from './data-table'
+import viewReq from "./view-req.hook"
 
 
 function ViewRequest() {
-    const [leaveType, setLeaveType] = useState('');
-
-    const leaveOptions = ['Dashboard', 'Calendar', 'Reports', 'Settings'];
+   
+    const {
+        provinceId, 
+        setProvinceId,
+        allProvinces,
+        clinicId, 
+        setClinicId,
+        allClinics,
+        regionalManagers,
+        regionalManagersId, 
+        setRegionalManagersId,
+        docName, 
+        setDocName,
+        allProviders,
+        providerId, 
+        setProviderId,
+        getReqData,
+        isLoading
+    } = viewReq();
+    
+    
     return (
         <div>
             <div className="p-5 border border-[#E6EAEE] rounded-2xl">
@@ -26,48 +45,74 @@ function ViewRequest() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
                         <div>
                             <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                label='Province'
-                                options={leaveOptions}
-                                placeholder="Province"
+                                onChange={(value) => {
+                                    setProvinceId(value);
+                                }}
+                                label="Province"
+                                options={allProvinces}
+                                placeholder="Select Provider Title"
+                                labelKey="name"
+                                valueKey="id"
+                                value={provinceId}
                             />
                         </div>
                         <div>
-                            <Input
-                                placeholder='Surya Rana'
-                                label='Regional Manager'
+                           <CustomSelector
+                                onChange={(value) => {
+                                    setRegionalManagersId(value);
+                                }}
+                                label="Regional Manager"
+                                options={regionalManagers}
+                                placeholder="Surya Rana"
+                                labelKey="name"
+                                valueKey="id"
+                                value={regionalManagersId}
+                                disabled={provinceId ? false : true}
+                                className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
                             <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                label='Clinic'
-                                options={leaveOptions}
-                                placeholder="Province"
+                                onChange={(value) => {
+                                    setClinicId(value);
+                                }}
+                                label="Clinic"
+                                options={allClinics}
+                                placeholder="Select Clinic"
+                                labelKey="clinic_name"
+                                valueKey="clinic_id"
+                                value={clinicId}
+                                disabled={provinceId ? false : true}
+                                className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
                          <div>
                             <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                label='Provider Title'
-                                options={leaveOptions}
-                                placeholder="Province"
+                                onChange={(value) => setDocName(value)}
+                                label="Provider Title"
+                                options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
+                                placeholder="Select Provider Name"
+                                labelKey="name"
+                                value={docName}
                             />
                         </div>
                         <div>
-                            <Input
-                                placeholder='Provider’s Name'
-                                label='Provider Name'
+                            <CustomSelector
+                                onChange={(value) => setProviderId(value)}
+                                label="Provider Name"
+                                options={allProviders}
+                                placeholder="Select Provider Title"
+                                labelKey="name"
+                                valueKey="id"
+                                value={providerId}
+                                disabled={clinicId ? false : true}
+                                className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
                        
-                        
-                        
-                       
-                        
                     </div>
                     <div className="overflow-auto">
-                        <DataTabel />
+                        <DataTabel getReqData={getReqData} isLoading={isLoading} />
                     </div>
                 </div>
 

@@ -2,8 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function useSteptwo({onNext}) {
+  const router = useRouter();
   const [getData, setGetData] = useState('');
   const token = Cookies.get('access-token');
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +61,7 @@ export default function useSteptwo({onNext}) {
        toast.success(response?.data?.detail);
        if(buttonName === 'approved'){
           onNext();
+          router.replace(`${window.location.pathname}?step=3`);
        }
       }
     }

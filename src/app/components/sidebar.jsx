@@ -7,6 +7,7 @@ import { Calendar, Home, Mail, Profile } from '../../common/assets/icons'
 // import Settings from '../../../common/assets/icons/settings'
 // import Logout from '../../../common/assets/icons/logout'
 import { usePathname } from 'next/navigation'
+import path from 'path'
 
 function Sidebar({ isSidebarOpen = false, onClose = () => { } }) {
     const pathname = usePathname()
@@ -30,7 +31,7 @@ function Sidebar({ isSidebarOpen = false, onClose = () => { } }) {
     }, [pathname])
 
     if (pathname === '/select-role' || pathname === '/' || pathname === '/forgot-password') return null;
-
+   
     return (
         <>
             {/* 👉 Mobile overlay */}
@@ -64,7 +65,12 @@ function Sidebar({ isSidebarOpen = false, onClose = () => { } }) {
                                 <Link
                                     key={index}
                                     href={items.sideLink}
-                                    onClick={onClose}
+                                    onClick={() => {
+                                        onClose();
+                                         if (items.sideLink === '/leave-request') {
+                                            localStorage.removeItem("leaveRequestId");
+                                        }
+                                    }}
                                     className="flex items-center mt-2"
                                 >
                                     <div

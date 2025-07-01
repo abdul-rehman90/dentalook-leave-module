@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Cookies from "js-cookie";
 import axios from 'axios';
 
-export default function useLeaveReq() {
+export default function useStepThree() {
     const [provinceId, setProvinceId] = useState('');
     const [allProvinces, setAllProvinces] = useState([]);
     const token = Cookies.get('access-token');
@@ -13,6 +13,8 @@ export default function useLeaveReq() {
     
     const [allProviders, setAllProviders] = useState([]);
     const [providerId, setProviderId] = useState('');
+    const [coverageProvider, setCoverageProvider] = useState([]);
+    const [coverageProviderId, setcoverageProviderId] = useState('');
 
     const [regionalManagers, setRegionalManagers] = useState([]);
     const [regionalManagersId, setRegionalManagersId] = useState('');
@@ -75,7 +77,9 @@ export default function useLeaveReq() {
                 }
             });
             if(response.status === 200) {
-                setAllProviders(response?.data?.providers)
+                setAllProviders(response?.data?.providers);
+                setCoverageProvider(response?.data?.providers);
+
             }
         } catch (error) {
             console.error("Error fetching providers:", error);
@@ -126,6 +130,30 @@ export default function useLeaveReq() {
         }
     }, []);
 
+    const [coverageProviderList, setCoverageProviderList] = useState([]);
+
+    const providerList = async () => {
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/provider-list/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            if(response.status === 200) {
+                setCoverageProviderList(response?.data)
+            }
+        } catch (error) {
+            console.error("Error fetching coverage providers:", error);
+        }
+    }
+
+    useEffect(() => {
+       if(token) {
+            providerList();
+        }
+    }, [token]);
+
+
    
         
 
@@ -144,6 +172,11 @@ export default function useLeaveReq() {
         getData,
         regionalManagers,
         regionalManagersId, setRegionalManagersId,
-        formId
+        formId,
+        coverageProvider,
+        coverageProviderId, setcoverageProviderId,
+        getLeaveDeatils,
+        coverageProviderList,
+        providerList
     }
 }

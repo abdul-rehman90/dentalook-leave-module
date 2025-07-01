@@ -75,7 +75,9 @@ const CustomSelector = ({
     selectorstyle,
     labelKey = 'label',
     valueKey = 'value',
-    value // <-- add this
+    value,
+    disabled = false,
+    className = ''
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const selectorRef = useRef(null);
@@ -84,6 +86,7 @@ const CustomSelector = ({
     const selected = options.find(option => option[valueKey] === value) || null;
 
     const handleSelect = (option) => {
+        if (disabled) return; 
         onChange(option[valueKey], option);
         setIsOpen(false);
     };
@@ -105,7 +108,8 @@ const CustomSelector = ({
                 <button
                     type='button'
                     onClick={() => setIsOpen(!isOpen)}
-                    className={`w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-xl px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F] focus:ring-0 ${selectorstyle || ''}`}
+                    disabled={disabled}
+                    className={`${className && className} w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-xl px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F] focus:ring-0 ${selectorstyle || ''}`}
                 >
                     <span className='text-[#1f1f1fa9]'>
                         {selected ? selected[labelKey] : placeholder}
@@ -113,7 +117,7 @@ const CustomSelector = ({
                     <ChevronDown className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} size={18} />
                 </button>
 
-                {isOpen && (
+                {isOpen && !disabled && (
                     <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 shadow-lg max-h-60 overflow-y-auto text-sm">
                         {options.map((option, index) => (
                             <li

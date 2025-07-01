@@ -1,30 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import Cookies from "js-cookie";
 import axios from 'axios';
+import Cookies from "js-cookie";
+import { useEffect, useState } from 'react';
 
-export default function useLeaveReq() {
+export default function viewReq() {
+    const token = Cookies.get('access-token');
     const [provinceId, setProvinceId] = useState('');
     const [allProvinces, setAllProvinces] = useState([]);
-    const token = Cookies.get('access-token');
-    
-
-    const [allClinics, setAllClinics] = useState([]);
-    const [clinicId, setClinicId] = useState('');
-    
-    const [allProviders, setAllProviders] = useState([]);
-    const [providerId, setProviderId] = useState('');
 
     const [regionalManagers, setRegionalManagers] = useState([]);
     const [regionalManagersId, setRegionalManagersId] = useState('');
-    const [formId, setFormId] = useState('');
 
-    // get province
+    const [allClinics, setAllClinics] = useState([]);
+    const [clinicId, setClinicId] = useState('');
+
+    const [docName, setDocName] = useState('');
+
+    const [allProviders, setAllProviders] = useState([]);
+    const [providerId, setProviderId] = useState('');
+
+    const [getReqData, setGetReqData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     const getProvinces = async () => {
+        setIsLoading(true);
         try{
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/upload-provinces/`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "ngrok-skip-browser-warning": "true"
                 }
             });
             if(response.status === 200) {
@@ -34,10 +36,16 @@ export default function useLeaveReq() {
         catch (error) {
             console.error("Error fetching provinces:", error);
         }
+        finally{
+            setIsLoading(false);
+        }
     }
     useEffect(()=>{
-        getProvinces();
+        if(token){
+            getProvinces();
+        }
     }, [token]);
+
 
     // get reg and clinic
     const clinicByRegionalManager = async () => {
@@ -45,7 +53,6 @@ export default function useLeaveReq() {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/clinic-by-regional-manager/${provinceId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
-                    "ngrok-skip-browser-warning": "true"
                 }
             });
             if(response.status === 200) {
@@ -64,8 +71,6 @@ export default function useLeaveReq() {
         
     }, [provinceId]);
 
-   
-    // get providers
     const getProviders = async () => {
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/provider-by-clinic/${clinicId}`, {
@@ -87,63 +92,50 @@ export default function useLeaveReq() {
         }
     }, [clinicId]);
 
-
-    const [rows, setRows] = useState([
-        { leave_date: '', leave_type:'', reason: '' }
-    ]);
-
-    // get patch method for update step 1
-    const [getData, setGetData] = useState('');
-    const getLeaveDeatils = async (id) => {
-        // setIsLoading(true);
+    const getViewRequests = async () => {
         try {
-        const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/leave-requests/${id}`,
-            {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "ngrok-skip-browser-warning": "true",
-            },
+                const params = {};
+                if (providerId) params.provider_id = providerId;
+                if (clinicId) params.clinic_id = clinicId;
+                if (provinceId) params.province_id = provinceId;
+                if (regionalManagersId) params.regional_manager = regionalManagersId;
+                
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/get-all-leave-request/`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                params
+            });
+            if(response.status === 200) {
+               setGetReqData(response.data)
             }
-        );
-        if (response.status === 200) {
-            setGetData(response?.data);
-        }
         } catch (error) {
-            console.log(error);
+            console.error("Error fetching view requests:", error);
         }
-        finally{
-        // setIsLoading(false);
-        }
-    };
+    }
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            const getId = localStorage.getItem("leaveRequestId");
-            setFormId(getId);
-            if (getId) {
-                getLeaveDeatils(getId);
-            }
+        if (token) {
+            getViewRequests();
         }
-    }, []);
+    }, [token, token, providerId, clinicId, provinceId, regionalManagersId]);
 
-   
-        
-
+       
     return {
-        allProvinces,
+        provinceId, 
         setProvinceId,
+        allProvinces,
+        clinicId, 
         setClinicId,
         allClinics,
-        clinicId,
+        regionalManagers,
+        regionalManagersId, 
+        setRegionalManagersId,
+        docName, 
+        setDocName,
         allProviders,
-        rows, 
-        setRows,
         providerId, 
         setProviderId,
-        provinceId,
-        getData,
-        regionalManagers,
-        regionalManagersId, setRegionalManagersId,
-        formId
+        getReqData,
+        isLoading
     }
 }

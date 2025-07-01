@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
 import { ChevronDown } from '../../../common/assets/icons';
+import loading from "../../../common/assets/icons/blue-loader.svg"
+import Image from 'next/image';
 
-export default function LeaveTable() {
+export default function LeaveTable({getReqData, isLoading}) {
     const leaveRequests = [
         {
             name: 'Dr. Test',
@@ -62,7 +64,7 @@ export default function LeaveTable() {
 
     return (
         <div className="overflow-hidden">
-            <div className="min-w-[700px] md:min-w-full border border-gray-200 rounded-xl overflow-x-auto">
+            <div className="min-w-[700px] relative md:min-w-full border border-gray-200 rounded-xl overflow-x-auto">
                 <table className="w-full text-sm text-left text-gray-700">
                     <thead className="bg-[#F3F3F5] text-xs text-[#475467] font-medium uppercase">
                         <tr>
@@ -76,91 +78,85 @@ export default function LeaveTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {leaveRequests.map((req, index) => (
-                            <tr
-                                key={index}
-                                className="border-t border-gray-100 hover:bg-gray-50"
-                            >
-                                <td className="px-4 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                                    {req.name}
-                                </td>
-                                <td className="px-4 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                                    {req.date}
-                                </td>
+                        {
+                            isLoading ?<Image src={loading} width={125} height={125} alt="" className="mx-auto " /> : 
+                            
+                            <>
+                                {getReqData?.map((req, index) => (
+                                    <tr
+                                        key={index}
+                                        className="border-t border-gray-100 hover:bg-gray-50"
+                                    >
+                                        <td className="px-4 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                                            {req.provider}
+                                        </td>
+                                        <td className="px-4 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                                            {req.leave_date}
+                                        </td>
 
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                    {req.type ? (
-                                        <div className="flex items-center gap-1 justify-between w-full">
-                                            <div className="flex items-center gap-2">
-                                                <span
-                                                    className={`w-2 h-2 inline-block rounded-full ${req.type.color}`}
-                                                />
-                                                <span className="text-xs font-normal text-[#475467]">
-                                                    {req.type.label}
-                                                </span>
-                                            </div>
-                                            <ChevronDown className="w-4 h-4 text-[#475467]" />
-                                        </div>
-                                    ) : (
-                                        '---'
-                                    )}
-                                </td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                    
+                                                <div className="flex items-center gap-1 justify-between w-full">
+                                                    <div className="flex items-center gap-2">
+                                                        <span
+                                                            className={`w-2 h-2 inline-block rounded-full ${req.leave_type === "emergency" ? "bg-red-500" : "bg-green-500"}`}
+                                                        />
+                                                        <span className="text-xs font-normal text-[#475467]">
+                                                            {req.leave_type}
+                                                        </span>
+                                                    </div>
+                                                   
+                                                </div>
+                                            
+                                        </td>
 
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                    {req.decision ? (
-                                        <div className="flex items-center gap-1 justify-between w-full">
-                                            <div className="flex items-center gap-2">
-                                                <span
-                                                    className={`inline-block w-2 h-2 rounded-full ${req.decision.color}`}
-                                                />
-                                                <span className="text-[#475467] text-xs">
-                                                    {req.decision.label}
-                                                </span>
-                                            </div>
-                                            <ChevronDown className="w-4 h-4 text-[#475467]" />
-                                        </div>
-                                    ) : (
-                                        '---'
-                                    )}
-                                </td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                                
+                                                <div className="flex items-center gap-1 justify-between w-full">
+                                                    <div className="flex items-center gap-2">
+                                                        {/* <span
+                                                            className={`inline-block w-2 h-2 rounded-full ${req.decision.color}`}
+                                                        /> */}
+                                                        <span className="text-[#475467] text-xs">
+                                                            {req.status}
+                                                        </span>
+                                                    </div>
+                                                   
+                                                </div>
+                                            
+                                        </td>
 
-                                <td className="px-4 py-3 whitespace-nowrap">
-                                    {req.coverageNeeded ? (
-                                        <div className="flex items-center gap-1 justify-between w-full">
-                                            <div className="flex gap-2 items-center">
-                                                <span
-                                                    className={`w-2 h-2 rounded-full inline-block ${req.coverageNeeded.color}`}
-                                                />
-                                                <span className="text-[#475467] text-xs">
-                                                    {req.coverageNeeded.label}
-                                                </span>
-                                            </div>
-                                            <ChevronDown className="w-4 h-4 text-[#475467]" />
-                                        </div>
-                                    ) : (
-                                        '---'
-                                    )}
-                                </td>
+                                        <td className="px-4 py-3 whitespace-nowrap">
+                            
+                                                <div className="flex items-center gap-1 justify-between w-full">
+                                                    <div className="flex gap-2 items-center">
+                                                        <span
+                                                            className={`w-2 h-2 inline-block rounded-full ${req.coverage_needed !== true ? "bg-red-500" : "bg-green-500"}`}
+                                                        />
+                                                        <span className="text-[#475467] text-xs">
+                                                            {req.coverage_needed === true ? 'Yes' : 'No'}
+                                                        </span>
+                                                    </div>
+                                                   
+                                                </div>
+                                            
+                                        </td>
 
-                                <td
-                                    className={`px-4 py-3 whitespace-nowrap text-xs font-medium ${req.coverageDetails.color
-                                        ? 'text-[#FF9500]'
-                                        : 'text-[#475467]'
-                                        }`}
-                                >
-                                    {req.coverageDetails.label}
-                                </td>
+                                        <td
+                                            className={`px-4 py-3 whitespace-nowrap text-xs font-medium `}
+                                        >
+                                            {req.reason}
+                                        </td>
 
-                                <td
-                                    className={`px-4 py-3 whitespace-nowrap text-xs font-medium ${req.coverageProvider.color
-                                        ? 'text-[#FF9500]'
-                                        : 'text-[#475467]'
-                                        }`}
-                                >
-                                    {req.coverageProvider.label}
-                                </td>
-                            </tr>
-                        ))}
+                                        <td
+                                            className={`px-4 py-3 whitespace-nowrap text-xs font-medium `}
+                                        >
+                                            {req.coverage_provider || "---"}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </>
+                        }
                     </tbody>
                 </table>
             </div>

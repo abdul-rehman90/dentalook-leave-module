@@ -6,20 +6,34 @@ import Heading from '../ui/heading'
 import Input from '../ui/input'
 import CustomSelector from '../ui/selector'
 import Button from '../ui/button'
+import Image from 'next/image'
+import loader from "../../../common/assets/icons/loader.svg"
 
-function Canvas({ open, onClose }) {
-    const leaveOptions = ['Dashboard', 'Calendar', 'Reports', 'Settings'];
-    const leaveOptions1 = ['Yes', 'No'];
+function Canvas({ 
+    open, 
+    onClose,
+    setProviderTitle,
+    providerTitle,  
+    setProviderType,
+    providerType,
+    allClinics,
+    coverageClinicId,
+    setCoverageClinicId,
+    handleProviderFormChange,
+    handleProviderFormSubmit,
+    providerFormData,
+    providerLoader
+}) {
     if (!open) return null
 
     return (
-        <>
+        <form onSubmit={handleProviderFormSubmit}>
             <div
                 onClick={onClose}
                 className="fixed inset-0 z-[9999] bg-black/50 transition-opacity duration-300"
             />
 
-            <div className="fixed top-0 right-0 z-[999999] rounded-l-2xl h-screen overflow-y-auto bg-white w-full max-w-[430px] dark:bg-gray-800 transition-transform duration-300 shadow-xl">
+            <div className="fixed top-0 right-0 z-[999999] rounded-l-2xl h-screen overflow-y-auto bg-white w-full max-w-[430px]  transition-transform duration-300 shadow-xl">
                 <div className="flex justify-between w-full items-start px-6 py-5 border-b border-[#E6EAEE]">
                     <Heading
                         title='New Provider Details'
@@ -38,51 +52,61 @@ function Canvas({ open, onClose }) {
                         <Input
                             label='Provider First Name'
                             placeholder='First Name'
+                            name="firstName"
+                            onChange={handleProviderFormChange}
+                            value={providerFormData.firstName} 
                         />
                     </div>
                     <div>
                         <Input
                             label='Provider Last Name'
                             placeholder='Last Name'
-                        />
-                    </div>
-                    <div>
-                        <Input
-                            label='Provider Title'
-                            placeholder='DDS/RDH/RDT'
-                        />
-                    </div>
-                    <div>
-                        <CustomSelector
-                            onChange={(value) => console.log(value)}
-                            options={leaveOptions}
-                            label='Leave Type'
-                            placeholder='Select' />
-                    </div>
-                    <div>
-                        <Input
-                            label='Province'
-                            placeholder='ON/SK/AB'
+                            name="lastName"
+                            value={providerFormData.lastName}
+                            onChange={handleProviderFormChange}
                         />
                     </div>
                     <div>
                         <CustomSelector
-                            onChange={(value) => console.log(value)}
-                            options={leaveOptions1}
-                            label='Leave Type'
-                            placeholder='Select option' />
+                            onChange={(value) => setProviderTitle(value)}
+                            label="Provider Title"
+                            options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
+                            placeholder="DDS/RDH/RDT"
+                            labelKey="name"
+                            value={providerTitle}
+                        />
+                    </div>
+
+                    <div>
+                        <CustomSelector
+                            onChange={(value) => setProviderType(value)}
+                            label="Provider Type"
+                            options={[{name:"Internal", value:"Internal"},{name:"External", value:"External"},{name:"ACE", value:"ACE"}]}
+                            placeholder="Internal/External/ACE"
+                            labelKey="name"
+                            value={providerType}
+                        />
                     </div>
                     <div>
                         <CustomSelector
-                            onChange={(value) => console.log(value)}
-                            options={leaveOptions}
-                            label='Clinic'
-                            placeholder='Select Clinic' />
+                            onChange={(value) => {
+                                setCoverageClinicId(value);
+                            }}
+                            label="Clinic"
+                            options={allClinics}
+                            placeholder="Select Clinic"
+                            labelKey="clinic_name"
+                            valueKey="clinic_id"
+                            value={coverageClinicId}
+                        />
                     </div>
+                   
                     <div>
                         <Input
-                            label='City'
-                            placeholder='Enter City'
+                            label="City"
+                            placeholder="Enter Coverage"
+                            name="city"
+                            onChange={handleProviderFormChange}
                         />
                     </div>
                     <div className='flex items-center justify-end gap-4'>
@@ -91,19 +115,30 @@ function Canvas({ open, onClose }) {
                             border={true}
                             textcolor={true}
                             type='button'
-                            className='!w-fit !px-6 !font-semibold'
+                            disabled={providerLoader}
+                            className='!w-fit !px-6 !font-semibold disabled:opacity-[0.5] disabled:cursor-not-allowed'
                         />
                         <Button
-                            text='Create'
-                            className='!w-fit !px-6 !font-semibold'
+                           text={
+                                providerLoader ? (
+                                <span className="flex items-center gap-2">
+                                    Create
+                                    <Image src={loader} alt="loading" width={24} height={24} />
+                                </span>
+                                ) : (
+                                "Create"
+                                )
+                            }
+                            className='!w-fit !px-6 !font-semibold disabled:opacity-[0.5] disabled:cursor-not-allowed'
+                            disabled={providerLoader}
                             bgcolor={true}
-                            type='button'
+                            type='submit'
                         />
                     </div>
                 </div>
 
             </div>
-        </>
+        </form>
     )
 }
 

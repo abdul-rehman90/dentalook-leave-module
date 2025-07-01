@@ -17,8 +17,7 @@ function Header() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isToggle, setIsToggle] = useState(false);
   const { userData } = useAuth();
-  console.log(userData, "..userData")
-
+  
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener("scroll", handleScroll);
