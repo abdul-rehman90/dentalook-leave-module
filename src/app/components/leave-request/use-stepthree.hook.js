@@ -93,7 +93,7 @@ export default function useStepThree() {
 
 
     const [rows, setRows] = useState([
-        { leave_date: '', leave_type:'', reason: '' }
+        { leave_date: '', leave_type:'', reason: '', coverage_needed: '', coverage_provider:''}
     ]);
 
     // get patch method for update step 1

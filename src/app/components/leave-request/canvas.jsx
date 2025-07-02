@@ -22,7 +22,13 @@ function Canvas({
     handleProviderFormChange,
     handleProviderFormSubmit,
     providerFormData,
-    providerLoader
+    providerLoader,
+    allProvinces,
+    provinceId,
+    setProvinceId,
+    setRegionalManagersId,
+    regionalManagersId,
+    regionalManagers
 }) {
     if (!open) return null
 
@@ -87,28 +93,81 @@ function Canvas({
                             value={providerType}
                         />
                     </div>
-                    <div>
-                        <CustomSelector
-                            onChange={(value) => {
-                                setCoverageClinicId(value);
-                            }}
-                            label="Clinic"
-                            options={allClinics}
-                            placeholder="Select Clinic"
-                            labelKey="clinic_name"
-                            valueKey="clinic_id"
-                            value={coverageClinicId}
-                        />
-                    </div>
+                    
+                    
+                    {
+                        providerType === "ACE" &&
+                        <div>
+                            <CustomSelector
+                                onChange={(value) => {
+                                    setProvinceId(value);
+                                }}
+                                label="Province"
+                                options={allProvinces}
+                                placeholder="Select Provider Title"
+                                labelKey="name"
+                                valueKey="id"
+                                value={provinceId}
+                            />
+                        </div>
+                    }   
+                    {
+                        providerType === "Internal" &&
+                        <>
+                            <div>
+                                <CustomSelector
+                                    onChange={(value) => {
+                                        setProvinceId(value);
+                                    }}
+                                    label="Province"
+                                    options={allProvinces}
+                                    placeholder="Select Provider Title"
+                                    labelKey="name"
+                                    valueKey="id"
+                                    value={provinceId}
+                                />
+                            </div>
+                            <div>
+                                <CustomSelector
+                                    onChange={(value) => {
+                                        setRegionalManagersId(value);
+                                    }}
+                                    label="Regional Manager"
+                                    options={regionalManagers}
+                                    placeholder="Surya Rana"
+                                    labelKey="name"
+                                    valueKey="id"
+                                    value={regionalManagersId}
+                                    
+                                />
+                            </div>
+                            <div>
+                                <CustomSelector
+                                    onChange={(value) => {
+                                        setCoverageClinicId(value);
+                                    }}
+                                    label="Clinic"
+                                    options={allClinics}
+                                    placeholder="Select Clinic"
+                                    labelKey="clinic_name"
+                                    valueKey="clinic_id"
+                                    value={coverageClinicId}
+                                />
+                            </div>
+                        </>
+                    }
+                    {
+                        providerType === "External" &&
+                        <div>
+                            <Input
+                                label="City"
+                                placeholder="Enter Coverage"
+                                name="city"
+                                onChange={handleProviderFormChange}
+                            />
+                        </div>
+                    }       
                    
-                    <div>
-                        <Input
-                            label="City"
-                            placeholder="Enter Coverage"
-                            name="city"
-                            onChange={handleProviderFormChange}
-                        />
-                    </div>
                     <div className='flex items-center justify-end gap-4'>
                         <Button
                             text='Cancel'

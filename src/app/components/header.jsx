@@ -83,7 +83,7 @@ function Header() {
           <Link href="/" className="font-bold text-lg hidden md:block">
             {
               pathname === "/reports" ? "Dental Look Leave Reports" : 
-              pathname === "/view-request" ? "Leave req dashboard" : 
+              pathname === "/view-request" ? "Leave Request Dashboard" : 
               pathname === "/leave-request" ? "Dental Look Provider Leave Request Application" : ""
             }
           </Link>

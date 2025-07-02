@@ -64,14 +64,16 @@ function StepThree({ onNext }) {
   };
   const handleProviderFormSubmit = async (e) => {
     e.preventDefault();
-    setProviderLoader(true);
+    // setProviderLoader(true);
     const payload = [{
       name: providerFormData.firstName + " " + providerFormData.lastName,
-      city: providerFormData.city,
-      clinic_id: coverageClinicId,
+      ...(providerType === "External" && { city: providerFormData.city }),
+      ...(providerType === "Internal" && { clinic_id: coverageClinicId }),
+      ...(providerType === "ACE" && { province_id: provinceId }),
       user_type: providerTitle,
       provider_coverage: providerType,
     }];
+    
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/provider-create/`,
@@ -157,18 +159,16 @@ function StepThree({ onNext }) {
       newRows[index][field] = value;
       setRows(newRows);
     };
-    const [buttonName, setButtonName] = useState("");
+
     const handleSubmit = async (e) => {
       e.preventDefault();
       setIsLoading(true);
       const paylaod = {
-        coverage_status:buttonName === "All" ? "All" : buttonName === "Partial" ? "Partial" : buttonName === "None" ? "None" : "",
         leave_requests: rows?.map((row) => ({
           id: row.id,
           coverage_needed: row.coverage_needed === "yes" ? true : false,
           ...(row.coverage_needed === "yes" && {
             coverage_provider: row.coverage_provider,
-            // provider_coverage: row.coverage_type,
             coverage_found_by: userData?.id,
           }),
         })),
@@ -191,8 +191,7 @@ function StepThree({ onNext }) {
           router.replace(`${window.location.pathname}?step=4`);
         }
       } catch (error) {
-        console.log(error);
-        onNext();
+        toast.error(error.response?.data?.error);
       } finally {
         setIsLoading(false);
       }
@@ -391,7 +390,7 @@ function StepThree({ onNext }) {
                             handleChange(index, "coverage_type", value)
                           }
                           labelKey="name"
-                          valueKey="id"
+                          valueKey="value"
                           disabled={row.coverage_needed === "no"}
                           className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
                         />
@@ -421,35 +420,18 @@ function StepThree({ onNext }) {
             </div>
           </div>
           <div className="flex flex-wrap md:flex-nowrap justify-center md:justify-end gap-3.5 py-4 mt-0 md:mt-5">
-            <Button
-              className="!text-[#335679] disabled:opacity-[0.5] disabled:cursor-not-allowed w-full md:!w-fit text-nowrap !px-6"
-              text="No Coverage Secured"
-              textcolor={true}
-              border={true}
-              disabled={isLoading}
-              onClick={() => setButtonName("None")}
-              type="submit"
-            />
-            <Button
-              className="!text-red-600 w-full disabled:opacity-[0.5] disabled:cursor-not-allowed md:!w-fit text-nowrap !bg-transparent !border !border-red-600 !px-6"
-              text="Partial Coverage Secured"
-              bgcolor={true}
-              disabled={isLoading}
-              onClick={() => setButtonName("Partial")}
-              type="submit"
-            />
+           
             <Button
               className="w-full md:!w-fit disabled:opacity-[0.5] disabled:cursor-not-allowed text-nowrap !px-6"
               disabled={isLoading}
-              onClick={() => setButtonName("All")}
               text={
                 isLoading ? (
                   <span className="flex items-center gap-2">
-                    All Coverage Secured{" "}
+                   Submit Secure Coverage
                     <Image src={loader} alt="loading" width={24} height={24} />
                   </span>
                 ) : (
-                  "All Coverage Secured"
+                  "Submit Secure Coverage"
                 )
               }
               bgcolor={true}
@@ -471,6 +453,12 @@ function StepThree({ onNext }) {
           handleProviderFormSubmit={handleProviderFormSubmit}
           providerFormData={providerFormData}
           providerLoader={providerLoader}
+          allProvinces={allProvinces}
+          setProvinceId={setProvinceId}
+          provinceId={provinceId}
+          setRegionalManagersId={setRegionalManagersId}
+          regionalManagersId={regionalManagersId}
+          regionalManagers={regionalManagers}
         />
       </>
     );

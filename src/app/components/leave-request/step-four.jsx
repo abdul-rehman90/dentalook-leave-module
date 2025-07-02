@@ -1,156 +1,367 @@
-import React, { useState } from 'react'
-import Heading from '../ui/heading'
-import CustomSelector from '../ui/selector'
-import Input from '../ui/input'
-import { ArrowRight, Plus } from 'lucide-react'
-import DateInput from '../ui/date-input'
-import Button from '../ui/button'
-import Link from 'next/link'
+import React, { useEffect, useState } from "react";
+import Heading from "../ui/heading";
+import CustomSelector from "../ui/selector";
+import Input from "../ui/input";
+import { ArrowRight, Plus } from "lucide-react";
+import Button from "../ui/button";
+import Canvas from "./canvas";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Cookies from "js-cookie";
+import loader from "../../../common/assets/icons/loader.svg";
+import axios from "axios";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import { useAuth } from "../../utils/AuthContext";
+import useStepThree from "./use-stepthree.hook";
+import Link from "next/link";
 
-function StepFour() {
-    const [leaveType, setLeaveType] = useState('');
+function StepFour({setCurrentStep}) {
+  const {
+    allProvinces,
+    setProvinceId,
+    setClinicId,
+    allClinics,
+    clinicId,
+    allProviders,
+    rows,
+    setRows,
+    providerId,
+    setProviderId,
+    provinceId,
+    getData,
+    regionalManagers,
+    regionalManagersId,
+    setRegionalManagersId,
+    coverageProviderList,
+  } = useStepThree();
+  const router = useRouter();
+  const [docName, setDocName] = useState("");
+  const token = Cookies.get("access-token");
+  const { userData } = useAuth();
+  const searchParams = useSearchParams();
+  const step = searchParams.get("step");
 
-    const leaveOptions = ['Dashboard', 'Calendar', 'Reports', 'Settings'];
-    return (
-        <div>
-            {/* <div classN
-            ame="">
-                <div>
-                    <Heading
-                        title='Provider Requiring Coverage'
-                        subtitle='Please complete the form below to initiate the provider requiring coverages'
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-                        <div className='col-span-3 flex items-center gap-6'>
-                            <div className='w-full'>
-                                <CustomSelector
-                                    onChange={(value) => setLeaveType(value)}
-                                    label='Provider Title'
-                                    options={leaveOptions}
-                                    placeholder="Select Provider Title"
-                                />
-                            </div>
-                            <div className='w-full'>
-                                <Input
-                                    placeholder='Provider’s Name'
-                                    label='Provider Name'
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                label='Province'
-                                options={leaveOptions}
-                                placeholder="Province"
-                            />
-                        </div>
-                        <div>
-                            <Input
-                                placeholder='Surya Rana'
-                                label='Regional Manager'
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                label='Clinic'
-                                options={leaveOptions}
-                                placeholder="Province"
-                            />
-                        </div>
-                    </div>
-                    <div className="flex w-full items-center justify-between py-4">
-                        <Heading
-                            title='Leave Details'
-                        />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 py-5">
-                        <div>
-                            <DateInput
-                                label='Leave Date'
-                                placeholder=''
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                options={leaveOptions}
-                                label='Leave Type'
-                                placeholder='Select' />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                label='Coverage Needed'
-                                placeholder='Enter Reason'
-                                options={leaveOptions}
-                                onChange={(value) => setLeaveType(value)}
-                            />
-                        </div>
-                        <div>
-                            <Input
-                                label='Coverage Provider'
-                                placeholder='Enter Reason'
+  useEffect(() => {
+    if (getData?.province && allProvinces?.length > 0) {
+      const matchedProvince = allProvinces.find(
+        (item) => item.name === getData.province
+      );
+      if (matchedProvince) {
+        setProvinceId(matchedProvince.id);
+      }
+    }
 
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                options={leaveOptions}
-                                label='Coverage Type'
-                                placeholder='Select' />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                options={leaveOptions}
-                                label='Coverage Found By'
-                                placeholder='Select'
-                            />
-                        </div>
-                        <div>
-                            <DateInput />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                options={leaveOptions}
-                                placeholder='Select' />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                placeholder='Enter Reason'
-                                onChange={(value) => setLeaveType(value)}
-                                options={leaveOptions}
-                            />
-                        </div>
-                        <div>
-                            <Input
-                                placeholder='Enter Reason'
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                options={leaveOptions}
-                                placeholder='Select' />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setLeaveType(value)}
-                                options={leaveOptions}
-                                placeholder='Select'
-                            />
-                        </div>
-                    </div>
+    if (getData?.regional_manager && regionalManagers?.length > 0) {
+      const matchedManager = regionalManagers.find(
+        (item) => item.name === getData.regional_manager
+      );
+      if (matchedManager) {
+        setRegionalManagersId(matchedManager.id);
+      }
+    }
+
+    if (getData?.clinic_name && allClinics?.length > 0 && !clinicId) {
+      const matchedManager = allClinics?.find(
+        (item) =>
+          item.clinic_name.trim().toLowerCase() ===
+          getData.clinic_name.trim().toLowerCase()
+      );
+      if (matchedManager) {
+        setClinicId(matchedManager.clinic_id);
+      }
+    }
+    if (getData?.provider_name && allProviders?.length > 0) {
+      const matchedManager = allProviders?.find((item) => {
+        const isMatch =
+          item.name.trim().toLowerCase() ===
+          getData?.provider_name.trim().toLowerCase();
+        return isMatch;
+      });
+      if (matchedManager) {
+        setProviderId(matchedManager.id);
+      }
+    }
+
+    if (getData?.days && getData.days.length > 0) {
+      setRows(getData.days);
+    }
+  }, [getData, allProvinces, regionalManagers, allClinics, allProviders]);
+
+  // Update field values
+  const handleChange = (index, field, value) => {
+    const newRows = [...rows];
+    newRows[index][field] = value;
+    setRows(newRows);
+  };
+  const handleClick = () => {
+    localStorage.removeItem("leaveRequestId");
+    setCurrentStep(0);
+    router.replace("/leave-request");
+  }
+
+  return (
+    <>
+      <>
+        <div className="relative">
+          <div className="">
+            <div>
+              <Heading
+                title="Provider Requiring Coverage"
+                subtitle="Please complete the form below to initiate the provider requiring coverages"
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
+                <div className="col-span-3 md:col-span-1 ">
+                  <CustomSelector
+                    onChange={(value) => {
+                      setProvinceId(value);
+                    }}
+                    label="Province"
+                    options={allProvinces}
+                    placeholder="Select Provider Title"
+                    labelKey="name"
+                    valueKey="id"
+                    value={provinceId || getData?.province}
+                    disabled={step === "4" ? true : false}
+                    className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                  />
+                </div>
+                <div className="col-span-3 md:col-span-1">
+                  <CustomSelector
+                    onChange={(value) => {
+                      setRegionalManagersId(value);
+                    }}
+                    label="Regional Manager"
+                    options={regionalManagers}
+                    placeholder="Surya Rana"
+                    labelKey="name"
+                    valueKey="id"
+                    value={regionalManagersId}
+                    disabled={step === "4" ? true : false}
+                    className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                  />
+                </div>
+                <div className="col-span-3 md:col-span-1">
+                  <CustomSelector
+                    onChange={(value) => {
+                      setClinicId(value);
+                    }}
+                    label="Clinic"
+                    options={allClinics}
+                    placeholder="Select Clinic"
+                    labelKey="clinic_name"
+                    valueKey="clinic_id"
+                    value={clinicId}
+                    disabled={step === "4" ? true : false}
+                    className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                  />
                 </div>
 
-            </div> */}
+                <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
+                  <div className="w-full">
+                    <CustomSelector
+                      onChange={(value) => setDocName(value)}
+                      label="Provider Title"
+                      options={[
+                        { name: "DDS", value: "DDS" },
+                        { name: "RDH", value: "RDH" },
+                        { name: "RDT", value: "RDT" },
+                      ]}
+                      placeholder="Select Provider Name"
+                      labelKey="name"
+                      value={docName || getData?.provider_type}
+                      disabled={step === "4" ? true : false}
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <CustomSelector
+                      onChange={(value) => setProviderId(value)}
+                      label="Provider Name"
+                      options={allProviders}
+                      placeholder="Select Provider Title"
+                      labelKey="name"
+                      valueKey="id"
+                      value={providerId}
+                      disabled={step === "4" ? true : false}
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                    />
+                  </div>
+                </div>
+              </div>
 
+              <div className="flex flex-wrap md:flex-nowrap gap-4 w-full items-center justify-between py-4">
+                <Heading title="Leave Details" />
+              </div>
+              {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-2 py-5"></div> */}
+              <div>
+                {rows?.map((row, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-2 py-5"
+                  >
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[13px] text-[#373940] font-medium block">
+                        Leave Date
+                      </label>
+                      <DatePicker
+                        selected={
+                          row.leave_date ? new Date(row.leave_date) : null
+                        }
+                        minDate={new Date()}
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        dateFormat="YYYY-MM-dd"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.5] py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        name="leave_date"
+                        onChange={(date) => {
+                          const formatted = date
+                            ? format(date, "yyyy-MM-dd")
+                            : "";
+                          handleChange(index, "leave_date", formatted);
+                        }}
+                        disabled={step === "4" ? true : false}
+                      />
+                    </div>
+                    <div>
+                      <CustomSelector
+                        label="Leave Type"
+                        options={[
+                          { name: "Emergency", value: "emergency" },
+                          { name: "Planned", value: "planned" },
+                        ]}
+                        placeholder="Select Leave Type"
+                        value={row.leave_type}
+                        onChange={(value) =>
+                          handleChange(index, "leave_type", value)
+                        }
+                        labelKey="name"
+                        valueKey="value"
+                        disabled={step === "4" ? true : false}
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      />
+                    </div>
+                    <div>
+                      <CustomSelector
+                        label="Coverage Needed"
+                        options={[
+                          { name: "Yes", value: "yes" },
+                          { name: "No", value: "no" },
+                        ]}
+                        
+                        placeholder="Select Type"
+                        value={
+                            row.coverage_needed === true
+                            ? "yes"
+                            : row.coverage_needed === false
+                            ? "no"
+                            : row.coverage_needed // fallback for initial empty string
+                        }
+                        onChange={(value) =>
+                          handleChange(index, "coverage_needed", value)
+                        }
+                        labelKey="name"
+                        valueKey="value"
+                        disabled={step === "4" ? true : false}
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      />
+                    </div>
+                    <div>
+                      <CustomSelector
+                        label="Covering Provider"
+                        //   options={coverageProvider}
+                        options={coverageProviderList}
+                        placeholder="Select Type"
+                        value={
+                            typeof row.coverage_provider === "object" && row.coverage_provider !== null
+                            ? row.coverage_provider.name
+                            : row.coverage_provider
+                        }
+                        onChange={(value) =>
+                          handleChange(index, "coverage_provider", value)
+                        }
+                        labelKey="name"
+                        valueKey="name"
+                        disabled={row.coverage_needed === "no" || step === "4" ? true : false}
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                        
+                      />
+                    </div>
+                    <div>
+                      <CustomSelector
+                        label="Coverage Type"
+                        options={[
+                          { name: "ACE", value: "ACE" },
+                          { name: "Internal", value: "Internal" },
+                          { name: "External", value: "External" },
+                        ]}
+                        placeholder="Select Type"
+                        value={row.coverage_type}
+                        onChange={(value) =>
+                          handleChange(index, "coverage_type", value)
+                        }
+                        labelKey="name"
+                        valueKey="value"
+                        disabled={row.coverage_needed === "no" || step === "4" ? true : false}
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      />
+                    </div>
 
+                    <div>
+                      <Input
+                        label="Coverage Found By"
+                        placeholder="Enter Coverage"
+                        name="coverage_found_by"
+                        value={userData?.name}
+                        onChange={(e) =>
+                          handleChange(
+                            index,
+                            "coverage_found_by",
+                            e.target.value
+                          )
+                        }
+                        disabled
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-    )
+        <div >
+            
+                    <div className='flex items-center justify-center gap-3 mt-6'>
+                        <button onClick={handleClick} className='!p-0'>
+                            <div className='group w-full hover:shadow-lg max-w-md mx-auto mt-6 px-6 py-12 border-2 relative rounded-2xl shadow border-white hover:border-[#335679] transition-all duration-300 ease-in-out'>
+                                <Heading
+                                    titleClass='font-medium text-lg text-black group-hover:text-[#335679] font-jakarta transition-colors duration-300'
+                                    title='Submit Provider Leave Request'
+                                />
+                                <div className='absolute hidden group-hover:block top-3 right-3 group-hover:text-[#335679] -rotate-45'>
+                                    <ArrowRight />
+                                </div>
+                            </div>
+                        </button>
+                        <Link href='/view-request'>
+                            <div className='group w-full relative hover:shadow-lg max-w-md mx-auto mt-6 px-6 py-12 border-2 rounded-2xl shadow border-white hover:border-[#335679] transition-all duration-300 ease-in-out'>
+                                <Heading
+                                    titleClass='font-medium text-center text-lg text-black group-hover:text-[#335679] font-jakarta transition-colors duration-300'
+                                    title='View Leave Requests'
+                                />
+                                <div className='absolute hidden group-hover:block top-3 right-3 group-hover:text-[#335679] -rotate-45'>
+                                    <ArrowRight />
+                                </div>
+                            </div>
+                        </Link>
+                    </div>
+                </div>
+      </>
+    </>
+  );
 }
 
-export default StepFour
+export default StepFour;

@@ -11,11 +11,15 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { format } from "date-fns";
 import loader from "../../../common/assets/icons/blue-loader.svg"
 import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 function StepTwo({onPrev, onNext}) {
-    const [leaveType, setLeaveType] = useState('');
     const [formData, setFormData] = useState({});
-
+    const param = useSearchParams();
+    const getIdParam = param.get('leaveRequestId');
+    const [isChecked, setIsChecked] = useState(false); 
+    const router = useRouter();
+   
     const {
         getData, 
         isLoading, 
@@ -34,7 +38,7 @@ function StepTwo({onPrev, onNext}) {
             })));
         }
     }, [getData]);
-
+    console.log(getData, "...getData")
 
     const handleChange = (name, value) => {
         setFormData({ ...formData, [name]: value });
@@ -42,33 +46,29 @@ function StepTwo({onPrev, onNext}) {
 
     const rightSideSteps = [
         {
-            title: '1. Verify to Payroll System',
-            description: 'Check the payroll system to confirm the leave request has been submitted.'
+            title: '1. Review the Provider Contract',
+            description: 'Verify the vacation entitlement as outlined in the contract'
         },
         {
-            title: '2. Confirm Request Details',
-            description: 'Review the amount of time requested for the leave.'
+            title: '2. Confirm Vacation Allowance',
+            description: 'Check the remaining vacation days available to the provider'
         },
         {
-            title: '3. Consult with the practice manager (PM)',
-            description: 'Get input from the PM regarding the impact and feasibility of the requested leave'
+            title: '3. Assss Notification Requirement ',
+            description: 'Review the required notice period for leave requests as stipulated in the contract'
         },
         {
-            title: '4. Evaluate Notice Period Compliance',
-            description: 'Verify whether the request was submitted within the required notice period.'
-        },
-        {
-            title: '5. Connect with the provider',
+            title: '4. Connect with the provider',
             description: 'Get in touch with the provider to understand their reason for the request'
         },
         {
-            title: '6. Make the Decision',
+            title: '5. Decide on Approval',
             description: 'Approve or decline the request based on the evaluation'
-        },
+        }
     ];
 
     const providerInfo = [
-        { label: 'Provider Title', value: 'Dental Look' },
+        { label: 'Provider Title', value: getData?.provider_type },
         { label: 'Provider’s Name', value: getData?.provider_name },
     ];
 
@@ -82,7 +82,7 @@ function StepTwo({onPrev, onNext}) {
         <div className="">
             <Heading
                 title='Review Leave Request'
-                subtitle='Please review the leave request before taking any action'
+                subtitle='Please review the leave request before taking any decision.'
             />
             <form> 
                           
@@ -91,6 +91,16 @@ function StepTwo({onPrev, onNext}) {
                         isLoading ? <Image src={loader} alt="" width={80} height={80} />  : 
                         <div className='flex justify-between flex-col h-full gap-8'>
                             <div>
+                                
+
+                                <div className="grid grid-cols-2 md:grid-cols-3 justify-between w-full mb-4 mt-4.5">
+                                    {locationInfo.map((item, index) => (
+                                        <div className='flex flex-col gap-2' key={index}>
+                                            <p className='font-medium text-[#979797] text-sm'>{item.label}</p>
+                                            <h2 className='font-medium text-base'>{item.value}</h2>
+                                        </div>
+                                    ))}
+                                </div>   
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full justify-start">
                                     {providerInfo?.map((item, index) => (
                                         <div className='flex flex-col gap-2' key={index}>
@@ -98,16 +108,7 @@ function StepTwo({onPrev, onNext}) {
                                             <h2 className='font-medium text-base'>{item.value}</h2>
                                         </div>
                                     ))}
-                                </div>
-
-                                <div className="grid grid-cols-2 md:grid-cols-3 justify-between w-full mt-4.5">
-                                    {locationInfo.map((item, index) => (
-                                        <div className='flex flex-col gap-2' key={index}>
-                                            <p className='font-medium text-[#979797] text-sm'>{item.label}</p>
-                                            <h2 className='font-medium text-base'>{item.value}</h2>
-                                        </div>
-                                    ))}
-                                </div>                   
+                                </div>                
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2 md:py-5">
                                     {formData1.map((day, dayIdx) => (
                                         <React.Fragment key={dayIdx}>
@@ -179,38 +180,43 @@ function StepTwo({onPrev, onNext}) {
                             </div>
                         ))}
                         <div className='mt-5 flex gap-2 items-center'>
-                            <input id='check' type="checkbox" />
+                            <input 
+                                id='check' 
+                                type="checkbox" 
+                                checked={isChecked}
+                                onChange={e => setIsChecked(e.target.checked)}
+                            />
                             <label htmlFor='check' className='text-black font-medium text-base'>
-                                I acknowledge that I’ve reviewed the above points
+                                I acknowledge that I've reviewed the above points for the following leave request.
                             </label>
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-wrap md:flex-nowrap justify-between w-full items-center gap-3.5 md:py-4 mt-5">
+                <div className={`${getIdParam ? "justify-end" : "justify-between"} flex flex-wrap md:flex-nowrap  w-full items-center gap-3.5 md:py-4 mt-5`}>
                     <button
                         type='button'
-                        className='w-full md:w-fit py-[6px] md:py-[11px] rounded-xl text-base text-[#335679] font-medium px-[75px] cursor-pointer border border-[#D0D5DD]'
-                        onClick={() => onPrev()}
+                        className={`${getIdParam ? "hidden" : "block"} w-full md:w-fit py-[6px] md:py-[11px] rounded-xl text-base text-[#335679] font-medium px-[75px] cursor-pointer border border-[#D0D5DD]`}
+                        onClick={() => {onPrev(); router.replace('/leave-request?step=1')}}
                     >
                         Edit Request
                     </button>
-                    <div className='flex flex-wrap md:flex-nowrap items-center gap-2'>
+                    <div className={`flex flex-wrap md:flex-nowrap items-center gap-2`}>
                         <Button
                             text={loadingButton === 'decline' ? 'Declining...' : 'Decline Request'}
                             textcolor={true}
                             border={true}
                             onClick={()=>handleStatus("decline")}
                             type='button'
-                            disabled={loadingButton !== null}
-                            className='w-full md:w-fit disabled:opacity-[0.5] text-[#FF0000] border border-[#FF0000]'
+                            disabled={loadingButton !== null || !isChecked}
+                            className='w-full disabled:cursor-not-allowed md:w-fit disabled:opacity-[0.5] text-[#FF0000] border border-[#FF0000]'
                         />
                         <Button
                             text={loadingButton === 'approved' ? 'Approving...' : 'Approved Request'}
                             bgcolor={true}
                             onClick={()=>handleStatus("approved")}
                             type='button'
-                            disabled={loadingButton !== null}
-                            className='w-full disabled:opacity-[0.5] md:w-fit'
+                            disabled={loadingButton !== null || !isChecked}
+                            className='w-full disabled:cursor-not-allowed disabled:opacity-[0.5] md:w-fit'
                         />
                     </div>
                 </div>

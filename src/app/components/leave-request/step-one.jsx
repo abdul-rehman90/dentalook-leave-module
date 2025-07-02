@@ -140,8 +140,12 @@ function StepOne({ onSubmit, onNext }) {
 
         if (role === "regional_manager") {
             setProvinceId(allProvinces[0]?.id);
-            setRegionalManagersId(regionalManagers[0]?.id);
-            
+            setRegionalManagersId(regionalManagers[0]?.id);  
+        }
+        if (role === "PM") {
+            setProvinceId(allProvinces[0]?.id);
+            setRegionalManagersId(regionalManagers[0]?.id);  
+            setClinicId(allClinics[0]?.clinic_id);
         }
          
         if (getData?.province && allProvinces?.length > 0) {
@@ -216,7 +220,7 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="name"
                                     valueKey="id"
                                     value={provinceId || getData?.province}
-                                    disabled={role === "regional_manager" ? true : false}
+                                    disabled={(role === "regional_manager" || role === "PM") ? true : false}
                                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>
@@ -232,7 +236,7 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="name"
                                     valueKey="id"
                                     value={regionalManagersId}
-                                    disabled={role === "regional_manager" ? true : false || provinceId ? false : true }
+                                    disabled={(role === "regional_manager" || role === "PM") ? true : false || provinceId ? false : true }
                                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>
@@ -247,7 +251,7 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="clinic_name"
                                     valueKey="clinic_id"
                                     value={clinicId}
-                                    disabled={provinceId ? false : true}
+                                    disabled={provinceId ? false : true || role === "PM" ? true : false}
                                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>
@@ -348,7 +352,7 @@ function StepOne({ onSubmit, onNext }) {
                        formId ?  
                         <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">
                             <Button
-                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Next"}
+                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Update"}
                                 bgcolor={true}
                                 disabled={isLoading}
                                 className="disabled:opacity-[0.5] disabled:cursor-not-allowed"
