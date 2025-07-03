@@ -11,6 +11,7 @@ export default function useSteptwo({onNext}) {
   const [isLoading, setIsLoading] = useState(false);
   const [stepId, setStepId] = useState(null);
   const [loadingButton, setLoadingButton] = useState(null);
+  const [declineReq, setDeclineReq] = useState(false);
   const getLeaveDeatils = async (id) => {
     setIsLoading(true);
     try {
@@ -58,11 +59,15 @@ export default function useSteptwo({onNext}) {
         },
       });
       if(response.status === 200){
+        
        toast.success(response?.data?.detail);
-       if(buttonName === 'approved'){
+        if(buttonName === 'approved'){
           onNext();
           router.replace(`${window.location.pathname}?step=3`);
-       }
+        }
+        if(buttonName === 'decline'){
+          setDeclineReq(true);
+        }
       }
     }
     catch(error){
@@ -78,6 +83,7 @@ export default function useSteptwo({onNext}) {
     getData,
     isLoading,
     handleStatus,
-    loadingButton
+    loadingButton,
+    declineReq
   };
 }

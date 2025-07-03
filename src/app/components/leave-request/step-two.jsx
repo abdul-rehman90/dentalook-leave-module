@@ -25,7 +25,8 @@ function StepTwo({onPrev, onNext}) {
         getData, 
         isLoading, 
         handleStatus,
-        loadingButton
+        loadingButton,
+        declineReq
     } = useSteptwo({onNext});
       
     const [formData1, setFormData2] = useState([]);
@@ -194,26 +195,29 @@ function StepTwo({onPrev, onNext}) {
                     >
                         Edit Request
                     </button>
-                    
-                    <div className={`flex-wrap md:flex-nowrap items-center gap-2 ${getStatusParam === "rejected" ? "hidden" : "flex"}`}>
-                        <Button
-                            text={loadingButton === 'decline' ? 'Declining...' : 'Decline Request'}
-                            textcolor={true}
-                            border={true}
-                            onClick={()=>handleStatus("decline")}
-                            type='button'
-                            disabled={loadingButton !== null || !isChecked}
-                            className='w-full disabled:cursor-not-allowed md:w-fit disabled:opacity-[0.5] text-[#FF0000] border border-[#FF0000]'
-                        />
-                        <Button
-                            text={loadingButton === 'approved' ? 'Approving...' : 'Approved Request'}
-                            bgcolor={true}
-                            onClick={()=>handleStatus("approved")}
-                            type='button'
-                            disabled={loadingButton !== null || !isChecked}
-                            className='w-full disabled:cursor-not-allowed disabled:opacity-[0.5] md:w-fit'
-                        />
-                    </div>
+                    {
+                        getStatusParam === "decline" || declineReq === true ?
+                        <p className='text-red-600'>Your Request has been declined.</p> :
+                        <div className={`flex flex-wrap md:flex-nowrap items-center gap-2`}>
+                            <Button
+                                text={loadingButton === 'decline' ? 'Declining...' : 'Decline Request'}
+                                textcolor={true}
+                                border={true}
+                                onClick={()=>handleStatus("decline")}
+                                type='button'
+                                disabled={loadingButton !== null || !isChecked}
+                                className='w-full disabled:cursor-not-allowed md:w-fit disabled:opacity-[0.5] text-[#FF0000] border border-[#FF0000]'
+                            />
+                            <Button
+                                text={loadingButton === 'approved' ? 'Approving...' : 'Approved Request'}
+                                bgcolor={true}
+                                onClick={()=>handleStatus("approved")}
+                                type='button'
+                                disabled={loadingButton !== null || !isChecked}
+                                className='w-full disabled:cursor-not-allowed disabled:opacity-[0.5] md:w-fit'
+                            />
+                        </div>
+                    }
                 </div>
             </form>
         </div>

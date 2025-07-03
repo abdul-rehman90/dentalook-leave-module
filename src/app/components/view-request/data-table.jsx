@@ -33,7 +33,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
     if(item.status === "pending"){
       router.push(`/leave-request?step=2&leaveRequestId=${item.id}&status=${item.status}`); 
     }
-    if(item.status === "rejected"){
+    if(item.status === "decline"){
       router.push(`/leave-request?step=2&leaveRequestId=${item.id}&status=${item.status}`); 
     }
     if(item.status !== "pending"){
