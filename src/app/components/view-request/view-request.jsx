@@ -6,7 +6,7 @@ import Button from "../ui/button";
 import CustomSelector from "../ui/selector";
 import Input from "../ui/input";
 import DataTabel from './data-table'
-import viewReq from "./view-req.hook"
+import useViewReq from "./use-view-req.hook"
 
 
 function ViewRequest() {
@@ -28,7 +28,7 @@ function ViewRequest() {
         setProviderId,
         getReqData,
         isLoading
-    } = viewReq();
+    } = useViewReq();
     
     
     return (

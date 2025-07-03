@@ -6,7 +6,8 @@ export default function useStepThree() {
     const [provinceId, setProvinceId] = useState('');
     const [allProvinces, setAllProvinces] = useState([]);
     const token = Cookies.get('access-token');
-    
+
+    const [provinceId2, setProvinceId2] = useState('');    
 
     const [allClinics, setAllClinics] = useState([]);
     const [clinicId, setClinicId] = useState('');
@@ -18,6 +19,7 @@ export default function useStepThree() {
 
     const [regionalManagers, setRegionalManagers] = useState([]);
     const [regionalManagersId, setRegionalManagersId] = useState('');
+    const [regionalManagersId2, setRegionalManagersId2] = useState('');
     const [formId, setFormId] = useState('');
 
     // get province
@@ -44,7 +46,7 @@ export default function useStepThree() {
     // get reg and clinic
     const clinicByRegionalManager = async () => {
         try{
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/clinic-by-regional-manager/${provinceId}`, {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/clinic-by-regional-manager/${provinceId2 ? provinceId2 : provinceId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "ngrok-skip-browser-warning": "true"
@@ -62,9 +64,11 @@ export default function useStepThree() {
     useEffect(()=>{
         if (provinceId) {
             clinicByRegionalManager();
+        }else if(provinceId2){
+            clinicByRegionalManager();
         }
         
-    }, [provinceId]);
+    }, [provinceId, provinceId2]);
 
    
     // get providers
@@ -177,6 +181,8 @@ export default function useStepThree() {
         coverageProviderId, setcoverageProviderId,
         getLeaveDeatils,
         coverageProviderList,
-        providerList
+        providerList,
+        provinceId2, setProvinceId2,
+        regionalManagersId2, setRegionalManagersId2
     }
 }

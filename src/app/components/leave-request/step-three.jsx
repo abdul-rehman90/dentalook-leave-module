@@ -15,6 +15,7 @@ import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAuth } from "../../utils/AuthContext";
+import { format } from "date-fns";
 
 function StepThree({ onNext }) {
     const {
@@ -39,7 +40,9 @@ function StepThree({ onNext }) {
       getLeaveDeatils,
       formId,
       coverageProviderList,
-      providerList
+      providerList,
+      provinceId2, setProvinceId2,
+      regionalManagersId2, setRegionalManagersId2
     } = useStepThree();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -64,16 +67,16 @@ function StepThree({ onNext }) {
   };
   const handleProviderFormSubmit = async (e) => {
     e.preventDefault();
-    // setProviderLoader(true);
+    setProviderLoader(true);
     const payload = [{
       name: providerFormData.firstName + " " + providerFormData.lastName,
       ...(providerType === "External" && { city: providerFormData.city }),
-      ...(providerType === "Internal" && { clinic_id: coverageClinicId }),
-      ...(providerType === "ACE" && { province_id: provinceId }),
+      ...(providerType === "Internal" && { clinic_id: coverageClinicId, province_id: provinceId2}),
+      ...(providerType === "ACE" && { province_id: provinceId2 }),
       user_type: providerTitle,
       provider_coverage: providerType,
     }];
-    
+   
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/provider-create/`,
@@ -103,7 +106,13 @@ function StepThree({ onNext }) {
     } finally {
       setProviderLoader(false);
     }
- } 
+  } 
+
+  const providerTitleOptions = [
+    { name: "DDS", value: "DDS" },
+    { name: "RDH", value: "RDH" },
+    { name: "RDT", value: "RDT" },
+  ]
 
     
 
@@ -140,13 +149,26 @@ function StepThree({ onNext }) {
         const matchedManager = allProviders?.find((item) => {
           const isMatch =
             item.name.trim().toLowerCase() ===
-            getData?.provider_name.trim().toLowerCase();
+            getData?.provider_name?.name?.trim().toLowerCase();
           return isMatch;
         });
         if (matchedManager) {
           setProviderId(matchedManager.id);
         }
       }
+
+      if (getData?.provider_name && providerTitleOptions?.length > 0) {
+        const matchedManager = providerTitleOptions?.find(
+          (item) =>
+            item.name?.trim().toLowerCase() ===
+            getData.provider_name?.user_type?.trim().toLowerCase()
+        );
+        if (matchedManager) {
+          setDocName(matchedManager.value);
+        }
+      }
+
+      
 
       if (getData?.days && getData.days.length > 0) {
         setRows(getData.days);
@@ -259,14 +281,10 @@ function StepThree({ onNext }) {
                       <CustomSelector
                         onChange={(value) => setDocName(value)}
                         label="Provider Title"
-                        options={[
-                          { name: "DDS", value: "DDS" },
-                          { name: "RDH", value: "RDH" },
-                          { name: "RDT", value: "RDT" },
-                        ]}
+                        options={providerTitleOptions}
                         placeholder="Select Provider Name"
                         labelKey="name"
-                        value={docName || getData?.provider_type}
+                        value={docName || getData?.provider_type?.user_type}
                         disabled={step === "3" ? true : false}
                         className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
                       />
@@ -459,6 +477,10 @@ function StepThree({ onNext }) {
           setRegionalManagersId={setRegionalManagersId}
           regionalManagersId={regionalManagersId}
           regionalManagers={regionalManagers}
+          provinceId2={provinceId2}
+          setProvinceId2={setProvinceId2}
+          regionalManagersId2={regionalManagersId2}
+          setRegionalManagersId2={setRegionalManagersId2}
         />
       </>
     );

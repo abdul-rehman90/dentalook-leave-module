@@ -43,6 +43,12 @@ function StepFour({setCurrentStep}) {
   const searchParams = useSearchParams();
   const step = searchParams.get("step");
 
+  const providerTitleOptions = [
+    { name: "DDS", value: "DDS" },
+    { name: "RDH", value: "RDH" },
+    { name: "RDT", value: "RDT" },
+  ]
+
   useEffect(() => {
     if (getData?.province && allProvinces?.length > 0) {
       const matchedProvince = allProvinces.find(
@@ -73,16 +79,27 @@ function StepFour({setCurrentStep}) {
       }
     }
     if (getData?.provider_name && allProviders?.length > 0) {
-      const matchedManager = allProviders?.find((item) => {
-        const isMatch =
-          item.name.trim().toLowerCase() ===
-          getData?.provider_name.trim().toLowerCase();
-        return isMatch;
-      });
-      if (matchedManager) {
-        setProviderId(matchedManager.id);
-      }
+        const matchedManager = allProviders?.find((item) => {
+          const isMatch =
+            item.name.trim().toLowerCase() ===
+            getData?.provider_name?.name?.trim().toLowerCase();
+          return isMatch;
+        });
+        if (matchedManager) {
+          setProviderId(matchedManager.id);
+        }
     }
+
+    if (getData?.provider_name && providerTitleOptions?.length > 0) {
+        const matchedManager = providerTitleOptions?.find(
+          (item) =>
+            item.name?.trim().toLowerCase() ===
+            getData.provider_name?.user_type?.trim().toLowerCase()
+        );
+        if (matchedManager) {
+          setDocName(matchedManager.value);
+        }
+      }
 
     if (getData?.days && getData.days.length > 0) {
       setRows(getData.days);
@@ -163,11 +180,7 @@ function StepFour({setCurrentStep}) {
                     <CustomSelector
                       onChange={(value) => setDocName(value)}
                       label="Provider Title"
-                      options={[
-                        { name: "DDS", value: "DDS" },
-                        { name: "RDH", value: "RDH" },
-                        { name: "RDT", value: "RDT" },
-                      ]}
+                      options={providerTitleOptions}
                       placeholder="Select Provider Name"
                       labelKey="name"
                       value={docName || getData?.provider_type}

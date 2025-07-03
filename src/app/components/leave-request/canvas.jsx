@@ -23,14 +23,25 @@ function Canvas({
     handleProviderFormSubmit,
     providerFormData,
     providerLoader,
-    allProvinces,
+    // allProvinces,
     provinceId,
     setProvinceId,
     setRegionalManagersId,
     regionalManagersId,
-    regionalManagers
+    regionalManagers,
+    provinceId2, 
+    setProvinceId2,
+    regionalManagersId2,
+    setRegionalManagersId2
 }) {
     if (!open) return null
+
+
+    const allProvinces = [
+        { id: 1, name: "Alberta (AB)" },
+        { id: 2, name: "Saskatchewan (SK)" },    
+        { id: 3, name: "Ontario (ON)" },
+    ]
 
     return (
         <form onSubmit={handleProviderFormSubmit}>
@@ -100,14 +111,14 @@ function Canvas({
                         <div>
                             <CustomSelector
                                 onChange={(value) => {
-                                    setProvinceId(value);
+                                    setProvinceId2(value);
                                 }}
                                 label="Province"
                                 options={allProvinces}
                                 placeholder="Select Provider Title"
                                 labelKey="name"
                                 valueKey="id"
-                                value={provinceId}
+                                value={provinceId2}
                             />
                         </div>
                     }   
@@ -117,27 +128,27 @@ function Canvas({
                             <div>
                                 <CustomSelector
                                     onChange={(value) => {
-                                        setProvinceId(value);
+                                        setProvinceId2(value);
                                     }}
                                     label="Province"
                                     options={allProvinces}
                                     placeholder="Select Provider Title"
                                     labelKey="name"
                                     valueKey="id"
-                                    value={provinceId}
+                                    value={provinceId2}
                                 />
                             </div>
                             <div>
                                 <CustomSelector
                                     onChange={(value) => {
-                                        setRegionalManagersId(value);
+                                        setRegionalManagersId2(value);
                                     }}
                                     label="Regional Manager"
                                     options={regionalManagers}
                                     placeholder="Surya Rana"
                                     labelKey="name"
                                     valueKey="id"
-                                    value={regionalManagersId}
+                                    value={regionalManagersId2}
                                     
                                 />
                             </div>

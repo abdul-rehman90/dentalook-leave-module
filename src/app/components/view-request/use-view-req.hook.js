@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from "js-cookie";
 import { useEffect, useState } from 'react';
 
-export default function viewReq() {
+export default function useViewReq() {
     const token = Cookies.get('access-token');
     const [provinceId, setProvinceId] = useState('');
     const [allProvinces, setAllProvinces] = useState([]);

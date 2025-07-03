@@ -68,8 +68,8 @@ function StepTwo({onPrev, onNext}) {
     ];
 
     const providerInfo = [
-        { label: 'Provider Title', value: getData?.provider_type },
-        { label: 'Provider’s Name', value: getData?.provider_name },
+        { label: 'Provider Title', value: getData?.provider_name?.user_type },
+        { label: 'Provider’s Name', value: getData?.provider_name?.name },
     ];
 
     const locationInfo = [
@@ -110,7 +110,7 @@ function StepTwo({onPrev, onNext}) {
                                     ))}
                                 </div>                
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2 md:py-5">
-                                    {formData1.map((day, dayIdx) => (
+                                    {formData1?.map((day, dayIdx) => (
                                         <React.Fragment key={dayIdx}>
                                             <div className="flex flex-col gap-2">
                                                 <label className="text-[13px] text-[#373940] font-medium block">Leave Date</label>
@@ -155,17 +155,10 @@ function StepTwo({onPrev, onNext}) {
                                             />
                                         </React.Fragment>
                                     ))}
-                                </div>
+                                </div> 
 
                             </div>
 
-                            {/* <Button
-                                type='button'
-                                className='md:w-fit'
-                                textcolor={true}
-                                border={true}
-                                text='Edit Request'
-                            /> */}
                         </div>
                     }
                     <div className='bg-[#F8F8F8] p-4.5 rounded-xl'>
