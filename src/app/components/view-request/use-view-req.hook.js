@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 export default function useViewReq() {
     const token = Cookies.get('access-token');
+    const role = Cookies.get('role');
     const [provinceId, setProvinceId] = useState('');
     const [allProvinces, setAllProvinces] = useState([]);
 
@@ -119,6 +120,20 @@ export default function useViewReq() {
         }
     }, [token, token, providerId, clinicId, provinceId, regionalManagersId]);
 
+     useEffect(() => {
+    
+            if (role === "regional_manager") {
+                setProvinceId(allProvinces[0]?.id);
+                setRegionalManagersId(regionalManagers[0]?.id);  
+            }
+            if (role === "PM") {
+                setProvinceId(allProvinces[0]?.id);
+                setRegionalManagersId(regionalManagers[0]?.id);  
+                setClinicId(allClinics[0]?.clinic_id);
+            }
+        },[allProvinces, regionalManagers, allClinics]
+    );
+
        
     return {
         provinceId, 
@@ -136,6 +151,7 @@ export default function useViewReq() {
         providerId, 
         setProviderId,
         getReqData,
-        isLoading
+        isLoading,
+        role
     }
 }

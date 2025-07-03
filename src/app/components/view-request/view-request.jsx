@@ -27,7 +27,8 @@ function ViewRequest() {
         providerId, 
         setProviderId,
         getReqData,
-        isLoading
+        isLoading,
+        role
     } = useViewReq();
     
     
@@ -54,6 +55,8 @@ function ViewRequest() {
                                 labelKey="name"
                                 valueKey="id"
                                 value={provinceId}
+                                disabled={(role === "regional_manager" || role === "PM") ? true : false}
+                                className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
@@ -67,7 +70,7 @@ function ViewRequest() {
                                 labelKey="name"
                                 valueKey="id"
                                 value={regionalManagersId}
-                                disabled={provinceId ? false : true}
+                                disabled={role === "regional_manager" ? true : false || provinceId ? false : true}
                                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
@@ -82,7 +85,7 @@ function ViewRequest() {
                                 labelKey="clinic_name"
                                 valueKey="clinic_id"
                                 value={clinicId}
-                                disabled={provinceId ? false : true}
+                                disabled={role === "PM" ? true : false || provinceId ? false : true}
                                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>

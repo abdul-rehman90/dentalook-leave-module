@@ -135,7 +135,11 @@ function StepOne({ onSubmit, onNext }) {
         }
     };
 
-
+    const providerTitleOptions = [
+        { name: "DDS", value: "DDS" },
+        { name: "RDH", value: "RDH" },
+        { name: "RDT", value: "RDT" },
+    ]
     useEffect(() => {
 
         if (role === "regional_manager") {
@@ -180,14 +184,25 @@ function StepOne({ onSubmit, onNext }) {
             }
         }
         if (getData?.provider_name && allProviders?.length > 0) {
-            const matchedManager = allProviders?.find(
-                (item) => {
-                    const isMatch = item.name.trim().toLowerCase() === getData?.provider_name.trim().toLowerCase();
-                    return isMatch;
-                }
+            const matchedManager = allProviders?.find((item) => {
+            const isMatch =
+                item.name.trim().toLowerCase() ===
+                getData?.provider_name?.name?.trim().toLowerCase();
+            return isMatch;
+            });
+            if (matchedManager) {
+            setProviderId(matchedManager.id);
+            }
+        }
+
+        if (getData?.provider_name && providerTitleOptions?.length > 0) {
+            const matchedManager = providerTitleOptions?.find(
+            (item) =>
+                item.name?.trim().toLowerCase() ===
+                getData.provider_name?.user_type?.trim().toLowerCase()
             );
             if (matchedManager) {
-                setProviderId(matchedManager.id);
+            setDocName(matchedManager.value);
             }
         }
 
@@ -262,10 +277,10 @@ function StepOne({ onSubmit, onNext }) {
                                     <CustomSelector
                                         onChange={(value) => setDocName(value)}
                                         label="Provider Title"
-                                        options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
+                                       options={providerTitleOptions}
                                         placeholder="Select Provider Name"
                                         labelKey="name"
-                                        value={docName || getData?.provider_type}
+                                        value={docName}
                                     />
                                 </div>
                                 <div className="w-full">

@@ -32,7 +32,10 @@ function Canvas({
     provinceId2, 
     setProvinceId2,
     regionalManagersId2,
-    setRegionalManagersId2
+    setRegionalManagersId2,
+    getData,
+    docName,
+    setDocName
 }) {
     if (!open) return null
 
@@ -85,12 +88,14 @@ function Canvas({
                     </div>
                     <div>
                         <CustomSelector
-                            onChange={(value) => setProviderTitle(value)}
+                            onChange={(value) => setDocName(value)}
                             label="Provider Title"
                             options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
                             placeholder="DDS/RDH/RDT"
                             labelKey="name"
-                            value={providerTitle}
+                            value={docName || getData?.provider_type?.user_type}
+                            className='disabled:opacity-50 disabled:cursor-not-allowed'
+                            disabled
                         />
                     </div>
 
@@ -184,6 +189,7 @@ function Canvas({
                             text='Cancel'
                             border={true}
                             textcolor={true}
+                            onClick={onClose}
                             type='button'
                             disabled={providerLoader}
                             className='!w-fit !px-6 !font-semibold disabled:opacity-[0.5] disabled:cursor-not-allowed'

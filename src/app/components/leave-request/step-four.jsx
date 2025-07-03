@@ -345,33 +345,23 @@ function StepFour({setCurrentStep}) {
             </div>
           </div>
         </div>
-        <div >
-            
-                    <div className='flex items-center justify-center gap-3 mt-6'>
-                        <button onClick={handleClick} className='!p-0'>
-                            <div className='group w-full hover:shadow-lg max-w-md mx-auto mt-6 px-6 py-12 border-2 relative rounded-2xl shadow border-white hover:border-[#335679] transition-all duration-300 ease-in-out'>
-                                <Heading
-                                    titleClass='font-medium text-lg text-black group-hover:text-[#335679] font-jakarta transition-colors duration-300'
-                                    title='Submit Provider Leave Request'
+         <div className={`flex-wrap md:flex-nowrap items-center gap-2 flex justify-end`}>
+                                <Button
+                                    text="Goto Dashboard"
+                                    textcolor={true}
+                                    border={true}
+                                    onClick={()=>router.push(`/view-request`)}
+                                    type='button'
+                                    className='w-full md:w-fit  text-[#FF0000] border border-[#FF0000]'
                                 />
-                                <div className='absolute hidden group-hover:block top-3 right-3 group-hover:text-[#335679] -rotate-45'>
-                                    <ArrowRight />
-                                </div>
-                            </div>
-                        </button>
-                        <Link href='/view-request'>
-                            <div className='group w-full relative hover:shadow-lg max-w-md mx-auto mt-6 px-6 py-12 border-2 rounded-2xl shadow border-white hover:border-[#335679] transition-all duration-300 ease-in-out'>
-                                <Heading
-                                    titleClass='font-medium text-center text-lg text-black group-hover:text-[#335679] font-jakarta transition-colors duration-300'
-                                    title='View Leave Requests'
+                                <Button
+                                    text="Submit Another Leave Request"
+                                    bgcolor={true}
+                                    onClick={handleClick}
+                                    type='button'
+                                    className='w-full md:w-fit'
                                 />
-                                <div className='absolute hidden group-hover:block top-3 right-3 group-hover:text-[#335679] -rotate-45'>
-                                    <ArrowRight />
-                                </div>
-                            </div>
-                        </Link>
-                    </div>
-                </div>
+          </div>
       </>
     </>
   );

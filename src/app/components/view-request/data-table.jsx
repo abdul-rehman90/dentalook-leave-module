@@ -31,10 +31,13 @@ export default function LeaveTable({ getReqData, isLoading }) {
   const handelClick = (item) =>{
     localStorage.setItem("leaveRequestId", item.id);
     if(item.status === "pending"){
-      router.push(`/leave-request?step=2&leaveRequestId=${item.id}`); 
+      router.push(`/leave-request?step=2&leaveRequestId=${item.id}&status=${item.status}`); 
+    }
+    if(item.status === "rejected"){
+      router.push(`/leave-request?step=2&leaveRequestId=${item.id}&status=${item.status}`); 
     }
     if(item.status !== "pending"){
-      router.push(`/leave-request?step=3&leaveRequestId=${item.id}`); 
+      router.push(`/leave-request?step=3&leaveRequestId=${item.id}&status=${item.status}`); 
     }
   }
 
@@ -120,20 +123,37 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         </div>
                       ))}
                     </td>
+
                     <td className="px-3 py-3 text-xs font-normal text-[#475467]">
-                      {item?.reason.map((detail, index) => (
-                        <div key={index}>
-                          {detail}
-                        </div>
-                      ))}
+                      {item?.reason?.map((detail, index) => {
+                        if (item.coverage_needed?.[index] === false) {
+                          return <div key={index}>No Coverage needed</div>;
+                        }
+                        if (
+                          item.coverage_needed?.[index] === true &&
+                          (!detail || detail === "")
+                        ) {
+                          return <div key={index}>Looking for coverage</div>;
+                        }
+                        return <div key={index}>{detail}</div>;
+                      })}
                     </td>
+
                     <td className="px-3 py-3 text-xs font-normal text-[#475467]">
-                      {item?.coverage_provider?.map((provider, index) => (
-                        <div key={index}>
-                          {provider}
-                        </div>
-                      ))}
+                      {item?.coverage_provider?.map((provider, index) => {
+                        if (item.coverage_needed?.[index] === false) {
+                          return <div key={index}>No Coverage needed</div>;
+                        }
+                        if (
+                          item.coverage_needed?.[index] === true &&
+                          (!provider || provider === "")
+                        ) {
+                          return <div key={index}>Looking for coverage</div>;
+                        }
+                        return <div key={index}>{provider}</div>;
+                      })}
                     </td>
+
                     </tr>
                   )
                 })}

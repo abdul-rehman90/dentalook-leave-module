@@ -73,7 +73,7 @@ function StepThree({ onNext }) {
       ...(providerType === "External" && { city: providerFormData.city }),
       ...(providerType === "Internal" && { clinic_id: coverageClinicId, province_id: provinceId2}),
       ...(providerType === "ACE" && { province_id: provinceId2 }),
-      user_type: providerTitle,
+      user_type: docName,
       provider_coverage: providerType,
     }];
    
@@ -97,9 +97,9 @@ function StepThree({ onNext }) {
           city: "",
         });
         // setDocName("");
-        // setProviderTitle("");
-        // setProviderType("");
+        setProvinceId2("");
         // setCoverageClinicId("");
+        setRegionalManagersId2("");
       }
     } catch (error) {
       toast.error(error.response?.data?.error)
@@ -380,19 +380,19 @@ function StepThree({ onNext }) {
                       </div>
                       <div>
                         <CustomSelector
-                          label="Covering Provider"
-                        //   options={coverageProvider}
-                          options={coverageProviderList}
-                          placeholder="Select Type"
-                          value={row.coverage_provider}
-                          onChange={(value) =>
-                            handleChange(index, "coverage_provider", value)
-                          }
-                          labelKey="name"
-                          valueKey="id"
-                          disabled={row.coverage_needed === "no"}
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
-                        />
+                                label="Covering Provider"
+                                options={coverageProviderList}
+                                placeholder="Select Type"
+                                value={row.coverage_provider}
+                                onChange={(value) =>
+                                  handleChange(index, "coverage_provider", value)
+                                }
+                                labelKey="name"
+                                valueKey="id"
+                                disabled={row.coverage_needed === "no"}
+                                showSearch={true}
+                              />
+
                       </div>
                       <div>
                         <CustomSelector
@@ -481,6 +481,9 @@ function StepThree({ onNext }) {
           setProvinceId2={setProvinceId2}
           regionalManagersId2={regionalManagersId2}
           setRegionalManagersId2={setRegionalManagersId2}
+          getData={getData}
+          docName={docName}
+          setDocName={setDocName}
         />
       </>
     );

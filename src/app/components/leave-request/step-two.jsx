@@ -17,6 +17,7 @@ function StepTwo({onPrev, onNext}) {
     const [formData, setFormData] = useState({});
     const param = useSearchParams();
     const getIdParam = param.get('leaveRequestId');
+    const getStatusParam = param.get('status');
     const [isChecked, setIsChecked] = useState(false); 
     const router = useRouter();
    
@@ -185,15 +186,16 @@ function StepTwo({onPrev, onNext}) {
                         </div>
                     </div>
                 </div>
-                <div className={`${getIdParam ? "justify-end" : "justify-between"} flex flex-wrap md:flex-nowrap  w-full items-center gap-3.5 md:py-4 mt-5`}>
+                <div className={`justify-between flex flex-wrap md:flex-nowrap  w-full items-center gap-3.5 md:py-4 mt-5`}>
                     <button
                         type='button'
-                        className={`${getIdParam ? "hidden" : "block"} w-full md:w-fit py-[6px] md:py-[11px] rounded-xl text-base text-[#335679] font-medium px-[75px] cursor-pointer border border-[#D0D5DD]`}
+                        className={` w-full md:w-fit py-[6px] md:py-[11px] rounded-xl text-base text-[#335679] font-medium px-[75px] cursor-pointer border border-[#D0D5DD]`}
                         onClick={() => {onPrev(); router.replace('/leave-request?step=1')}}
                     >
                         Edit Request
                     </button>
-                    <div className={`flex flex-wrap md:flex-nowrap items-center gap-2`}>
+                    
+                    <div className={`flex-wrap md:flex-nowrap items-center gap-2 ${getStatusParam === "rejected" ? "hidden" : "flex"}`}>
                         <Button
                             text={loadingButton === 'decline' ? 'Declining...' : 'Decline Request'}
                             textcolor={true}
