@@ -131,7 +131,7 @@ function StepOne({ onSubmit, onNext }) {
     ]
     useEffect(() => {
 
-        if (role === "regional_manager") {
+        if (role === "RM") {
             setProvinceId(allProvinces[0]?.id);
             setRegionalManagersId(regionalManagers[0]?.id);  
         }
@@ -224,7 +224,7 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="name"
                                     valueKey="id"
                                     value={provinceId || getData?.province}
-                                    disabled={(role === "regional_manager" || role === "PM") ? true : false}
+                                    disabled={(role === "RM" || role === "PM") ? true : false}
                                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>
@@ -240,7 +240,7 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="name"
                                     valueKey="id"
                                     value={regionalManagersId}
-                                    disabled={(role === "regional_manager" || role === "PM") ? true : false || provinceId ? false : true }
+                                    disabled={(role === "RM" || role === "PM") ? true : false || provinceId ? false : true }
                                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>

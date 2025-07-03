@@ -107,7 +107,7 @@ export default function useViewReq() {
 
      useEffect(() => {
     
-            if (role === "regional_manager") {
+            if (role === "RM") {
                 setProvinceId(allProvinces[0]?.id);
                 setRegionalManagersId(regionalManagers[0]?.id);  
             }

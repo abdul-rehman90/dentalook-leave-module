@@ -55,7 +55,7 @@ function ViewRequest() {
                                 labelKey="name"
                                 valueKey="id"
                                 value={provinceId}
-                                disabled={(role === "regional_manager" || role === "PM") ? true : false}
+                                disabled={(role === "RM" || role === "PM") ? true : false}
                                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
@@ -70,7 +70,7 @@ function ViewRequest() {
                                 labelKey="name"
                                 valueKey="id"
                                 value={regionalManagersId}
-                                disabled={role === "regional_manager" ? true : false || provinceId ? false : true}
+                                disabled={role === "RM" ? true : false || provinceId ? false : true}
                                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
