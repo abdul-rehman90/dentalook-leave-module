@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import axiosInstance from "../../../utils/axios-instance";
 
 export default function useSteptwo({onNext}) {
   const router = useRouter();
@@ -15,14 +16,8 @@ export default function useSteptwo({onNext}) {
   const getLeaveDeatils = async (id) => {
     setIsLoading(true);
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/leave-requests/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
+      const response = await axiosInstance.get(
+        `api/v1/leave-requests/${id}`
       );
       if (response.status === 200) {
         setGetData(response?.data);
@@ -52,12 +47,7 @@ export default function useSteptwo({onNext}) {
       status: buttonName
     }
     try{
-      const response = await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/leave-requests/${stepId}/status/`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "ngrok-skip-browser-warning": "true",
-        },
-      });
+      const response = await axiosInstance.patch(`api/v1/leave-requests/${stepId}/status/`, payload);
       if(response.status === 200){
         
        toast.success(response?.data?.detail);

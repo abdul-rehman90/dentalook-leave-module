@@ -9,7 +9,8 @@ import Image from 'next/image';
 import Cookies from "js-cookie";
 import logo from "../../../common/assets/images/main-logo.svg"
 import { useAuth } from '../../utils/AuthContext';
-
+import axiosInstance from "../../../utils/axios-instance"
+ 
 
 const Login = () => {
     const { setUserData } = useAuth();
@@ -19,7 +20,6 @@ const Login = () => {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-        // showPassword: false,
     });
 
     const handleChange = (e) => {
@@ -38,7 +38,7 @@ const Login = () => {
         }
         setIsLoading(true);
         try{
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/login/`, formData);
+            const res = await axiosInstance.post(`api/v1/login/`, formData);
             if (res.status === 200) {
                 toast.success('Login successful!');
                 Cookies.set('access-token', res?.data?.access);

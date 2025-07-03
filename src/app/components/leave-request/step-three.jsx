@@ -16,6 +16,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAuth } from "../../utils/AuthContext";
 import { format } from "date-fns";
+import axiosInstance from "../../../utils/axios-instance";
 
 function StepThree({ onNext }) {
     const {
@@ -78,14 +79,9 @@ function StepThree({ onNext }) {
     }];
    
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/provider-create/`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const response = await axiosInstance.post(
+        `api/v1/provider-create/`,
+        payload
       );
       if(response.status === 201) {
         toast.success(response?.data?.message);
@@ -197,14 +193,9 @@ function StepThree({ onNext }) {
       };
       
       try {
-        const response = await axios.patch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/leave-requests-update/`,
-          paylaod,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const response = await axiosInstance.patch(
+          `api/v1/leave-requests-update/`,
+          paylaod
         );
         onNext();
         if (response.status === 200) {

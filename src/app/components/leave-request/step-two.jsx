@@ -40,7 +40,7 @@ function StepTwo({onPrev, onNext}) {
             })));
         }
     }, [getData]);
-    console.log(getData, "...getData")
+   
 
     const handleChange = (name, value) => {
         setFormData({ ...formData, [name]: value });
