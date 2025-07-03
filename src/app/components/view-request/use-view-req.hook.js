@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from "js-cookie";
 import { useEffect, useState } from 'react';
+import axiosInstance from '../../../utils/axios-instance';
 
 export default function useViewReq() {
     const token = Cookies.get('access-token');
@@ -25,11 +26,7 @@ export default function useViewReq() {
     const getProvinces = async () => {
         setIsLoading(true);
         try{
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/upload-provinces/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+            const response = await axiosInstance.get(`api/v1/upload-provinces/`);
             if(response.status === 200) {
                 setAllProvinces(response?.data);
             }
@@ -51,11 +48,7 @@ export default function useViewReq() {
     // get reg and clinic
     const clinicByRegionalManager = async () => {
         try{
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/clinic-by-regional-manager/${provinceId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+            const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId}`);
             if(response.status === 200) {
                 setRegionalManagers(response?.data?.regional_managers);
                 setAllClinics(response?.data?.regional_managers[0]?.clinics);
@@ -74,12 +67,7 @@ export default function useViewReq() {
 
     const getProviders = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/provider-by-clinic/${clinicId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "ngrok-skip-browser-warning": "true"
-                }
-            });
+            const response = await axiosInstance.get(`api/v1/provider-by-clinic/${clinicId}`);
             if(response.status === 200) {
                 setAllProviders(response?.data?.providers)
             }
@@ -101,10 +89,7 @@ export default function useViewReq() {
                 if (provinceId) params.province_id = provinceId;
                 if (regionalManagersId) params.regional_manager = regionalManagersId;
                 
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/get-all-leave-request/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                const response = await axiosInstance.get(`api/v1/get-all-leave-request/`, {
                 params
             });
             if(response.status === 200) {
@@ -122,7 +107,7 @@ export default function useViewReq() {
 
      useEffect(() => {
     
-            if (role === "regional_manager") {
+            if (role === "RM") {
                 setProvinceId(allProvinces[0]?.id);
                 setRegionalManagersId(regionalManagers[0]?.id);  
             }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Cookies from "js-cookie";
 import axios from 'axios';
+import axiosInstance from '../../../utils/axios-instance';
 
 export default function useStepThree() {
     const [provinceId, setProvinceId] = useState('');
@@ -25,12 +26,7 @@ export default function useStepThree() {
     // get province
     const getProvinces = async () => {
         try{
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/upload-provinces/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "ngrok-skip-browser-warning": "true"
-                }
-            });
+            const response = await axiosInstance.get(`api/v1/upload-provinces/`);
             if(response.status === 200) {
                 setAllProvinces(response?.data);
             }
@@ -46,12 +42,7 @@ export default function useStepThree() {
     // get reg and clinic
     const clinicByRegionalManager = async () => {
         try{
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/clinic-by-regional-manager/${provinceId2 ? provinceId2 : provinceId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "ngrok-skip-browser-warning": "true"
-                }
-            });
+            const response = await axios.get(`api/v1/clinic-by-regional-manager/${provinceId2 ? provinceId2 : provinceId}`);
             if(response.status === 200) {
                 setRegionalManagers(response?.data?.regional_managers);
                 setAllClinics(response?.data?.regional_managers[0]?.clinics);
@@ -74,12 +65,7 @@ export default function useStepThree() {
     // get providers
     const getProviders = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/provider-by-clinic/${clinicId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "ngrok-skip-browser-warning": "true"
-                }
-            });
+            const response = await axios.get(`api/v1/provider-by-clinic/${clinicId}`);
             if(response.status === 200) {
                 setAllProviders(response?.data?.providers);
                 setCoverageProvider(response?.data?.providers);
@@ -106,13 +92,7 @@ export default function useStepThree() {
         // setIsLoading(true);
         try {
         const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/leave-requests/${id}`,
-            {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "ngrok-skip-browser-warning": "true",
-            },
-            }
+            `api/v1/leave-requests/${id}`
         );
         if (response.status === 200) {
             setGetData(response?.data);
@@ -138,11 +118,7 @@ export default function useStepThree() {
 
     const providerList = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/provider-list/`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+            const response = await axios.get(`api/v1/provider-list/`);
             if(response.status === 200) {
                 setCoverageProviderList(response?.data)
             }

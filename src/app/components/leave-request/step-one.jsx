@@ -15,6 +15,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import toast from "react-hot-toast";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import axiosInstance from "../../../utils/axios-instance";
 
 function StepOne({ onSubmit, onNext }) {
     const router = useRouter();
@@ -65,12 +66,7 @@ function StepOne({ onSubmit, onNext }) {
             }))
         }
         try{
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/leave-requests/`, paylaod, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "ngrok-skip-browser-warning": "true"
-                }
-            });
+            const response = await axiosInstance.post(`api/v1/leave-requests/`, paylaod);
             if(response.status === 201){
                 localStorage.setItem("leaveRequestId", response.data?.id);
                 onNext();
@@ -110,18 +106,11 @@ function StepOne({ onSubmit, onNext }) {
                 reason: row.reason
             }))
         }
-        // console.log(paylaod, "..paylaod")
        
         try {
-            const response = await axios.patch(
-                `${process.env.NEXT_PUBLIC_BACKEND_URL}api/v1/update-leave-request/${formId}/`,
-                paylaod,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "ngrok-skip-browser-warning": "true"
-                    }
-                }
+            const response = await axiosInstance.patch(
+                `api/v1/update-leave-request/${formId}/`,
+                paylaod
             );
             if (response.status === 200) {
                 toast.success(response?.data?.detail);
@@ -142,7 +131,7 @@ function StepOne({ onSubmit, onNext }) {
     ]
     useEffect(() => {
 
-        if (role === "regional_manager") {
+        if (role === "RM") {
             setProvinceId(allProvinces[0]?.id);
             setRegionalManagersId(regionalManagers[0]?.id);  
         }
@@ -235,7 +224,7 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="name"
                                     valueKey="id"
                                     value={provinceId || getData?.province}
-                                    disabled={(role === "regional_manager" || role === "PM") ? true : false}
+                                    disabled={(role === "RM" || role === "PM") ? true : false}
                                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>
@@ -251,7 +240,7 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="name"
                                     valueKey="id"
                                     value={regionalManagersId}
-                                    disabled={(role === "regional_manager" || role === "PM") ? true : false || provinceId ? false : true }
+                                    disabled={(role === "RM" || role === "PM") ? true : false || provinceId ? false : true }
                                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>
@@ -266,7 +255,7 @@ function StepOne({ onSubmit, onNext }) {
                                     labelKey="clinic_name"
                                     valueKey="clinic_id"
                                     value={clinicId}
-                                    disabled={provinceId ? false : true || role === "PM" ? true : false}
+                                    disabled={role === "PM" ? true : false ||provinceId ? false : true }
                                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                                 />
                             </div>
