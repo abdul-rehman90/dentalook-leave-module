@@ -356,20 +356,20 @@ function StepOne({ onSubmit, onNext }) {
                        formId ?  
                         <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">
                             <Button
-                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Update"}
+                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Update Leave Process"}
                                 bgcolor={true}
                                 disabled={isLoading}
-                                className="disabled:opacity-[0.5] disabled:cursor-not-allowed"
+                                className="disabled:opacity-[0.7] disabled:cursor-not-allowed"
                                 type="submit"
                             />
                         </div>
                         :
                         <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">
                             <Button
-                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Submit"}
+                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Complete Leave Process"}
                                 bgcolor={true}
                                 disabled={isLoading}
-                                className="disabled:opacity-[0.5] disabled:cursor-not-allowed"
+                                className="disabled:opacity-[0.7] disabled:cursor-not-allowed"
                                 type="submit"
                             />
                         </div>

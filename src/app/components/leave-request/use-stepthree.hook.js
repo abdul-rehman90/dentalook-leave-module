@@ -42,7 +42,7 @@ export default function useStepThree() {
     // get reg and clinic
     const clinicByRegionalManager = async () => {
         try{
-            const response = await axios.get(`api/v1/clinic-by-regional-manager/${provinceId2 ? provinceId2 : provinceId}`);
+            const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId2 ? provinceId2 : provinceId}`);
             if(response.status === 200) {
                 setRegionalManagers(response?.data?.regional_managers);
                 setAllClinics(response?.data?.regional_managers[0]?.clinics);
@@ -65,7 +65,7 @@ export default function useStepThree() {
     // get providers
     const getProviders = async () => {
         try {
-            const response = await axios.get(`api/v1/provider-by-clinic/${clinicId}`);
+            const response = await axiosInstance.get(`api/v1/provider-by-clinic/${clinicId}`);
             if(response.status === 200) {
                 setAllProviders(response?.data?.providers);
                 setCoverageProvider(response?.data?.providers);
@@ -91,7 +91,7 @@ export default function useStepThree() {
     const getLeaveDeatils = async (id) => {
         // setIsLoading(true);
         try {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
             `api/v1/leave-requests/${id}`
         );
         if (response.status === 200) {
@@ -118,7 +118,7 @@ export default function useStepThree() {
 
     const providerList = async () => {
         try {
-            const response = await axios.get(`api/v1/provider-list/`);
+            const response = await axiosInstance.get(`api/v1/provider-list/`);
             if(response.status === 200) {
                 setCoverageProviderList(response?.data)
             }

@@ -15,7 +15,7 @@ function Sidebar({ isSidebarOpen = false, onClose = () => { } }) {
     const sidebarData = [
         { SideIcon: Home, sideLink: '/view-request', Sideitem: 'Dashboard' },
         // { SideIcon: Calendar, sideLink: '/calendar', Sideitem: 'Calendar' },
-        { SideIcon: Mail, sideLink: '/reports', Sideitem: 'Reports' },
+        // { SideIcon: Mail, sideLink: '/reports', Sideitem: 'Reports' },
         { SideIcon: Profile, sideLink: '/leave-request', Sideitem: 'Leave Request' },
     ]
 
