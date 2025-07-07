@@ -21,7 +21,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
           status: item?.status,
           leave_date: item?.days?.map((nestedDay) => nestedDay?.leave_date),
           leave_type: item?.days?.map((nestedDay) => nestedDay?.leave_type),
-          reason: item?.days?.map((nestedDay) => nestedDay?.coverage_provider?.user_type),
+          reason: item?.days?.map((nestedDay) => nestedDay?.coverage_provider?.provider_coverage),
           coverage_provider: item?.days?.map((nestedDay) => nestedDay?.coverage_provider?.name),
           coverage_status: item?.days?.map((nestedDay) => nestedDay?.coverage_status),
           coverage_needed: item?.days?.map((nestedDay) => nestedDay?.coverage_needed),
@@ -57,12 +57,12 @@ export default function LeaveTable({ getReqData, isLoading }) {
         <table className="w-full border border-gray-300 text-sm text-left text-gray-700">
           <thead className="bg-[#F3F3F5] text-xs text-[#475467] font-medium uppercase">
             <tr>
-              <th className="px-3 py-3 whitespace-nowrap text-xs">Name</th>
+              <th className="px-3 py-3 whitespace-nowrap text-xs">Provider Name</th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">Leave Date Requested</th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">Type of Leave</th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">Request Decision</th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">Coverage Needed</th>
-              <th className="px-3 py-3 whitespace-nowrap text-xs">Coverage Details</th>
+              <th className="px-3 py-3 whitespace-nowrap text-xs">Provider Title</th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">Covering Provider Name</th>
             </tr>
           </thead>
@@ -137,18 +137,25 @@ export default function LeaveTable({ getReqData, isLoading }) {
                     </td>
 
                     <td className="px-3 flex items-center gap-2 py-3 text-xs font-normal text-[#475467]">
+                       
                       <>
                         {item?.coverage_provider?.map((provider, index) => {
                           if (item.coverage_needed?.[index] === false) {
-                            return <div key={index}>No Coverage needed</div>;
+                            return <div key={index}>
+                              <span className={`w-2 mr-[5px] h-2 inline-block rounded-full bg-green-500`} />
+                                No Coverage needed
+                              </div>;
                           }
                           if (
                             item.coverage_needed?.[index] === true &&
                             (!provider || provider === "")
                           ) {
-                            return <div key={index}>Looking for coverage</div>;
+                            return <div key={index}>
+                              <span className={`w-2 h-2 mr-[5px] inline-block rounded-full bg-red-500`} />
+                              Looking for coverage
+                            </div>;
                           }
-                          return <div key={index}>{provider}</div>;
+                          return <div key={index}><span className={`w-2 mr-[5px] h-2 inline-block rounded-full ${provider && "bg-green-500" } `} /> {provider}</div>;
                         })}
                       </>
                       <button type="button" className="cursor-pointer" onClick={(e) => {handleModelOpen(item); e.stopPropagation()}}>
