@@ -275,6 +275,8 @@ function StepOne({ onSubmit, onNext }) {
                                         placeholder="Select Provider Name"
                                         labelKey="name"
                                         value={docName}
+                                        disabled={clinicId ? false : true }
+                                        className="disabled:opacity-50 disabled:cursor-not-allowed"
                                     />
                                 </div>
                                 <div className="w-full">
@@ -286,7 +288,7 @@ function StepOne({ onSubmit, onNext }) {
                                         labelKey="name"
                                         valueKey="id"
                                         value={providerId}
-                                        disabled={clinicId ? false : true}
+                                        disabled={docName ? false : true}
                                         className="disabled:opacity-50 disabled:cursor-not-allowed"
                                     />
                                 </div>
@@ -361,7 +363,7 @@ function StepOne({ onSubmit, onNext }) {
                        formId ?  
                         <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">
                             <Button
-                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Update Leave Process"}
+                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Update"}
                                 bgcolor={true}
                                 disabled={isLoading}
                                 className="disabled:opacity-[0.7] disabled:cursor-not-allowed"
@@ -371,7 +373,7 @@ function StepOne({ onSubmit, onNext }) {
                         :
                         <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">
                             <Button
-                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Complete Leave Process"}
+                                text={isLoading ? <Image src={loading} alt="loading" width={24} height={24} /> : "Submit"}
                                 bgcolor={true}
                                 disabled={isLoading}
                                 className="disabled:opacity-[0.7] disabled:cursor-not-allowed"

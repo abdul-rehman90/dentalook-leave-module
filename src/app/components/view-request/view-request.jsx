@@ -101,6 +101,8 @@ function ViewRequest() {
                                 placeholder="Select Provider Name"
                                 labelKey="name"
                                 value={docName}
+                                disabled={clinicId ? false : true }
+                                className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
@@ -112,7 +114,7 @@ function ViewRequest() {
                                 labelKey="name"
                                 valueKey="id"
                                 value={providerId}
-                                disabled={clinicId ? false : true}
+                                disabled={docName ? false : true}
                                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>

@@ -135,7 +135,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                           showYearDropdown
                           dropdownMode="select"
                           dateFormat="YYYY-MM-dd"
-                          className="py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                          className="py-[8px] w-full px-4 disabled:opacity-50 disabled:cursor-not-allowed text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
                           name="leave_date"
                           placeholderText="Leave Date"
                           onChange={(date) => {
@@ -145,6 +145,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                               : "";
                             setFormData2(updated);
                           }}
+                          disabled
                         />
                       </div>
                       <CustomSelector
@@ -160,6 +161,8 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                           setFormData2(updated);
                         }}
                         labelKey="name"
+                        disabled
+                        className="disabled:opacity-50 disabled:cursor-not-allowed"
                       />
 
                       <Input
@@ -171,6 +174,8 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                           updated[dayIdx].reason = e.target.value;
                           setFormData2(updated);
                         }}
+                        disabled
+                        className="disabled:opacity-50 disabled:cursor-not-allowed"
                       />
                     </React.Fragment>
                   ))}
@@ -224,7 +229,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                 className={`flex flex-wrap md:flex-nowrap items-center gap-2`}
               >
                 <Button
-                  text="Goto Dashboard"
+                  text="Go to Dashboard"
                   textcolor={true}
                   border={true}
                   onClick={() => router.push(`/view-request`)}
@@ -259,7 +264,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                 text={
                   loadingButton === "approved"
                     ? "Approving..."
-                    : "Approved Request"
+                    : "Approve Request"
                 }
                 bgcolor={true}
                 onClick={() => handleStatus("approved")}

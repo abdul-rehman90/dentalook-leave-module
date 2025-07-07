@@ -58,7 +58,7 @@ function StepThree({ onNext }) {
   const [coverageClinicId, setCoverageClinicId] = useState("");
   const [providerLoader, setProviderLoader] = useState(false);
   const [covergeType, setCoverageType] = useState('');
-  console.log(covergeType?.user_type, "...covergeType")
+  console.log(covergeType, "...covergeType")
   const [providerFormData, setProviderFormData] = useState({
     firstName: "",
     lastName: "",
@@ -169,7 +169,6 @@ function StepThree({ onNext }) {
       if (getData?.days && getData?.days?.length > 0) {
         setRows(
           getData.days.map((row) => {
-            console.log(row, "row");
             return {
               ...row,
               coverage_needed: row.coverage_needed ? "yes" : "no",
@@ -407,12 +406,17 @@ function StepThree({ onNext }) {
                         <CustomSelector
                           label="Coverage Type"
                           options={[
-                            { name: "DDS", value: "DDS" },
-                            { name: "RDH", value: "RDH" },
-                            { name: "RTS", value: "RTS" },
+                            { name: "Internal", value: "Internal" },
+                            { name: "External", value: "External" },
+                            { name: "ACE", value: "ACE" },
                           ]}
                           placeholder="Select Type"
-                          value={covergeType?.user_type}
+                          // value={covergeType?.provider_coverage}
+                          value={
+                            typeof row.coverage_provider === "object" && row.coverage_provider !== null
+                            ? row.coverage_provider.provider_coverage
+                            : covergeType?.provider_coverage
+                          }
                           onChange={(value) =>
                             handleChange(index, "coverage_type", value)
                           }
@@ -454,11 +458,11 @@ function StepThree({ onNext }) {
               text={
                 isLoading ? (
                   <span className="flex items-center gap-2">
-                   Submit Secure Coverage
+                   Complete Leave Process
                     <Image src={loader} alt="loading" width={24} height={24} />
                   </span>
                 ) : (
-                  "Submit Secure Coverage"
+                  "Complete Leave Process"
                 )
               }
               bgcolor={true}

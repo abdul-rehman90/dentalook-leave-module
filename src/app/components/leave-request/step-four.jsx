@@ -312,14 +312,14 @@ function StepFour({setCurrentStep}) {
                       <CustomSelector
                         label="Coverage Type"
                         options={[
-                          { name: "DDS", value: "DDS" },
-                          { name: "RDH", value: "RDH" },
-                          { name: "RTS", value: "RTS" },
-                        ]}
+                            { name: "Internal", value: "Internal" },
+                            { name: "External", value: "External" },
+                            { name: "ACE", value: "ACE" },
+                          ]}
                         placeholder="Select Type"
                         value={
                             typeof row.coverage_provider === "object" && row.coverage_provider !== null
-                            ? row.coverage_provider.user_type
+                            ? row.coverage_provider.provider_coverage
                             : row.coverage_provider
                         }
                         onChange={(value) =>
@@ -357,7 +357,7 @@ function StepFour({setCurrentStep}) {
         </div>
          <div className={`flex-wrap md:flex-nowrap items-center gap-2 flex justify-end`}>
                                 <Button
-                                    text="Goto Dashboard"
+                                    text="Go to Dashboard"
                                     textcolor={true}
                                     border={true}
                                     onClick={()=>router.push(`/view-request`)}
