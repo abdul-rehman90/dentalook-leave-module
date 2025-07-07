@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 
+
 export default function LeaveTable({ getReqData, isLoading }) {
   const [newData, setNewData] = React.useState([]);
   const router = useRouter();
@@ -13,12 +14,13 @@ export default function LeaveTable({ getReqData, isLoading }) {
     if (getReqData?.length > 0) {
       const transformedData = getReqData?.flatMap((item) =>
         item?.days?.map((day) => ({
-          clinic_name: item?.clinic_name,
+          provider_name: item?.provider_name,
+          status: item?.status,
           id: item?.id,
           status: item?.status,
           leave_date: item?.days?.map((nestedDay) => nestedDay?.leave_date),
           leave_type: item?.days?.map((nestedDay) => nestedDay?.leave_type),
-          reason: item?.days?.map((nestedDay) => nestedDay?.reason),
+          reason: item?.days?.map((nestedDay) => nestedDay?.coverage_provider?.user_type),
           coverage_provider: item?.days?.map((nestedDay) => nestedDay?.coverage_provider?.name),
           coverage_status: item?.days?.map((nestedDay) => nestedDay?.coverage_status),
           coverage_needed: item?.days?.map((nestedDay) => nestedDay?.coverage_needed),
@@ -34,7 +36,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
       router.push(`/leave-request?step=2&leaveRequestId=${item.id}&status=${item.status}`); 
     }
     if(item.status === "decline"){
-      router.push(`/leave-request?step=2&leaveRequestId=${item.id}&status=${item.status}`); 
+      return
     }
     if(item.status !== "pending"){
       router.push(`/leave-request?step=3&leaveRequestId=${item.id}&status=${item.status}`); 
@@ -72,7 +74,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                   return(
                     <tr className={`border-t border-[#EAECF0] ${!allPast ? "cursor-pointer" : "cursor-not-allowed"}`} onClick={() => !allPast && handelClick(item)}>
                     <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                      {item?.clinic_name}
+                      {item?.provider_name || ""}
                     </td>
                     <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                       {item?.leave_date?.map((date, index) => (
@@ -94,14 +96,12 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         </div>
                       ))}
                     </td>
-                    <td className="px-3 py-3 text-xs font-normal text-[#475467]">
+                    {/* <td className="px-3 py-3 text-xs font-normal text-[#475467]">
                       {item?.coverage_status?.map((status, index) => (
                        
                         <div key={index} className="flex items-center gap-1 justify-between w-full">
                             <div className="flex items-center gap-2">
-                                {/* <span
-                                    className={`inline-block w-2 h-2 rounded-full ${req.decision.color}`}
-                                /> */}
+                               
                             <span className="text-[#475467] text-xs">
                               {status}
                             </span>
@@ -109,6 +109,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                                    
                         </div>
                       ))}   
+                    </td> */}
+                    <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                      {item?.status}
                     </td>
                     <td className="px-3 py-3 text-xs font-normal text-[#475467]">
                       {item?.coverage_needed.map((needed, index) => (

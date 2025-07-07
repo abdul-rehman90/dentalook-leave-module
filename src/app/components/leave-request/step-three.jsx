@@ -57,6 +57,8 @@ function StepThree({ onNext }) {
   const [providerType, setProviderType] = useState("");
   const [coverageClinicId, setCoverageClinicId] = useState("");
   const [providerLoader, setProviderLoader] = useState(false);
+  const [covergeType, setCoverageType] = useState('');
+  console.log(covergeType?.user_type, "...covergeType")
   const [providerFormData, setProviderFormData] = useState({
     firstName: "",
     lastName: "",
@@ -71,7 +73,7 @@ function StepThree({ onNext }) {
     setProviderLoader(true);
     const payload = [{
       name: providerFormData.firstName + " " + providerFormData.lastName,
-      ...(providerType === "External" && { city: providerFormData.city }),
+      ...(providerType === "External" && { province_id: provinceId2 }),
       ...(providerType === "Internal" && { clinic_id: coverageClinicId, province_id: provinceId2}),
       ...(providerType === "ACE" && { province_id: provinceId2 }),
       user_type: docName,
@@ -164,10 +166,16 @@ function StepThree({ onNext }) {
         }
       }
 
-      
-
-      if (getData?.days && getData.days.length > 0) {
-        setRows(getData.days);
+      if (getData?.days && getData?.days?.length > 0) {
+        setRows(
+          getData.days.map((row) => {
+            console.log(row, "row");
+            return {
+              ...row,
+              coverage_needed: row.coverage_needed ? "yes" : "no",
+            };
+          })
+        );
       }
     }, [getData, allProvinces, regionalManagers, allClinics, allProviders]);
 
@@ -186,18 +194,16 @@ function StepThree({ onNext }) {
           id: row.id,
           coverage_needed: row.coverage_needed === "yes" ? true : false,
           ...(row.coverage_needed === "yes" && {
-            coverage_provider: row.coverage_provider,
+            coverage_provider: row?.coverage_provider?.id,
             coverage_found_by: userData?.id,
           }),
         })),
       };
-      
       try {
         const response = await axiosInstance.patch(
           `api/v1/leave-requests-update/`,
           paylaod
         );
-        onNext();
         if (response.status === 200) {
           toast.success(response?.data?.message);
           onNext();
@@ -233,7 +239,7 @@ function StepThree({ onNext }) {
                       valueKey="id"
                       value={provinceId || getData?.province}
                       disabled={step === "3" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                     />
                   </div>
                   <div className="col-span-3 md:col-span-1">
@@ -248,7 +254,7 @@ function StepThree({ onNext }) {
                       valueKey="id"
                       value={regionalManagersId}
                       disabled={step === "3" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                     />
                   </div>
                   <div className="col-span-3 md:col-span-1">
@@ -263,7 +269,7 @@ function StepThree({ onNext }) {
                       valueKey="clinic_id"
                       value={clinicId}
                       disabled={step === "3" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                     />
                   </div>
 
@@ -277,7 +283,7 @@ function StepThree({ onNext }) {
                         labelKey="name"
                         value={docName || getData?.provider_type?.user_type}
                         disabled={step === "3" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                       />
                     </div>
                     <div className="w-full">
@@ -290,7 +296,7 @@ function StepThree({ onNext }) {
                         valueKey="id"
                         value={providerId}
                         disabled={step === "3" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                       />
                     </div>
                   </div>
@@ -361,47 +367,59 @@ function StepThree({ onNext }) {
                             { name: "No", value: "no" },
                           ]}
                           placeholder="Select Type"
-                          value={row.coverage_needed}
                           onChange={(value) =>
                             handleChange(index, "coverage_needed", value)
                           }
                           labelKey="name"
                           valueKey="value"
+                          value={
+                            row.coverage_needed === true
+                            ? "yes"
+                            : row.coverage_needed === false
+                            ? "no"
+                            : row.coverage_needed 
+                          }
                         />
                       </div>
                       <div>
                         <CustomSelector
-                                label="Covering Provider"
-                                options={coverageProviderList}
-                                placeholder="Select Type"
-                                value={row.coverage_provider}
-                                onChange={(value) =>
-                                  handleChange(index, "coverage_provider", value)
-                                }
-                                labelKey="name"
-                                valueKey="id"
-                                disabled={row.coverage_needed === "no"}
-                                showSearch={true}
-                              />
+                          label="Covering Provider"
+                          options={coverageProviderList}
+                          placeholder="Select Type"
+                          value={
+                            typeof row.coverage_provider === "object" && row.coverage_provider !== null
+                            ? row.coverage_provider.id
+                            : row.coverage_provider
+                          }
+                            onChange={(value, option) => {
+                              handleChange(index, "coverage_provider", option);
+                              setCoverageType(option);
+                            }}
+                          labelKey="name"
+                          valueKey="id"
+                          disabled={row.coverage_needed === "no" || row.coverage_needed === false}
+                          showSearch={true}
+                          className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                        />
 
                       </div>
                       <div>
                         <CustomSelector
                           label="Coverage Type"
                           options={[
-                            { name: "ACE", value: "ACE" },
-                            { name: "Internal", value: "Internal" },
-                            { name: "External", value: "External" },
+                            { name: "DDS", value: "DDS" },
+                            { name: "RDH", value: "RDH" },
+                            { name: "RTS", value: "RTS" },
                           ]}
                           placeholder="Select Type"
-                          value={row.coverage_type}
+                          value={covergeType?.user_type}
                           onChange={(value) =>
                             handleChange(index, "coverage_type", value)
                           }
                           labelKey="name"
                           valueKey="value"
-                          disabled={row.coverage_needed === "no"}
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                          disabled={row.coverage_needed === "no" || row.coverage_needed === false}
+                          className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                         />
                       </div>
 
@@ -419,7 +437,7 @@ function StepThree({ onNext }) {
                             )
                           }
                           disabled
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                          className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                         />
                       </div>
                     </div>
@@ -431,7 +449,7 @@ function StepThree({ onNext }) {
           <div className="flex flex-wrap md:flex-nowrap justify-center md:justify-end gap-3.5 py-4 mt-0 md:mt-5">
            
             <Button
-              className="w-full md:!w-fit disabled:opacity-[0.5] disabled:cursor-not-allowed text-nowrap !px-6"
+              className="w-full md:!w-fit disabled:opacity-[0.7] disabled:cursor-not-allowed text-nowrap !px-6"
               disabled={isLoading}
               text={
                 isLoading ? (

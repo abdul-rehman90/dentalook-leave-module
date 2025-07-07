@@ -174,12 +174,25 @@ function Canvas({
                     }
                     {
                         providerType === "External" &&
+                        // <div>
+                        //     <Input
+                        //         label="City"
+                        //         placeholder="Enter Coverage"
+                        //         name="city"
+                        //         onChange={handleProviderFormChange}
+                        //     />
+                        // </div>
                         <div>
-                            <Input
-                                label="City"
-                                placeholder="Enter Coverage"
-                                name="city"
-                                onChange={handleProviderFormChange}
+                            <CustomSelector
+                                onChange={(value) => {
+                                    setProvinceId2(value);
+                                }}
+                                label="Province"
+                                options={allProvinces}
+                                placeholder="Select Provider Title"
+                                labelKey="name"
+                                valueKey="id"
+                                value={provinceId2}
                             />
                         </div>
                     }       
@@ -192,7 +205,7 @@ function Canvas({
                             onClick={onClose}
                             type='button'
                             disabled={providerLoader}
-                            className='!w-fit !px-6 !font-semibold disabled:opacity-[0.5] disabled:cursor-not-allowed'
+                            className='!w-fit !px-6 !font-semibold disabled:opacity-[0.7] disabled:cursor-not-allowed'
                         />
                         <Button
                            text={
@@ -205,7 +218,7 @@ function Canvas({
                                 "Create"
                                 )
                             }
-                            className='!w-fit !px-6 !font-semibold disabled:opacity-[0.5] disabled:cursor-not-allowed'
+                            className='!w-fit !px-6 !font-semibold disabled:opacity-[0.7] disabled:cursor-not-allowed'
                             disabled={providerLoader}
                             bgcolor={true}
                             type='submit'

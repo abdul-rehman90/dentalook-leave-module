@@ -22,6 +22,7 @@ export default function useViewReq() {
 
     const [getReqData, setGetReqData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [allClicnicData, setAllClinicData] = useState([]);
 
     const getProvinces = async () => {
         setIsLoading(true);
@@ -81,6 +82,11 @@ export default function useViewReq() {
         }
     }, [clinicId]);
 
+    useEffect(()=>{
+        const data = allProviders?.filter((item) => item.user_type === docName);
+        setAllClinicData(data)
+    }, [allProviders, docName])
+
     const getViewRequests = async () => {
         try {
                 const params = {};
@@ -137,6 +143,7 @@ export default function useViewReq() {
         setProviderId,
         getReqData,
         isLoading,
-        role
+        role,
+        allClicnicData
     }
 }

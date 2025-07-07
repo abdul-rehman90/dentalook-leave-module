@@ -103,7 +103,7 @@ const ForgotPasswordFlow = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-                    <button type="submit" disabled={emailLoading} className="w-full bg-[#00465F] disabled:opacity-[0.5] disabled:cursor-not-allowed text-white p-2 rounded">
+                    <button type="submit" disabled={emailLoading} className="w-full bg-[#00465F] disabled:opacity-[0.7] disabled:cursor-not-allowed text-white p-2 rounded">
                         {emailLoading ? <Image src={loader} alt="" width={24} height={24} className="mx-auto" /> : 'Send OTP'}
                     </button>
                 </form>
@@ -145,7 +145,7 @@ const ForgotPasswordFlow = () => {
 
                     <div className="flex justify-between">
                         <button type="button" onClick={prevStep} className="text-blue-500">Back</button>
-                        <button type="submit" disabled={isLoading} className="bg-[#00465F] cursor-pointer disabled:opacity-[0.5] disabled:cursor-not-allowed text-white px-4 py-2 rounded">
+                        <button type="submit" disabled={isLoading} className="bg-[#00465F] cursor-pointer disabled:opacity-[0.7] disabled:cursor-not-allowed text-white px-4 py-2 rounded">
                             {isLoading ? <Image src={loader} alt="" width={24} height={24} className="mx-auto" /> : 'Reset Password'}
                         </button>
                     </div>

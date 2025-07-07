@@ -28,13 +28,16 @@ function ViewRequest() {
         setProviderId,
         getReqData,
         isLoading,
-        role
+        role,
+        allClicnicData
     } = useViewReq();
+
+    
     
     
     return (
         <div>
-            <div className="p-5 border border-[#E6EAEE] rounded-2xl">
+            <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-2">
                 <div>
                     <div className="flex items-start flex-wrap md:flex-nowrap justify-between gap-4 w-full">
                         <Heading
@@ -78,6 +81,7 @@ function ViewRequest() {
                             <CustomSelector
                                 onChange={(value) => {
                                     setClinicId(value);
+                                    setDocName("");
                                 }}
                                 label="Clinic"
                                 options={allClinics}
@@ -103,7 +107,7 @@ function ViewRequest() {
                             <CustomSelector
                                 onChange={(value) => setProviderId(value)}
                                 label="Provider Name"
-                                options={allProviders}
+                                options={allClicnicData}
                                 placeholder="Select Provider Title"
                                 labelKey="name"
                                 valueKey="id"

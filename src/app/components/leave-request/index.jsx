@@ -85,6 +85,7 @@ const LeaveRequest = () => {
                     onSubmit={handleStepTwoSubmit}
                     onPrev={() => goToStep(0)}
                     onNext={() => goToStep(2)}
+                    setCurrentStep={setCurrentStep}
                 />
             ),
         },

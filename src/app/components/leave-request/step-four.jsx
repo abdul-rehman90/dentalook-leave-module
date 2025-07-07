@@ -101,9 +101,16 @@ function StepFour({setCurrentStep}) {
         }
       }
 
-    if (getData?.days && getData.days.length > 0) {
-      setRows(getData.days);
-    }
+      if (getData?.days && getData?.days?.length > 0) {
+        console.log(getData?.days, "..getData?.days")
+        // setRows(getData.days);
+        setRows(
+          getData.days.map((row) => ({
+            ...row,
+            coverage_needed: row.coverage_needed ? "yes" : "no",
+          }))
+        );
+      }
   }, [getData, allProvinces, regionalManagers, allClinics, allProviders]);
 
   // Update field values
@@ -284,7 +291,6 @@ function StepFour({setCurrentStep}) {
                     <div>
                       <CustomSelector
                         label="Covering Provider"
-                        //   options={coverageProvider}
                         options={coverageProviderList}
                         placeholder="Select Type"
                         value={
@@ -306,12 +312,16 @@ function StepFour({setCurrentStep}) {
                       <CustomSelector
                         label="Coverage Type"
                         options={[
-                          { name: "ACE", value: "ACE" },
-                          { name: "Internal", value: "Internal" },
-                          { name: "External", value: "External" },
+                          { name: "DDS", value: "DDS" },
+                          { name: "RDH", value: "RDH" },
+                          { name: "RTS", value: "RTS" },
                         ]}
                         placeholder="Select Type"
-                        value={row.coverage_type}
+                        value={
+                            typeof row.coverage_provider === "object" && row.coverage_provider !== null
+                            ? row.coverage_provider.user_type
+                            : row.coverage_provider
+                        }
                         onChange={(value) =>
                           handleChange(index, "coverage_type", value)
                         }

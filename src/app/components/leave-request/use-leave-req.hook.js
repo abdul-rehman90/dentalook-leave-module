@@ -19,6 +19,10 @@ export default function useLeaveReq() {
     const [regionalManagersId, setRegionalManagersId] = useState('');
     const [formId, setFormId] = useState('');
 
+    const [allClicnicData, setAllClinicData] = useState([]);
+
+    const [docName, setDocName] = useState('');
+
     // get province
     const getProvinces = async () => {
         try{
@@ -52,7 +56,6 @@ export default function useLeaveReq() {
         if (provinceId) {
             clinicByRegionalManager();
         }
-        
     }, [provinceId]);
 
    
@@ -72,6 +75,11 @@ export default function useLeaveReq() {
             getProviders();
         }
     }, [clinicId]);
+
+    useEffect(()=>{
+        const data = allProviders?.filter((item) => item.user_type === docName);
+        setAllClinicData(data)
+    }, [allProviders, docName])
 
 
     const [rows, setRows] = useState([
@@ -122,6 +130,8 @@ export default function useLeaveReq() {
         getData,
         regionalManagers,
         regionalManagersId, setRegionalManagersId,
-        formId
+        formId,
+        allClicnicData,
+        docName, setDocName
     }
 }
