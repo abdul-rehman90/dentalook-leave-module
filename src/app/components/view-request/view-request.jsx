@@ -28,8 +28,11 @@ function ViewRequest() {
         setProviderId,
         getReqData,
         isLoading,
-        role
+        role,
+        allClicnicData
     } = useViewReq();
+
+    
     
     
     return (
@@ -78,6 +81,7 @@ function ViewRequest() {
                             <CustomSelector
                                 onChange={(value) => {
                                     setClinicId(value);
+                                    setDocName("");
                                 }}
                                 label="Clinic"
                                 options={allClinics}
@@ -103,7 +107,7 @@ function ViewRequest() {
                             <CustomSelector
                                 onChange={(value) => setProviderId(value)}
                                 label="Provider Name"
-                                options={allProviders}
+                                options={allClicnicData}
                                 placeholder="Select Provider Title"
                                 labelKey="name"
                                 valueKey="id"

@@ -57,6 +57,8 @@ function StepThree({ onNext }) {
   const [providerType, setProviderType] = useState("");
   const [coverageClinicId, setCoverageClinicId] = useState("");
   const [providerLoader, setProviderLoader] = useState(false);
+  const [covergeType, setCoverageType] = useState('');
+  console.log(covergeType?.user_type, "...covergeType")
   const [providerFormData, setProviderFormData] = useState({
     firstName: "",
     lastName: "",
@@ -164,11 +166,16 @@ function StepThree({ onNext }) {
         }
       }
 
-      
-
       if (getData?.days && getData?.days?.length > 0) {
-        console.log(getData?.days, "..getData?.days")
-        setRows(getData.days);
+        setRows(
+          getData.days.map((row) => {
+            console.log(row, "row");
+            return {
+              ...row,
+              coverage_needed: row.coverage_needed ? "yes" : "no",
+            };
+          })
+        );
       }
     }, [getData, allProvinces, regionalManagers, allClinics, allProviders]);
 
@@ -181,24 +188,22 @@ function StepThree({ onNext }) {
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-      // setIsLoading(true);
+      setIsLoading(true);
       const paylaod = {
         leave_requests: rows?.map((row) => ({
           id: row.id,
           coverage_needed: row.coverage_needed === "yes" ? true : false,
           ...(row.coverage_needed === "yes" && {
-            coverage_provider: row?.coverage_provider,
+            coverage_provider: row?.coverage_provider?.id,
             coverage_found_by: userData?.id,
           }),
         })),
       };
-      console.log(paylaod, "..payload")
       try {
         const response = await axiosInstance.patch(
           `api/v1/leave-requests-update/`,
           paylaod
         );
-        onNext();
         if (response.status === 200) {
           toast.success(response?.data?.message);
           onNext();
@@ -362,7 +367,6 @@ function StepThree({ onNext }) {
                             { name: "No", value: "no" },
                           ]}
                           placeholder="Select Type"
-                          // value={row.coverage_needed}
                           onChange={(value) =>
                             handleChange(index, "coverage_needed", value)
                           }
@@ -384,15 +388,16 @@ function StepThree({ onNext }) {
                           placeholder="Select Type"
                           value={
                             typeof row.coverage_provider === "object" && row.coverage_provider !== null
-                            ? row.coverage_provider.name
+                            ? row.coverage_provider.id
                             : row.coverage_provider
                           }
-                          onChange={(value) =>
-                            handleChange(index, "coverage_provider", value)
-                          }
+                            onChange={(value, option) => {
+                              handleChange(index, "coverage_provider", option);
+                              setCoverageType(option);
+                            }}
                           labelKey="name"
                           valueKey="id"
-                          disabled={row.coverage_needed === "no"}
+                          disabled={row.coverage_needed === "no" || row.coverage_needed === false}
                           showSearch={true}
                           className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                         />
@@ -402,18 +407,18 @@ function StepThree({ onNext }) {
                         <CustomSelector
                           label="Coverage Type"
                           options={[
-                            { name: "ACE", value: "ACE" },
-                            { name: "Internal", value: "Internal" },
-                            { name: "External", value: "External" },
+                            { name: "DDS", value: "DDS" },
+                            { name: "RDH", value: "RDH" },
+                            { name: "RTS", value: "RTS" },
                           ]}
                           placeholder="Select Type"
-                          value={row.coverage_type}
+                          value={covergeType?.user_type}
                           onChange={(value) =>
                             handleChange(index, "coverage_type", value)
                           }
                           labelKey="name"
                           valueKey="value"
-                          disabled={row.coverage_needed === "no"}
+                          disabled={row.coverage_needed === "no" || row.coverage_needed === false}
                           className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
                         />
                       </div>

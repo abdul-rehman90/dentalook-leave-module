@@ -22,7 +22,7 @@ function StepOne({ onSubmit, onNext }) {
     const token = Cookies.get('access-token');
     const role = Cookies.get('role');
     const [isLoading, setIsLoading] = useState(false);
-    const [docName, setDocName] = useState('');
+    
     const {
         allProvinces,
         setProvinceId,
@@ -38,7 +38,9 @@ function StepOne({ onSubmit, onNext }) {
         getData,
         regionalManagers,
         regionalManagersId, setRegionalManagersId,
-        formId
+        formId,
+        allClicnicData,
+        docName, setDocName
     } = useLeaveReq();
    
     // Update field values
@@ -248,6 +250,7 @@ function StepOne({ onSubmit, onNext }) {
                                 <CustomSelector
                                     onChange={(value) => {
                                         setClinicId(value);
+                                        setDocName("");
                                     }}
                                     label="Clinic"
                                     options={allClinics}
@@ -264,9 +267,11 @@ function StepOne({ onSubmit, onNext }) {
                             <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
                                 <div className="w-full">
                                     <CustomSelector
-                                        onChange={(value) => setDocName(value)}
+                                        onChange={(value) => {
+                                            setDocName(value);
+                                        }}
                                         label="Provider Title"
-                                       options={providerTitleOptions}
+                                        options={providerTitleOptions}
                                         placeholder="Select Provider Name"
                                         labelKey="name"
                                         value={docName}
@@ -276,7 +281,7 @@ function StepOne({ onSubmit, onNext }) {
                                     <CustomSelector
                                         onChange={(value) => setProviderId(value)}
                                         label="Provider Name"
-                                        options={allProviders}
+                                        options={allClicnicData}
                                         placeholder="Select Provider Title"
                                         labelKey="name"
                                         valueKey="id"

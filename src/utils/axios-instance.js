@@ -12,7 +12,9 @@ axiosInstance.interceptors.request.use(
     const token = Cookies.get('access-token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
+      // config.headers['ngrok'] = 'true';
     }
+    
     return config;
   },
   (error) => Promise.reject(error)
