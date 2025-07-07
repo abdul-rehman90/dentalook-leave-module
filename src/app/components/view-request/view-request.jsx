@@ -37,7 +37,7 @@ function ViewRequest() {
     
     return (
         <div>
-            <div className="p-5 border border-[#E6EAEE] rounded-2xl">
+            <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-2">
                 <div>
                     <div className="flex items-start flex-wrap md:flex-nowrap justify-between gap-4 w-full">
                         <Heading

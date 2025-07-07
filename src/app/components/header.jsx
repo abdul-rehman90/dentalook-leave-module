@@ -71,8 +71,8 @@ function Header() {
       </div>
 
       <div
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          isScrolled ? "py-0 px-0 md:px-6" : "py-0 md:py-6 px-0 md:px-6"
+        className={`sticky top-0 z-[99] transition-all ${
+          isScrolled ? "py-0 px-0 md:px-6" : "py-0 md:py-0 px-0 md:px-6"
         }`}
       >
         <div
