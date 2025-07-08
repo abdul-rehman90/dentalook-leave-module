@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from "js-cookie";
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../../utils/axios-instance';
+import { format } from "date-fns";
 
 export default function useViewReq() {
     const token = Cookies.get('access-token');
@@ -23,6 +24,14 @@ export default function useViewReq() {
     const [getReqData, setGetReqData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [allClicnicData, setAllClinicData] = useState([]);
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [startDate, endDate] = dateRange;
+    const handleDateChange = (update) => {
+        const [start, end] = update || [];
+        const formattedStart = start ? format(start, "yyyy-MM-dd") : "";
+        const formattedEnd = end ? format(end, "yyyy-MM-dd") : "";
+        console.log("start_Date=", formattedStart, "end_Date=", formattedEnd);
+    };
 
     const getProvinces = async () => {
         setIsLoading(true);
@@ -94,7 +103,11 @@ export default function useViewReq() {
                 if (clinicId) params.clinic_id = clinicId;
                 if (provinceId) params.province_id = provinceId;
                 if (regionalManagersId) params.regional_manager = regionalManagersId;
-                
+                if (startDate && endDate) {
+                    params.start_date = format(startDate, "yyyy-MM-dd");
+                    params.end_date = format(endDate, "yyyy-MM-dd");
+                };
+                // if (endDate) params.end_date = format(endDate, "yyyy-MM-dd");
                 const response = await axiosInstance.get(`api/v1/get-all-leave-request/`, {
                 params
             });
@@ -109,7 +122,7 @@ export default function useViewReq() {
         if (token) {
             getViewRequests();
         }
-    }, [token, token, providerId, clinicId, provinceId, regionalManagersId]);
+    }, [token, token, providerId, clinicId,startDate, endDate, provinceId, regionalManagersId]);
 
      useEffect(() => {
     
@@ -144,6 +157,9 @@ export default function useViewReq() {
         getReqData,
         isLoading,
         role,
-        allClicnicData
+        allClicnicData,
+        handleDateChange,
+        startDate, endDate,
+        setDateRange
     }
 }

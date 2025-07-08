@@ -54,7 +54,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
         "Check the remaining vacation days available to the provider",
     },
     {
-      title: "3. Assss Notification Requirement ",
+      title: "3. Assess Notification Requirement ",
       description:
         "Review the required notice period for leave requests as stipulated in the contract",
     },
@@ -183,7 +183,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
               </div>
             </div>
           )}
-          <div className="bg-[#F8F8F8] p-4.5 rounded-xl">
+          <div className="bg-[#F8F8F8] p-4.5 border-l border-[#D9DADF]">
             {rightSideSteps.map((step, index) => (
               <div className={`mt-${index === 0 ? "0" : "5"}`} key={index}>
                 <h2 className="text-base font-medium text-[#111B2B]">

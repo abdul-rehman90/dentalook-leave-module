@@ -7,6 +7,8 @@ import CustomSelector from "../ui/selector";
 import Input from "../ui/input";
 import DataTabel from './data-table'
 import useViewReq from "./use-view-req.hook"
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 
 function ViewRequest() {
@@ -29,11 +31,13 @@ function ViewRequest() {
         getReqData,
         isLoading,
         role,
-        allClicnicData
+        allClicnicData,
+        handleDateChange,
+        startDate, endDate,
+        setDateRange
     } = useViewReq();
 
-    
-    
+   
     
     return (
         <div>
@@ -93,7 +97,7 @@ function ViewRequest() {
                                 className="disabled:opacity-50 disabled:cursor-not-allowed"
                             />
                         </div>
-                         <div>
+                        <div>
                             <CustomSelector
                                 onChange={(value) => setDocName(value)}
                                 label="Provider Title"
@@ -116,6 +120,21 @@ function ViewRequest() {
                                 value={providerId}
                                 disabled={docName ? false : true}
                                 className="disabled:opacity-50 disabled:cursor-not-allowed"
+                            />
+                        </div>
+                        <div className="request_Datepicker">
+                            <label className='text-[13px] mb-2 block font-medium text-[#373940]'>Leave Request Date</label>
+                            <DatePicker
+                                selectsRange={true}
+                                startDate={startDate}
+                                endDate={endDate}
+                                dateFormat="yyyy-MM-dd"
+                                onChange={(update) => {
+                                    setDateRange(update);
+                                    handleDateChange(update);
+                                }}
+                                isClearable={true}
+                                className="w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-xl px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F]"
                             />
                         </div>
                        
