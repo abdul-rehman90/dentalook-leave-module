@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import loader from "../../../common/assets/icons/blue-loader.svg";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from "js-cookie";
 
 function StepTwo({ onPrev, onNext,setCurrentStep }) {
   const [formData, setFormData] = useState({});
@@ -20,6 +21,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
   const getStatusParam = param.get("status");
   const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
+  const role = Cookies.get("role");
 
   const { getData, isLoading, handleStatus, loadingButton, declineReq } =
     useSteptwo({ onNext });
@@ -258,7 +260,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                 onClick={() => handleStatus("decline")}
                 type="button"
                 disabled={loadingButton !== null || !isChecked}
-                className="w-full disabled:cursor-not-allowed disabled:opacity-[0.7] md:w-fit"
+                className={`${role === "PM" ? "hidden" : "block"} w-full disabled:cursor-not-allowed disabled:opacity-[0.7] md:w-fit`}
               />
               <Button
                 text={
@@ -270,7 +272,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                 onClick={() => handleStatus("approved")}
                 type="button"
                 disabled={loadingButton !== null || !isChecked}
-                className="w-full disabled:cursor-not-allowed disabled:opacity-[0.7] md:w-fit"
+                className={`${role === "PM" ? "hidden" : "block"} w-full disabled:cursor-not-allowed disabled:opacity-[0.7] md:w-fit`}
               />
             </div>
           )}

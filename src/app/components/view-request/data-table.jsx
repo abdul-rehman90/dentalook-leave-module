@@ -322,7 +322,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
               {
                 (modelData.reason.includes("ACE") || modelData.reason.includes("External")) && (
                   <div className="flex gap-3">
-                    <strong>Province</strong>
+                    <strong>Name</strong>
                     <p>{modelData.name}</p>
                   </div>
                 )}
