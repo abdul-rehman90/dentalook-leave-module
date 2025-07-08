@@ -9,7 +9,10 @@ import { IoClose } from "react-icons/io5";
 
 export default function LeaveTable({ getReqData, isLoading }) {
   const [newData, setNewData] = React.useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modelData, setModelData] = useState({});
   const router = useRouter();
+
   useEffect(() => {
     if (getReqData?.length > 0) {
       const transformedData = getReqData?.flatMap((item) =>
@@ -20,6 +23,23 @@ export default function LeaveTable({ getReqData, isLoading }) {
           status: item?.status,
           leave_date: item?.days?.map((nestedDay) => nestedDay?.leave_date),
           leave_type: item?.days?.map((nestedDay) => nestedDay?.leave_type),
+          email: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.email
+          ),
+          user_type: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.user_type
+          ),
+          province_name: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.province_name
+          ),
+          clinic_name: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.clinic_name
+
+          ),
+          name: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.name
+
+          ),
           reason: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.provider_coverage
           ),
@@ -54,13 +74,12 @@ export default function LeaveTable({ getReqData, isLoading }) {
       );
     }
   };
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modelData, setModelData] = useState({});
+  
   const handleModelOpen = (item) => {
+    console.log(item, "..item")
     setModelData(item);
     setModalOpen(true);
   };
-  console.log(modelData, "...modelData");
 
   return (
     <div className="overflow-hidden">
@@ -134,8 +153,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               <span
                                 className={`w-2 h-2 inline-block rounded-full ${
                                   type === "emergency"
-                                    ? "bg-red-500"
-                                    : "bg-green-500"
+                                    ? "bg-red-600"
+                                    : "bg-green-600"
                                 }`}
                               />
                               <span className="text-xs font-normal text-[#475467]">
@@ -147,7 +166,16 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       </td>
 
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.status}
+                        <span
+                          className={`w-2 h-2 mr-[6px] inline-block rounded-full ${
+                            item?.status === "decline"
+                              ? "bg-red-600"
+                              : "bg-green-600"
+                          }`}
+                        />
+                        <span className="text-xs font-normal text-[#475467]">
+                          {item?.status}
+                        </span>
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467]">
                         {item?.coverage_needed.map((needed, index) => (
@@ -159,8 +187,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               <span
                                 className={`w-2 h-2 inline-block rounded-full ${
                                   needed !== true
-                                    ? "bg-red-500"
-                                    : "bg-green-500"
+                                    ? "bg-red-600"
+                                    : "bg-green-600"
                                 }`}
                               />
                               <span className="text-[#475467] text-xs">
@@ -188,45 +216,46 @@ export default function LeaveTable({ getReqData, isLoading }) {
 
                       <td className="px-3 flex flex-col items-start gap-2 py-3 text-xs font-normal text-[#475467]">
                         <>
-                         
                           {item?.coverage_provider?.map((provider, index) => {
                             let label = provider;
-                            let color = "bg-green-500";
+                            let color = "bg-green-600";
                             if (item.coverage_needed?.[index] === false) {
                               label = "No Coverage needed";
-                              color = "bg-green-500";
+                              color = "bg-green-600";
                             } else if (
                               item.coverage_needed?.[index] === true &&
                               (!provider || provider === "")
                             ) {
                               label = "Looking for coverage";
-                              color = "bg-red-500";
+                              color = "bg-red-600";
                             }
+
                             return (
                               <div key={index} className="flex items-center">
                                 <span
                                   className={`w-2 mr-[5px] h-2 inline-block rounded-full ${color}`}
                                 />
                                 <span>{label}</span>
-                                <button
-                                  type="button"
-                                  className="cursor-pointer ml-2"
-                                  onClick={(e) => {
-                                    handleModelOpen({
-                                      provider_name: item.provider_name,
-                                      leave_date: item.leave_date?.[index],
-                                      leave_type: item.leave_type?.[index],
-                                      status: item.status,
-                                      coverage_needed:
-                                        item.coverage_needed?.[index],
-                                      reason: item.reason?.[index],
-                                      coverage_provider: provider,
-                                    });
-                                    e.stopPropagation();
-                                  }}
-                                >
-                                  <FaEye className="text-[16px]" />
-                                </button>
+                                {(item.coverage_provider?.[index] !== null && item.coverage_provider?.[index] !== undefined ) && (
+                                  <button
+                                    type="button"
+                                    className="cursor-pointer ml-2"
+                                    onClick={(e) => {
+                                      handleModelOpen({
+                                        province_name: item.province_name,
+                                        user_type: item.user_type, 
+                                        email: item.email,
+                                        reason: item.reason, 
+                                        coverage_provider: provider, 
+                                        clinic_name: item.clinic_name,
+                                        name: item.name,
+                                      });
+                                      e.stopPropagation();
+                                    }}
+                                  >
+                                    <FaEye className="text-[16px]" />
+                                  </button>
+                                )}
                               </div>
                             );
                           })}
@@ -261,45 +290,45 @@ export default function LeaveTable({ getReqData, isLoading }) {
             <div className="space-y-2 text-sm">
               <div className="flex gap-3">
                 <strong>Name:</strong>
-                <p>{modelData.provider_name}</p>
+                <p>{modelData.coverage_provider}</p>
               </div>
               <div className="flex gap-3">
-                <strong>Leave Date:</strong>
-                <p>{modelData.leave_date}</p>
+                <strong>Email:</strong>
+                <p>{modelData.email}</p>
               </div>
               <div className="flex gap-3">
-                <strong>Type of Leave:</strong>
-                <p>{modelData.leave_type}</p>
+                <strong>Coverage Type:</strong>
+                <p>{modelData.reason}</p>
               </div>
               <div className="flex gap-3">
-                <strong>Request Decision:</strong>
-                <p>{modelData.status}</p>
+                <strong>Provider Title:</strong>
+                <p>{modelData.user_type}</p>
               </div>
-              <div className="flex gap-3">
-                <strong>Coverage Needed:</strong>
-                <p>{modelData.coverage_needed === true ? "Yes" : "No"}</p>
-              </div>
-              <div className="flex gap-3">
-                <strong>Coverage Detail:</strong>
-                <p>
-                  {modelData.coverage_needed === false
-                    ? "No Coverage needed"
-                    : !modelData.reason || modelData.reason === ""
-                    ? "Looking for coverage"
-                    : modelData.reason}
-                </p>
-              </div>
-              <div className="flex gap-3">
-                <strong>Coverage Provider:</strong>
-                <p>
-                  {modelData.coverage_needed === false
-                    ? "No Coverage needed"
-                    : !modelData.coverage_provider ||
-                      modelData.coverage_provider === ""
-                    ? "Looking for coverage"
-                    : modelData.coverage_provider}
-                </p>
-              </div>
+             
+              {
+                modelData.reason.includes("Internal") && (
+                  <>
+                    <div className="flex gap-3">
+                      <strong>Province Name</strong>
+                      <p>{modelData.province_name}</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <strong>Clinic Name</strong>
+                    <p>{modelData.clinic_name}</p>
+                  </div>
+                  </>
+                )
+              }
+              {
+                (modelData.reason.includes("ACE") || modelData.reason.includes("External")) && (
+                  <div className="flex gap-3">
+                    <strong>Province</strong>
+                    <p>{modelData.name}</p>
+                  </div>
+                )}
+              
+
+  
             </div>
           </div>
         </div>

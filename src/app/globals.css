@@ -10,3 +10,6 @@ body {
 .font-jakarta {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
+.request_Datepicker .react-datepicker-wrapper{
+  width: 100%;
+}

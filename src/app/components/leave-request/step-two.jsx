@@ -54,7 +54,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
         "Check the remaining vacation days available to the provider",
     },
     {
-      title: "3. Assss Notification Requirement ",
+      title: "3. Assess Notification Requirement ",
       description:
         "Review the required notice period for leave requests as stipulated in the contract",
     },
@@ -135,7 +135,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                           showYearDropdown
                           dropdownMode="select"
                           dateFormat="YYYY-MM-dd"
-                          className="py-[8px] w-full px-4 disabled:opacity-50 disabled:cursor-not-allowed text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                          className="py-[8px] w-full px-4 disabled:opacity-[0.8] disabled:cursor-not-allowed text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
                           name="leave_date"
                           placeholderText="Leave Date"
                           onChange={(date) => {
@@ -162,7 +162,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                         }}
                         labelKey="name"
                         disabled
-                        className="disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                       />
 
                       <Input
@@ -175,7 +175,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                           setFormData2(updated);
                         }}
                         disabled
-                        className="disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                       />
                     </React.Fragment>
                   ))}
@@ -183,7 +183,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
               </div>
             </div>
           )}
-          <div className="bg-[#F8F8F8] p-4.5 rounded-xl">
+          <div className="bg-[#F8F8F8] p-4.5 border-l border-[#D9DADF]">
             {rightSideSteps.map((step, index) => (
               <div className={`mt-${index === 0 ? "0" : "5"}`} key={index}>
                 <h2 className="text-base font-medium text-[#111B2B]">

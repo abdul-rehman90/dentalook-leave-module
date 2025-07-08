@@ -238,7 +238,7 @@ function StepThree({ onNext }) {
                       valueKey="id"
                       value={provinceId || getData?.province}
                       disabled={step === "3" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                     />
                   </div>
                   <div className="col-span-3 md:col-span-1">
@@ -253,7 +253,7 @@ function StepThree({ onNext }) {
                       valueKey="id"
                       value={regionalManagersId}
                       disabled={step === "3" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                     />
                   </div>
                   <div className="col-span-3 md:col-span-1">
@@ -268,7 +268,7 @@ function StepThree({ onNext }) {
                       valueKey="clinic_id"
                       value={clinicId}
                       disabled={step === "3" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                     />
                   </div>
 
@@ -282,7 +282,7 @@ function StepThree({ onNext }) {
                         labelKey="name"
                         value={docName || getData?.provider_type?.user_type}
                         disabled={step === "3" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
                     <div className="w-full">
@@ -295,7 +295,7 @@ function StepThree({ onNext }) {
                         valueKey="id"
                         value={providerId}
                         disabled={step === "3" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
                   </div>
@@ -398,7 +398,7 @@ function StepThree({ onNext }) {
                           valueKey="id"
                           disabled={row.coverage_needed === "no" || row.coverage_needed === false}
                           showSearch={true}
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                          className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                         />
 
                       </div>
@@ -423,7 +423,7 @@ function StepThree({ onNext }) {
                           labelKey="name"
                           valueKey="value"
                           disabled={row.coverage_needed === "no" || row.coverage_needed === false}
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                          className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                         />
                       </div>
 
@@ -441,7 +441,7 @@ function StepThree({ onNext }) {
                             )
                           }
                           disabled
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.7]"
+                          className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                         />
                       </div>
                     </div>
@@ -453,7 +453,7 @@ function StepThree({ onNext }) {
           <div className="flex flex-wrap md:flex-nowrap justify-center md:justify-end gap-3.5 py-4 mt-0 md:mt-5">
            
             <Button
-              className="w-full md:!w-fit disabled:opacity-[0.7] disabled:cursor-not-allowed text-nowrap !px-6"
+              className="w-full md:!w-fit disabled:opacity-[0.8] disabled:cursor-not-allowed text-nowrap !px-6"
               disabled={isLoading}
               text={
                 isLoading ? (
