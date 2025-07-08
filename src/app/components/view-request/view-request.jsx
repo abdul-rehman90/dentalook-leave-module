@@ -63,7 +63,7 @@ function ViewRequest() {
                                 valueKey="id"
                                 value={provinceId}
                                 disabled={(role === "RM" || role === "PM") ? true : false}
-                                className="disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
@@ -78,7 +78,7 @@ function ViewRequest() {
                                 valueKey="id"
                                 value={regionalManagersId}
                                 disabled={role === "RM" ? true : false || provinceId ? false : true}
-                                className="disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
@@ -94,7 +94,7 @@ function ViewRequest() {
                                 valueKey="clinic_id"
                                 value={clinicId}
                                 disabled={role === "PM" ? true : false || provinceId ? false : true}
-                                className="disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
@@ -106,7 +106,7 @@ function ViewRequest() {
                                 labelKey="name"
                                 value={docName}
                                 disabled={clinicId ? false : true }
-                                className="disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
@@ -119,7 +119,7 @@ function ViewRequest() {
                                 valueKey="id"
                                 value={providerId}
                                 disabled={docName ? false : true}
-                                className="disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div className="request_Datepicker">

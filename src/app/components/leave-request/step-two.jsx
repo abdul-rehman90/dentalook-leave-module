@@ -135,7 +135,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                           showYearDropdown
                           dropdownMode="select"
                           dateFormat="YYYY-MM-dd"
-                          className="py-[8px] w-full px-4 disabled:opacity-50 disabled:cursor-not-allowed text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                          className="py-[8px] w-full px-4 disabled:opacity-[0.8] disabled:cursor-not-allowed text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
                           name="leave_date"
                           placeholderText="Leave Date"
                           onChange={(date) => {
@@ -162,7 +162,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                         }}
                         labelKey="name"
                         disabled
-                        className="disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                       />
 
                       <Input
@@ -175,7 +175,7 @@ function StepTwo({ onPrev, onNext,setCurrentStep }) {
                           setFormData2(updated);
                         }}
                         disabled
-                        className="disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                       />
                     </React.Fragment>
                   ))}

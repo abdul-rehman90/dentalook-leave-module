@@ -32,6 +32,14 @@ export default function LeaveTable({ getReqData, isLoading }) {
           province_name: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.province_name
           ),
+          clinic_name: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.clinic_name
+
+          ),
+          name: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.name
+
+          ),
           reason: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.provider_coverage
           ),
@@ -145,8 +153,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               <span
                                 className={`w-2 h-2 inline-block rounded-full ${
                                   type === "emergency"
-                                    ? "bg-red-500"
-                                    : "bg-green-500"
+                                    ? "bg-red-600"
+                                    : "bg-green-600"
                                 }`}
                               />
                               <span className="text-xs font-normal text-[#475467]">
@@ -158,7 +166,16 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       </td>
 
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.status}
+                        <span
+                          className={`w-2 h-2 mr-[6px] inline-block rounded-full ${
+                            item?.status === "decline"
+                              ? "bg-red-600"
+                              : "bg-green-600"
+                          }`}
+                        />
+                        <span className="text-xs font-normal text-[#475467]">
+                          {item?.status}
+                        </span>
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467]">
                         {item?.coverage_needed.map((needed, index) => (
@@ -170,8 +187,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               <span
                                 className={`w-2 h-2 inline-block rounded-full ${
                                   needed !== true
-                                    ? "bg-red-500"
-                                    : "bg-green-500"
+                                    ? "bg-red-600"
+                                    : "bg-green-600"
                                 }`}
                               />
                               <span className="text-[#475467] text-xs">
@@ -201,16 +218,16 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         <>
                           {item?.coverage_provider?.map((provider, index) => {
                             let label = provider;
-                            let color = "bg-green-500";
+                            let color = "bg-green-600";
                             if (item.coverage_needed?.[index] === false) {
                               label = "No Coverage needed";
-                              color = "bg-green-500";
+                              color = "bg-green-600";
                             } else if (
                               item.coverage_needed?.[index] === true &&
                               (!provider || provider === "")
                             ) {
                               label = "Looking for coverage";
-                              color = "bg-red-500";
+                              color = "bg-red-600";
                             }
 
                             return (
@@ -226,10 +243,12 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                     onClick={(e) => {
                                       handleModelOpen({
                                         province_name: item.province_name,
-                                        user_type: item.user_type, //done
-                                        email: item.email, //done
-                                        reason: item.reason, //done
-                                        coverage_provider: provider, // done
+                                        user_type: item.user_type, 
+                                        email: item.email,
+                                        reason: item.reason, 
+                                        coverage_provider: provider, 
+                                        clinic_name: item.clinic_name,
+                                        name: item.name,
                                       });
                                       e.stopPropagation();
                                     }}
@@ -285,10 +304,29 @@ export default function LeaveTable({ getReqData, isLoading }) {
                 <strong>Provider Title:</strong>
                 <p>{modelData.user_type}</p>
               </div>
-              <div className="flex gap-3">
-                <strong>Province</strong>
-                <p>{modelData.province_name}</p>
-              </div>
+             
+              {
+                modelData.reason.includes("Internal") && (
+                  <>
+                    <div className="flex gap-3">
+                      <strong>Province Name</strong>
+                      <p>{modelData.province_name}</p>
+                  </div>
+                  <div className="flex gap-3">
+                    <strong>Clinic Name</strong>
+                    <p>{modelData.clinic_name}</p>
+                  </div>
+                  </>
+                )
+              }
+              {
+                (modelData.reason.includes("ACE") || modelData.reason.includes("External")) && (
+                  <div className="flex gap-3">
+                    <strong>Province</strong>
+                    <p>{modelData.name}</p>
+                  </div>
+                )}
+              
 
   
             </div>

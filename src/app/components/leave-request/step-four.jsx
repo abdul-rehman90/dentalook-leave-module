@@ -148,7 +148,7 @@ function StepFour({setCurrentStep}) {
                     valueKey="id"
                     value={provinceId || getData?.province}
                     disabled={step === "4" ? true : false}
-                    className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                    className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                   />
                 </div>
                 <div className="col-span-3 md:col-span-1">
@@ -163,7 +163,7 @@ function StepFour({setCurrentStep}) {
                     valueKey="id"
                     value={regionalManagersId}
                     disabled={step === "4" ? true : false}
-                    className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                    className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                   />
                 </div>
                 <div className="col-span-3 md:col-span-1">
@@ -178,7 +178,7 @@ function StepFour({setCurrentStep}) {
                     valueKey="clinic_id"
                     value={clinicId}
                     disabled={step === "4" ? true : false}
-                    className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                    className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                   />
                 </div>
 
@@ -192,7 +192,7 @@ function StepFour({setCurrentStep}) {
                       labelKey="name"
                       value={docName || getData?.provider_type}
                       disabled={step === "4" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                     />
                   </div>
                   <div className="w-full">
@@ -205,7 +205,7 @@ function StepFour({setCurrentStep}) {
                       valueKey="id"
                       value={providerId}
                       disabled={step === "4" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                     />
                   </div>
                 </div>
@@ -234,7 +234,7 @@ function StepFour({setCurrentStep}) {
                         showYearDropdown
                         dropdownMode="select"
                         dateFormat="YYYY-MM-dd"
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.5] py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8] py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
                         name="leave_date"
                         onChange={(date) => {
                           const formatted = date
@@ -260,7 +260,7 @@ function StepFour({setCurrentStep}) {
                         labelKey="name"
                         valueKey="value"
                         disabled={step === "4" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
                     <div>
@@ -285,7 +285,7 @@ function StepFour({setCurrentStep}) {
                         labelKey="name"
                         valueKey="value"
                         disabled={step === "4" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
                     <div>
@@ -304,7 +304,7 @@ function StepFour({setCurrentStep}) {
                         labelKey="name"
                         valueKey="name"
                         disabled={row.coverage_needed === "no" || step === "4" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                         
                       />
                     </div>
@@ -328,7 +328,7 @@ function StepFour({setCurrentStep}) {
                         labelKey="name"
                         valueKey="value"
                         disabled={row.coverage_needed === "no" || step === "4" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
 
@@ -346,7 +346,7 @@ function StepFour({setCurrentStep}) {
                           )
                         }
                         disabled
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
                   </div>
