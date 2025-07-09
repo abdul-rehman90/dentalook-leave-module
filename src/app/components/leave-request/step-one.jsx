@@ -301,7 +301,7 @@ function StepOne({ onSubmit, onNext }) {
               <Heading title="Add Leave Details" />
               <div
                 onClick={canAddRow ? handleAddRow : undefined}
-                className="rounded-xl border flex cursor-pointer items-center px-2.5 py-2 gap-3 w-full md:w-fit border-[#D0D5DD]"
+                className="rounded-xl border flex cursor-pointer items-center p-2 gap-1 w-full md:w-fit border-[#D0D5DD]"
               >
                 <Plus className={`text-[#7DB02D]`} />
                 Add day(s)
@@ -312,7 +312,7 @@ function StepOne({ onSubmit, onNext }) {
               {rows?.map((row, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-5"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 relative"
                 >
                   <div className="flex flex-col gap-2">
                     <label className="text-[13px] text-[#373940] font-medium block">
@@ -364,7 +364,7 @@ function StepOne({ onSubmit, onNext }) {
                       }
                     />
                   </div>
-                  <div className="flex items-end">
+                  {index > 0 && (
                     <button
                       type="button"
                       onClick={() => {
@@ -372,16 +372,11 @@ function StepOne({ onSubmit, onNext }) {
                         newRows.splice(index, 1);
                         setRows(newRows);
                       }}
-                      className={`p-2 rounded-full ${
-                        rows.length <= 1
-                          ? 'text-gray-400 cursor-not-allowed'
-                          : 'text-red-500 hover:bg-red-50'
-                      }`}
-                      disabled={rows.length <= 1}
+                      className="absolute right-0 top-5 text-red-500 hover:bg-red-50 rounded-full cursor-pointer"
                     >
                       <X className="w-5 h-5" />
                     </button>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>
