@@ -102,7 +102,7 @@ function ViewRequest() {
                                 onChange={(value) => setDocName(value)}
                                 label="Provider Title"
                                 options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
-                                placeholder="Select Provider Name"
+                                placeholder="Select Provider Title"
                                 labelKey="name"
                                 value={docName}
                                 disabled={clinicId ? false : true }
@@ -114,7 +114,7 @@ function ViewRequest() {
                                 onChange={(value) => setProviderId(value)}
                                 label="Provider Name"
                                 options={allClicnicData}
-                                placeholder="Select Provider Title"
+                                placeholder="Select Provider Name"
                                 labelKey="name"
                                 valueKey="id"
                                 value={providerId}

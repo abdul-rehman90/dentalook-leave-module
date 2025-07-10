@@ -35,6 +35,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
           clinic_name: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.clinic_name
           ),
+          regional_manager: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.regional_manager
+          ),
           name: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.name
           ),
@@ -74,7 +77,6 @@ export default function LeaveTable({ getReqData, isLoading }) {
   };
 
   const handleModelOpen = (item) => {
-    console.log(item, '..item');
     setModelData(item);
     setModalOpen(true);
   };
@@ -186,99 +188,118 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             key={index}
                             className="flex items-center gap-1 justify-between w-full"
                           >
-                            <div className="flex gap-2 items-center">
-                              <span
-                                className={`w-2 h-2 inline-block rounded-full ${
-                                  needed !== true
-                                    ? 'bg-red-600'
-                                    : 'bg-green-600'
-                                }`}
-                              />
-                              <span className="text-[#475467] text-xs">
-                                {needed === true ? 'Yes' : 'No'}
-                              </span>
-                            </div>
+                           
+                              <div className="flex gap-2 items-center">
+                                <span
+                                  className={`w-2 h-2 inline-block rounded-full ${
+                                    needed !== true
+                                      ? 'bg-red-600'
+                                      : 'bg-green-600'
+                                  }`}
+                                />
+                                <span className="text-[#475467] text-xs">
+                                  {needed === true ? 'Yes' : 'No'}
+                                </span>
+                              </div>
+                            
                           </div>
                         ))}
                       </td>
 
                       <td className="px-3 py-3 text-xs font-normal text-[#475467]">
-                        {item?.reason?.map((detail, index) => {
-                          if (item.coverage_needed?.[index] === false) {
-                            return (
-                              <div key={index}>
-                                <span
-                                  className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
-                                />
-                                No Coverage Needed
-                              </div>
-                            );
-                          }
-                          if (
-                            item.coverage_needed?.[index] === true &&
-                            (!detail || detail === '')
-                          ) {
-                            return (
-                              <div key={index}>
-                                <span
-                                  className={`w-2 h-2 inline-block rounded-full bg-yellow-300 mr-1`}
-                                />
-                                Looking for Coverage
-                              </div>
-                            );
-                          }
-                          return <div key={index}>{detail}</div>;
-                        })}
+                        {
+                          item?.status === "pending" ? null :
+                          <>
+                            {item?.reason?.map((detail, index) => {
+                              if (item.coverage_needed?.[index] === false) {
+                                return (
+                                  <div key={index}>
+                                    {
+                                      item?.status === 'decline' ? null : 
+                                      <span
+                                        className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
+                                      />
+                                    }
+                                    
+                                    {item?.status === 'decline' ? "" : "No Coverage Needed"}
+                                  </div>
+                                );
+                              }
+                              if (
+                                item.coverage_needed?.[index] === true &&
+                                (!detail || detail === '')
+                              ) {
+                                return (
+                                  <div key={index}>
+                                    <span
+                                      className={`w-2 h-2 inline-block rounded-full bg-yellow-300 mr-1`}
+                                    />
+                                    Looking for Coverage
+                                  </div>
+                                );
+                              }
+                              return <div key={index}>{detail}</div>;
+                            })}
+                          </>
+                        }
                       </td>
 
                       <td className="px-3 flex flex-col items-start gap-2 py-3 text-xs font-normal text-[#475467]">
-                        <>
-                          {item?.coverage_provider?.map((provider, index) => {
-                            let label = provider;
-                            let color = '';
-                            if (item.coverage_needed?.[index] === false) {
-                              label = 'No Coverage Needed';
-                              color = 'bg-green-600';
-                            } else if (
-                              item.coverage_needed?.[index] === true &&
-                              (!provider || provider === '')
-                            ) {
-                              label = 'Looking for Coverage';
-                              color = 'bg-yellow-300';
-                            }
+                        {
+                          item?.status === "pending" ? null :
+                          <>
+                            {item?.coverage_provider?.map((provider, index) => {
+                              let label = provider;
+                              let color = '';
+                              if (item.coverage_needed?.[index] === false) {
+                                label = 'No Coverage Needed';
+                                color = 'bg-green-600';
+                              } else if (
+                                item.coverage_needed?.[index] === true &&
+                                (!provider || provider === '')
+                              ) {
+                                label = 'Looking for Coverage';
+                                color = 'bg-yellow-300';
+                              }
 
-                            return (
-                              <div key={index} className="flex items-center">
-                                <span
-                                  className={`w-2 mr-[5px] h-2 inline-block rounded-full ${color}`}
-                                />
-                                <span>{label}</span>
-                                {item.coverage_provider?.[index] !== null &&
-                                  item.coverage_provider?.[index] !==
-                                    undefined && (
-                                    <button
-                                      type="button"
-                                      className="cursor-pointer ml-2"
-                                      onClick={(e) => {
-                                        handleModelOpen({
-                                          province_name: item.province_name,
-                                          user_type: item.user_type,
-                                          email: item.email,
-                                          reason: item.reason,
-                                          coverage_provider: provider,
-                                          clinic_name: item.clinic_name,
-                                          name: item.name
-                                        });
-                                        e.stopPropagation();
-                                      }}
-                                    >
-                                      <FaEye className="text-[16px]" />
-                                    </button>
-                                  )}
-                              </div>
-                            );
-                          })}
-                        </>
+                              return (
+                                <div key={index} className="flex items-center">
+                                  {
+                                    item?.status === 'decline' ? null : 
+                                    <span
+                                      className={`w-2 mr-[5px] h-2 inline-block rounded-full ${color}`}
+                                    />
+                                  }
+                                  
+                                  <span>{item?.status === 'decline' ? "" : label}</span>
+                                  {item.coverage_provider?.[index] !== null &&
+                                    item.coverage_provider?.[index] !==
+                                      undefined && (
+                                      <button
+                                        type="button"
+                                        className="cursor-pointer ml-2"
+                                        onClick={(e) => {
+                                          handleModelOpen({
+                                            province_name: item.province_name,
+                                            user_type: item.user_type,
+                                            email: item.email,
+                                            reason: item.reason,
+                                            coverage_provider: provider,
+                                            clinic_name: item.clinic_name,
+                                            regional_manager: item.regional_manager,
+                                            name: item.name
+                                          });
+                                          e.stopPropagation();
+                                        }}
+                                      >
+                                        <FaEye className="text-[16px]" />
+                                      </button>
+                                    )}
+                                </div>
+                              );
+                            })}
+                          </>
+                        }
                       </td>
                     </tr>
                   );
@@ -308,41 +329,51 @@ export default function LeaveTable({ getReqData, isLoading }) {
             </h2>
             <div className="space-y-2 text-sm">
               <div className="flex gap-3">
+                <strong>Provider Title:</strong>
+                <p>{modelData.user_type || ""}</p>
+              </div>
+              <div className="flex gap-3">
                 <strong>Name:</strong>
-                <p>{modelData.coverage_provider}</p>
+                <p>{modelData.coverage_provider || ""}</p>
               </div>
               <div className="flex gap-3">
                 <strong>Email:</strong>
-                <p>{modelData.email}</p>
+                <p>{modelData.email || ""}</p>
               </div>
               <div className="flex gap-3">
                 <strong>Coverage Type:</strong>
-                <p>{modelData.reason}</p>
+                <p>{modelData.reason || ""}</p>
               </div>
-              <div className="flex gap-3">
-                <strong>Provider Title:</strong>
-                <p>{modelData.user_type}</p>
-              </div>
+              
+             
+              {
+                modelData.reason.includes("Internal") && (
+                  <>
+                    <div className="flex gap-3">
+                      <strong>Province:</strong>
+                      <p>{modelData.province_name || ""}</p>
+                    </div>
+                    <div className="flex gap-3">
+                      <strong>Regional Manager:</strong>
+                      <p>{modelData.regional_manager || ""}</p>
+                    </div>
+                    <div className="flex gap-3">
+                      <strong>Clinic:</strong>
+                      <p>{modelData.clinic_name || ""}</p>
+                    </div>
+                  </>
+                )
+              }
+              {
+                (modelData.reason.includes("ACE") || modelData.reason.includes("External")) && (
+                  <div className="flex gap-3">
+                    <strong>Name:</strong>
+                    <p>{modelData.name}</p>
+                  </div>
+                )}
+              
 
-              {modelData.reason.includes('Internal') && (
-                <>
-                  <div className="flex gap-3">
-                    <strong>Province Name</strong>
-                    <p>{modelData.province_name}</p>
-                  </div>
-                  <div className="flex gap-3">
-                    <strong>Clinic Name</strong>
-                    <p>{modelData.clinic_name}</p>
-                  </div>
-                </>
-              )}
-              {(modelData.reason.includes('ACE') ||
-                modelData.reason.includes('External')) && (
-                <div className="flex gap-3">
-                  <strong>Province</strong>
-                  <p>{modelData.name}</p>
-                </div>
-              )}
+  
             </div>
           </div>
         </div>

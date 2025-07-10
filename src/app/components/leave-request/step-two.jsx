@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import Heading from '../ui/heading';
-import CustomSelector from '../ui/selector';
-import Input from '../ui/input';
-import { Plus } from 'lucide-react';
-import DateInput from '../ui/date-input';
-import Button from '../ui/button';
-import useSteptwo from './use-steptwo.hook';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { format } from 'date-fns';
-import loader from '../../../common/assets/icons/blue-loader.svg';
-import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import Heading from "../ui/heading";
+import CustomSelector from "../ui/selector";
+import Input from "../ui/input";
+import { Plus } from "lucide-react";
+import DateInput from "../ui/date-input";
+import Button from "../ui/button";
+import useSteptwo from "./use-steptwo.hook";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
+import loader from "../../../common/assets/icons/blue-loader.svg";
+import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
+import Cookies from 'js-cookie';
 
 function StepTwo({ onPrev, onNext, setCurrentStep }) {
   const [formData, setFormData] = useState({});
@@ -20,6 +21,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
   const getStatusParam = param.get('status');
   const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
+  const role = Cookies.get("role");
 
   const { getData, isLoading, handleStatus, loadingButton, declineReq } =
     useSteptwo({ onNext });
@@ -212,7 +214,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
         >
           <button
             type="button"
-            className={` w-full md:w-fit py-[6px] md:py-[11px] rounded-xl text-base text-[#335679] font-medium px-[75px] cursor-pointer border border-[#D0D5DD]`}
+            className={` w-full md:w-fit py-[6px] md:py-[11px] rounded-xl text-base bg-[#335679] text-[#fff] font-medium px-[75px] cursor-pointer`}
             onClick={() => {
               onPrev();
               router.replace('/leave-request?step=1');
@@ -222,7 +224,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
           </button>
           {getStatusParam === 'decline' || declineReq === true ? (
             <div className="flex flex-col gap-2 items-end">
-              <p className="text-red-600">Your Request has been declined.</p>
+              <p className="text-red-600">The Leave Request has been declined.</p>
               <div
                 className={`flex flex-wrap md:flex-nowrap items-center gap-2`}
               >
@@ -252,11 +254,11 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                     : 'Decline Request'
                 }
                 // textcolor={true}
-                bgcolor={true}
+                // bgcolor={true}
                 onClick={() => handleStatus('decline')}
                 type="button"
                 disabled={loadingButton !== null || !isChecked}
-                className="bg-red-600 w-full disabled:cursor-not-allowed disabled:opacity-[0.7] md:w-fit"
+                className="w-full !bg-red-600 disabled:cursor-not-allowed disabled:opacity-[0.8] md:w-fit"
               />
               <Button
                 text={
@@ -264,11 +266,11 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                     ? 'Approving...'
                     : 'Approve Request'
                 }
-                bgcolor={true}
+                // bgcolor={true}
                 onClick={() => handleStatus('approved')}
                 type="button"
                 disabled={loadingButton !== null || !isChecked}
-                className="bg-green-600 w-full disabled:cursor-not-allowed disabled:opacity-[0.7] md:w-fit"
+                className="w-full !bg-green-600 disabled:cursor-not-allowed disabled:opacity-[0.8] md:w-fit"
               />
             </div>
           )}

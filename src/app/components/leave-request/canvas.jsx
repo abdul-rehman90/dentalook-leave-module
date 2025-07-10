@@ -174,14 +174,8 @@ function Canvas({
                     }
                     {
                         providerType === "External" &&
-                        // <div>
-                        //     <Input
-                        //         label="City"
-                        //         placeholder="Enter Coverage"
-                        //         name="city"
-                        //         onChange={handleProviderFormChange}
-                        //     />
-                        // </div>
+                        <>
+                        
                         <div>
                             <CustomSelector
                                 onChange={(value) => {
@@ -195,6 +189,15 @@ function Canvas({
                                 value={provinceId2}
                             />
                         </div>
+                         <div>
+                            <Input
+                                label="City"
+                                placeholder="Enter Coverage"
+                                name="city"
+                                onChange={handleProviderFormChange}
+                            />
+                        </div>
+                        </>
                     }       
                    
                     <div className='flex items-center justify-end gap-4'>

@@ -304,7 +304,7 @@ function StepOne({ onSubmit, onNext }) {
                 className="rounded-xl border flex cursor-pointer items-center p-2 gap-1 w-full md:w-fit border-[#D0D5DD]"
               >
                 <Plus className={`text-[#7DB02D]`} />
-                Add day(s)
+                Add Day(s)
               </div>
             </div>
 
@@ -404,7 +404,7 @@ function StepOne({ onSubmit, onNext }) {
                   isLoading ? (
                     <Image src={loading} alt="loading" width={24} height={24} />
                   ) : (
-                    'Submit'
+                    'Submit for Review'
                   )
                 }
                 bgcolor={true}

@@ -76,7 +76,7 @@ function StepThree({ onNext }) {
     const payload = [
       {
         name: providerFormData.firstName + ' ' + providerFormData.lastName,
-        ...(providerType === 'External' && { province_id: provinceId2 }),
+        ...(providerType === 'External' && { province_id: provinceId2, city: providerFormData.city }),
         ...(providerType === 'Internal' && {
           clinic_id: coverageClinicId,
           province_id: provinceId2
