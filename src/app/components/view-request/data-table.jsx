@@ -77,7 +77,6 @@ export default function LeaveTable({ getReqData, isLoading }) {
   };
 
   const handleModelOpen = (item) => {
-    console.log(item, '..item');
     setModelData(item);
     setModalOpen(true);
   };
@@ -189,9 +188,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             key={index}
                             className="flex items-center gap-1 justify-between w-full"
                           >
-                            {
-                              item?.status === "pending" ? null :
-                            
+                           
                               <div className="flex gap-2 items-center">
                                 <span
                                   className={`w-2 h-2 inline-block rounded-full ${
@@ -204,7 +201,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                   {needed === true ? 'Yes' : 'No'}
                                 </span>
                               </div>
-                            }
+                            
                           </div>
                         ))}
                       </td>
@@ -333,19 +330,19 @@ export default function LeaveTable({ getReqData, isLoading }) {
             <div className="space-y-2 text-sm">
               <div className="flex gap-3">
                 <strong>Provider Title:</strong>
-                <p>{modelData.user_type}</p>
+                <p>{modelData.user_type || ""}</p>
               </div>
               <div className="flex gap-3">
                 <strong>Name:</strong>
-                <p>{modelData.coverage_provider}</p>
+                <p>{modelData.coverage_provider || ""}</p>
               </div>
               <div className="flex gap-3">
                 <strong>Email:</strong>
-                <p>{modelData.email}</p>
+                <p>{modelData.email || ""}</p>
               </div>
               <div className="flex gap-3">
                 <strong>Coverage Type:</strong>
-                <p>{modelData.reason}</p>
+                <p>{modelData.reason || ""}</p>
               </div>
               
              
@@ -354,15 +351,15 @@ export default function LeaveTable({ getReqData, isLoading }) {
                   <>
                     <div className="flex gap-3">
                       <strong>Province:</strong>
-                      <p>{modelData.province_name}</p>
+                      <p>{modelData.province_name || ""}</p>
                     </div>
                     <div className="flex gap-3">
                       <strong>Regional Manager:</strong>
-                      <p>{modelData.regional_manager}</p>
+                      <p>{modelData.regional_manager || ""}</p>
                     </div>
                     <div className="flex gap-3">
                       <strong>Clinic:</strong>
-                      <p>{modelData.clinic_name}</p>
+                      <p>{modelData.clinic_name || ""}</p>
                     </div>
                   </>
                 )
