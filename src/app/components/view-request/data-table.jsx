@@ -289,6 +289,10 @@ export default function LeaveTable({ getReqData, isLoading }) {
             </h2>
             <div className="space-y-2 text-sm">
               <div className="flex gap-3">
+                <strong>Provider Title:</strong>
+                <p>{modelData.user_type}</p>
+              </div>
+              <div className="flex gap-3">
                 <strong>Name:</strong>
                 <p>{modelData.coverage_provider}</p>
               </div>
@@ -300,20 +304,17 @@ export default function LeaveTable({ getReqData, isLoading }) {
                 <strong>Coverage Type:</strong>
                 <p>{modelData.reason}</p>
               </div>
-              <div className="flex gap-3">
-                <strong>Provider Title:</strong>
-                <p>{modelData.user_type}</p>
-              </div>
+              
              
               {
                 modelData.reason.includes("Internal") && (
                   <>
                     <div className="flex gap-3">
-                      <strong>Province Name</strong>
+                      <strong>Province</strong>
                       <p>{modelData.province_name}</p>
                   </div>
                   <div className="flex gap-3">
-                    <strong>Clinic Name</strong>
+                    <strong>Clinic</strong>
                     <p>{modelData.clinic_name}</p>
                   </div>
                   </>
