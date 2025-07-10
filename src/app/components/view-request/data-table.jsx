@@ -1,11 +1,11 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { ChevronDown } from "../../../common/assets/icons";
-import loading from "../../../common/assets/icons/blue-loader.svg";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { FaEye } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { ChevronDown } from '../../../common/assets/icons';
+import loading from '../../../common/assets/icons/blue-loader.svg';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { FaEye } from 'react-icons/fa';
+import { IoClose } from 'react-icons/io5';
 
 export default function LeaveTable({ getReqData, isLoading }) {
   const [newData, setNewData] = React.useState([]);
@@ -34,11 +34,12 @@ export default function LeaveTable({ getReqData, isLoading }) {
           ),
           clinic_name: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.clinic_name
-
+          ),
+          regional_manager: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.regional_manager
           ),
           name: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.name
-
           ),
           reason: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.provider_coverage
@@ -51,7 +52,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
           ),
           coverage_needed: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_needed
-          ),
+          )
         }))
       );
       setNewData(transformedData);
@@ -59,24 +60,24 @@ export default function LeaveTable({ getReqData, isLoading }) {
   }, [getReqData]);
 
   const handelClick = (item) => {
-    localStorage.setItem("leaveRequestId", item.id);
-    if (item.status === "pending") {
+    localStorage.setItem('leaveRequestId', item.id);
+    if (item.status === 'pending') {
       router.push(
         `/leave-request?step=2&leaveRequestId=${item.id}&status=${item.status}`
       );
     }
-    if (item.status === "decline") {
+    if (item.status === 'decline') {
       return;
     }
-    if (item.status !== "pending") {
+    if (item.status !== 'pending') {
       router.push(
         `/leave-request?step=3&leaveRequestId=${item.id}&status=${item.status}`
       );
     }
   };
-  
+
   const handleModelOpen = (item) => {
-    console.log(item, "..item")
+    console.log(item, '..item');
     setModelData(item);
     setModalOpen(true);
   };
@@ -103,7 +104,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                 Coverage Needed
               </th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">
-                Provider Title
+                Provider Type
               </th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">
                 Covering Provider Name
@@ -131,12 +132,12 @@ export default function LeaveTable({ getReqData, isLoading }) {
                   return (
                     <tr
                       className={`border-t border-[#EAECF0] ${
-                        !allPast ? "cursor-pointer" : "cursor-not-allowed"
+                        !allPast ? 'cursor-pointer' : 'cursor-not-allowed'
                       }`}
                       onClick={() => !allPast && handelClick(item)}
                     >
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.provider_name || ""}
+                        {item?.provider_name || ''}
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.leave_date?.map((date, index) => (
@@ -152,13 +153,13 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             <div className="flex items-center gap-2">
                               <span
                                 className={`w-2 h-2 inline-block rounded-full ${
-                                  type === "emergency"
-                                    ? "bg-red-600"
-                                    : "bg-green-600"
+                                  type === 'emergency'
+                                    ? 'bg-red-600'
+                                    : 'bg-green-600'
                                 }`}
                               />
                               <span className="text-xs font-normal text-[#475467]">
-                                {type}
+                                {type.charAt(0).toUpperCase() + type.slice(1)}
                               </span>
                             </div>
                           </div>
@@ -168,13 +169,18 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         <span
                           className={`w-2 h-2 mr-[6px] inline-block rounded-full ${
-                            item?.status === "decline"
-                              ? "bg-red-600"
-                              : "bg-green-600"
+                            item?.status === 'decline'
+                              ? 'bg-red-600'
+                              : item?.status === 'pending'
+                              ? 'bg-yellow-300'
+                              : 'bg-green-600'
                           }`}
                         />
                         <span className="text-xs font-normal text-[#475467]">
-                          {item?.status}
+                          {item?.status === 'decline'
+                            ? 'Declined'
+                            : item?.status.charAt(0).toUpperCase() +
+                              item?.status.slice(1)}
                         </span>
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467]">
@@ -183,83 +189,120 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             key={index}
                             className="flex items-center gap-1 justify-between w-full"
                           >
-                            <div className="flex gap-2 items-center">
-                              <span
-                                className={`w-2 h-2 inline-block rounded-full ${
-                                  needed !== true
-                                    ? "bg-red-600"
-                                    : "bg-green-600"
-                                }`}
-                              />
-                              <span className="text-[#475467] text-xs">
-                                {needed === true ? "Yes" : "No"}
-                              </span>
-                            </div>
+                            {
+                              item?.status === "pending" ? null :
+                            
+                              <div className="flex gap-2 items-center">
+                                <span
+                                  className={`w-2 h-2 inline-block rounded-full ${
+                                    needed !== true
+                                      ? 'bg-red-600'
+                                      : 'bg-green-600'
+                                  }`}
+                                />
+                                <span className="text-[#475467] text-xs">
+                                  {needed === true ? 'Yes' : 'No'}
+                                </span>
+                              </div>
+                            }
                           </div>
                         ))}
                       </td>
 
                       <td className="px-3 py-3 text-xs font-normal text-[#475467]">
-                        {item?.reason?.map((detail, index) => {
-                          if (item.coverage_needed?.[index] === false) {
-                            return <div key={index}>No Coverage needed</div>;
-                          }
-                          if (
-                            item.coverage_needed?.[index] === true &&
-                            (!detail || detail === "")
-                          ) {
-                            return <div key={index}>Looking for coverage</div>;
-                          }
-                          return <div key={index}>{detail}</div>;
-                        })}
+                        {
+                          item?.status === "pending" ? null :
+                          <>
+                            {item?.reason?.map((detail, index) => {
+                              if (item.coverage_needed?.[index] === false) {
+                                return (
+                                  <div key={index}>
+                                    {
+                                      item?.status === 'decline' ? null : 
+                                      <span
+                                        className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
+                                      />
+                                    }
+                                    
+                                    {item?.status === 'decline' ? "" : "No Coverage Needed"}
+                                  </div>
+                                );
+                              }
+                              if (
+                                item.coverage_needed?.[index] === true &&
+                                (!detail || detail === '')
+                              ) {
+                                return (
+                                  <div key={index}>
+                                    <span
+                                      className={`w-2 h-2 inline-block rounded-full bg-yellow-300 mr-1`}
+                                    />
+                                    Looking for Coverage
+                                  </div>
+                                );
+                              }
+                              return <div key={index}>{detail}</div>;
+                            })}
+                          </>
+                        }
                       </td>
 
                       <td className="px-3 flex flex-col items-start gap-2 py-3 text-xs font-normal text-[#475467]">
-                        <>
-                          {item?.coverage_provider?.map((provider, index) => {
-                            let label = provider;
-                            let color = "bg-green-600";
-                            if (item.coverage_needed?.[index] === false) {
-                              label = "No Coverage needed";
-                              color = "bg-green-600";
-                            } else if (
-                              item.coverage_needed?.[index] === true &&
-                              (!provider || provider === "")
-                            ) {
-                              label = "Looking for coverage";
-                              color = "bg-red-600";
-                            }
+                        {
+                          item?.status === "pending" ? null :
+                          <>
+                            {item?.coverage_provider?.map((provider, index) => {
+                              let label = provider;
+                              let color = '';
+                              if (item.coverage_needed?.[index] === false) {
+                                label = 'No Coverage Needed';
+                                color = 'bg-green-600';
+                              } else if (
+                                item.coverage_needed?.[index] === true &&
+                                (!provider || provider === '')
+                              ) {
+                                label = 'Looking for Coverage';
+                                color = 'bg-yellow-300';
+                              }
 
-                            return (
-                              <div key={index} className="flex items-center">
-                                <span
-                                  className={`w-2 mr-[5px] h-2 inline-block rounded-full ${color}`}
-                                />
-                                <span>{label}</span>
-                                {(item.coverage_provider?.[index] !== null && item.coverage_provider?.[index] !== undefined ) && (
-                                  <button
-                                    type="button"
-                                    className="cursor-pointer ml-2"
-                                    onClick={(e) => {
-                                      handleModelOpen({
-                                        province_name: item.province_name,
-                                        user_type: item.user_type, 
-                                        email: item.email,
-                                        reason: item.reason, 
-                                        coverage_provider: provider, 
-                                        clinic_name: item.clinic_name,
-                                        name: item.name,
-                                      });
-                                      e.stopPropagation();
-                                    }}
-                                  >
-                                    <FaEye className="text-[16px]" />
-                                  </button>
-                                )}
-                              </div>
-                            );
-                          })}
-                        </>
+                              return (
+                                <div key={index} className="flex items-center">
+                                  {
+                                    item?.status === 'decline' ? null : 
+                                    <span
+                                      className={`w-2 mr-[5px] h-2 inline-block rounded-full ${color}`}
+                                    />
+                                  }
+                                  
+                                  <span>{item?.status === 'decline' ? "" : label}</span>
+                                  {item.coverage_provider?.[index] !== null &&
+                                    item.coverage_provider?.[index] !==
+                                      undefined && (
+                                      <button
+                                        type="button"
+                                        className="cursor-pointer ml-2"
+                                        onClick={(e) => {
+                                          handleModelOpen({
+                                            province_name: item.province_name,
+                                            user_type: item.user_type,
+                                            email: item.email,
+                                            reason: item.reason,
+                                            coverage_provider: provider,
+                                            clinic_name: item.clinic_name,
+                                            regional_manager: item.regional_manager,
+                                            name: item.name
+                                          });
+                                          e.stopPropagation();
+                                        }}
+                                      >
+                                        <FaEye className="text-[16px]" />
+                                      </button>
+                                    )}
+                                </div>
+                              );
+                            })}
+                          </>
+                        }
                       </td>
                     </tr>
                   );
@@ -310,20 +353,24 @@ export default function LeaveTable({ getReqData, isLoading }) {
                 modelData.reason.includes("Internal") && (
                   <>
                     <div className="flex gap-3">
-                      <strong>Province</strong>
+                      <strong>Province:</strong>
                       <p>{modelData.province_name}</p>
-                  </div>
-                  <div className="flex gap-3">
-                    <strong>Clinic</strong>
-                    <p>{modelData.clinic_name}</p>
-                  </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <strong>Regional Manager:</strong>
+                      <p>{modelData.regional_manager}</p>
+                    </div>
+                    <div className="flex gap-3">
+                      <strong>Clinic:</strong>
+                      <p>{modelData.clinic_name}</p>
+                    </div>
                   </>
                 )
               }
               {
                 (modelData.reason.includes("ACE") || modelData.reason.includes("External")) && (
                   <div className="flex gap-3">
-                    <strong>Name</strong>
+                    <strong>Name:</strong>
                     <p>{modelData.name}</p>
                   </div>
                 )}
