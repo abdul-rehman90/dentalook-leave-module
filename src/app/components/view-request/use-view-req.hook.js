@@ -128,7 +128,13 @@ export default function useViewReq() {
     
             if (role === "RM") {
                 setProvinceId(allProvinces[0]?.id);
-                setRegionalManagersId(regionalManagers[0]?.id);  
+                // setRegionalManagersId(regionalManagers[0]?.id);  
+                if(typeof window !== "undefined"){
+                    const userData = JSON.parse(localStorage.getItem('userData'));
+                    if(userData) {
+                        setRegionalManagersId(userData?.id);
+                    }
+                }
             }
             if (role === "PM") {
                 setProvinceId(allProvinces[0]?.id);
