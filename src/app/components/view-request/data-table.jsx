@@ -82,8 +82,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
   };
 
   return (
-    <div className="overflow-hidden">
-      <div className="min-w-[700px] relative md:min-w-full border border-gray-200 rounded-xl overflow-x-auto">
+    <div className="">
+      <div className="w-full relative md:min-w-full border border-gray-200 rounded-xl overflow-x-scroll">
         <table className="w-full border border-gray-300 text-sm text-left text-gray-700">
           <thead className="bg-[#F3F3F5] text-xs text-[#475467] font-medium uppercase">
             <tr>

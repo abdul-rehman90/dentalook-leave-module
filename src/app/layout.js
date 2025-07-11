@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
       />
         <div className='flex min-h-screen relative'>
           <Sidebar />
-          <div className='flex-1 max-w-full'>
+          <div className='flex-1 max-w-full w-[83%]'>
             <Header />
             <div className='!z-0'>
               <main className="w-full">{children}</main>

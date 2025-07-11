@@ -45,7 +45,7 @@ export default function useLeaveReq() {
             const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId}`);
             if(response.status === 200) {
                 setRegionalManagers(response?.data?.regional_managers);
-                setAllClinics(response?.data?.regional_managers[0]?.clinics);
+                // setAllClinics(response?.data?.regional_managers[0]?.clinics);
             }
         }
         catch (error) {
@@ -132,6 +132,7 @@ export default function useLeaveReq() {
         regionalManagersId, setRegionalManagersId,
         formId,
         allClicnicData,
-        docName, setDocName
+        docName, setDocName,
+        setAllClinics
     }
 }

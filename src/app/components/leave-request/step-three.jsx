@@ -45,7 +45,8 @@ function StepThree({ onNext }) {
     provinceId2,
     setProvinceId2,
     regionalManagersId2,
-    setRegionalManagersId2
+    setRegionalManagersId2,
+    setAllClinics
   } = useStepThree();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -60,7 +61,6 @@ function StepThree({ onNext }) {
   const [coverageClinicId, setCoverageClinicId] = useState('');
   const [providerLoader, setProviderLoader] = useState(false);
   const [covergeType, setCoverageType] = useState('');
-  console.log(covergeType, '...covergeType');
   const [providerFormData, setProviderFormData] = useState({
     firstName: '',
     lastName: '',
@@ -118,7 +118,7 @@ function StepThree({ onNext }) {
     { name: 'RDH', value: 'RDH' },
     { name: 'RDT', value: 'RDT' }
   ];
-
+  const [idd, setIdd] = useState("");
   useEffect(() => {
     if (getData?.province && allProvinces?.length > 0) {
       const matchedProvince = allProvinces.find(
@@ -133,21 +133,22 @@ function StepThree({ onNext }) {
       const matchedManager = regionalManagers.find(
         (item) => item.name === getData.regional_manager
       );
+      setIdd(matchedManager)
       if (matchedManager) {
         setRegionalManagersId(matchedManager.id);
+        setAllClinics(matchedManager.clinics);
       }
     }
 
-    if (getData?.clinic_name && allClinics?.length > 0 && !clinicId) {
+    if (getData?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
       const matchedManager = allClinics?.find(
-        (item) =>
-          item.clinic_name.trim().toLowerCase() ===
-          getData.clinic_name.trim().toLowerCase()
+        (item) => item.clinic_name === getData.clinic_name
       );
       if (matchedManager) {
         setClinicId(matchedManager.clinic_id);
       }
     }
+
     if (getData?.provider_name && allProviders?.length > 0) {
       const matchedManager = allProviders?.find((item) => {
         const isMatch =
@@ -248,9 +249,10 @@ function StepThree({ onNext }) {
                 </div>
                 <div className="col-span-3 md:col-span-1">
                   <CustomSelector
-                    onChange={(value) => {
-                      setRegionalManagersId(value);
-                    }}
+                     onChange={(value, options) => {
+                        setRegionalManagersId(value); 
+                        setAllClinics(options?.clinics)
+                      }}
                     label="Regional Manager"
                     options={regionalManagers}
                     placeholder="Surya Rana"

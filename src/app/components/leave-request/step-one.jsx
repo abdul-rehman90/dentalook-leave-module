@@ -42,7 +42,8 @@ function StepOne({ onSubmit, onNext }) {
     formId,
     allClicnicData,
     docName,
-    setDocName
+    setDocName,
+    setAllClinics
   } = useLeaveReq();
 
   // Update field values
@@ -136,12 +137,16 @@ function StepOne({ onSubmit, onNext }) {
   useEffect(() => {
     if (role === 'RM') {
       setProvinceId(allProvinces[0]?.id);
-      if(typeof window !== "undefined"){
-        const userData = JSON.parse(localStorage.getItem('userData'));
-        if(userData) {
-          setRegionalManagersId(userData?.id);
+        if(typeof window !== "undefined"){
+          const userData = JSON.parse(localStorage.getItem('userData'));
+          if(userData) {
+            setRegionalManagersId(userData?.id);
+            const rmObj = regionalManagers?.find(rm => rm.id === userData?.id);
+              if (rmObj && rmObj.clinics) {
+              setAllClinics(rmObj.clinics);
+            }
+          }
         }
-      }
       
     }
     if (role === 'PM') {
@@ -159,25 +164,29 @@ function StepOne({ onSubmit, onNext }) {
       }
     }
 
-    if (getData?.regional_manager && regionalManagers?.length > 0) {
+if (
+    getData?.regional_manager &&
+    regionalManagers?.length > 0 &&
+    !regionalManagersId 
+  ) {
       const matchedManager = regionalManagers.find(
-        (item) => item.name === getData.regional_manager
+        (item) => item.name === getData?.regional_manager
       );
       if (matchedManager) {
         setRegionalManagersId(matchedManager.id);
+        setAllClinics(matchedManager.clinics);
       }
     }
-
-    if (getData?.clinic_name && allClinics?.length > 0 && !clinicId) {
+   
+    if (getData?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
       const matchedManager = allClinics?.find(
-        (item) =>
-          item.clinic_name.trim().toLowerCase() ===
-          getData.clinic_name.trim().toLowerCase()
+        (item) => item.clinic_name === getData.clinic_name
       );
       if (matchedManager) {
         setClinicId(matchedManager.clinic_id);
       }
     }
+
     if (getData?.provider_name && allProviders?.length > 0) {
       const matchedManager = allProviders?.find((item) => {
         const isMatch =
@@ -233,8 +242,9 @@ function StepOne({ onSubmit, onNext }) {
               </div>
               <div className="col-span-3 md:col-span-1">
                 <CustomSelector
-                  onChange={(value) => {
-                    setRegionalManagersId(value);
+                  onChange={(value, options) => {
+                    setRegionalManagersId(value); 
+                    setAllClinics(options?.clinics)
                   }}
                   label="Regional Manager"
                   options={regionalManagers}
