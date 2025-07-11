@@ -31,11 +31,11 @@ function Header() {
   const dropdownRef = useRef();
 
   const handleLogout = () => {
+    router.push('/');
     Cookies.remove("access-token");
     Cookies.remove("refresh-token");
     Cookies.remove("role");
     localStorage.clear();
-    router.push('/');
     setOpen(false);
   };
 

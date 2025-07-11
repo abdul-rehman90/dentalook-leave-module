@@ -14,12 +14,19 @@ export function middleware(req) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
+
   // If token does not exist and user tries to access anything except "/" or "/forgot-password", redirect to /
   if (
     !token &&
     pathname !== "/" &&
     pathname !== "/forgot-password"
   ) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  // If token does not exist and pathname does not match any allowed URLs, redirect to "/"
+  const allowedPaths = ["/", "/forgot-password", "/select-role", "/view-request", "/reports", "/leave-request"];
+  if (!token && !allowedPaths.includes(pathname)) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
