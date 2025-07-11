@@ -128,18 +128,24 @@ export default function useViewReq() {
     
             if (role === "RM") {
                 setProvinceId(allProvinces[0]?.id);
-                // setRegionalManagersId(regionalManagers[0]?.id);  
                 if(typeof window !== "undefined"){
                     const userData = JSON.parse(localStorage.getItem('userData'));
                     if(userData) {
                         setRegionalManagersId(userData?.id);
+                        const rmObj = regionalManagers?.find(rm => rm.id === userData?.id);
+                        if (rmObj && rmObj.clinics) {
+                            setAllClinics(rmObj.clinics);
+                        }
                     }
                 }
             }
             if (role === "PM") {
                 setProvinceId(allProvinces[0]?.id);
                 setRegionalManagersId(regionalManagers[0]?.id);  
-                setClinicId(allClinics[0]?.clinic_id);
+                if(regionalManagers[0]?.clinics && regionalManagers[0]?.clinics.length > 0){
+                    setAllClinics(regionalManagers[0]?.clinics);
+                    setClinicId(regionalManagers[0]?.clinics[0]?.clinic_id);
+                }
             }
         },[allProvinces, regionalManagers, allClinics]
     );
