@@ -19,7 +19,7 @@ const CustomSelector = ({
     const [searchTerm, setSearchTerm] = useState('');
     const selectorRef = useRef(null);
 
-    const selected = options.find(option => option[valueKey] === value) || null;
+    const selected = options?.find(option => option[valueKey] === value) || null;
 
     const handleSelect = (option) => {
         if (disabled) return;

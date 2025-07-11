@@ -238,7 +238,7 @@ function StepOne({ onSubmit, onNext }) {
                   }}
                   label="Regional Manager"
                   options={regionalManagers}
-                  placeholder="Surya Rana"
+                  placeholder="Select Regional Manager"
                   labelKey="name"
                   valueKey="id"
                   value={regionalManagersId}
