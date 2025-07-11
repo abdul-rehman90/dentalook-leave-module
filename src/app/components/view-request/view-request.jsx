@@ -70,7 +70,8 @@ function ViewRequest() {
                         <div>
                            <CustomSelector
                                 onChange={(value, options) => {
-                                    setRegionalManagersId(value); setAllClinics(options?.clinics)
+                                    setRegionalManagersId(value); 
+                                    setAllClinics(options?.clinics)
                                 }}
                                 label="Regional Manager"
                                 options={regionalManagers}
@@ -78,7 +79,7 @@ function ViewRequest() {
                                 labelKey="name"
                                 valueKey="id"
                                 value={regionalManagersId}
-                                disabled={role === "RM" ? true : false || provinceId ? false : true}
+                                disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
