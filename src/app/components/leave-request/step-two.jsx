@@ -127,8 +127,11 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                           Leave Date
                         </label>
                         <DatePicker
+                          
                           selected={
-                            day.leave_date ? new Date(day.leave_date) : null
+                            day.leave_date
+                              ? new Date(day.leave_date + 'T00:00:00')
+                              : null
                           }
                           minDate={new Date()}
                           showMonthDropdown

@@ -34,7 +34,8 @@ function ViewRequest() {
         allClicnicData,
         handleDateChange,
         startDate, endDate,
-        setDateRange
+        setDateRange,
+        setAllClinics
     } = useViewReq();
 
    
@@ -58,7 +59,7 @@ function ViewRequest() {
                                 }}
                                 label="Province"
                                 options={allProvinces}
-                                placeholder="Select Provider Title"
+                                placeholder="Select Province"
                                 labelKey="name"
                                 valueKey="id"
                                 value={provinceId}
@@ -68,8 +69,8 @@ function ViewRequest() {
                         </div>
                         <div>
                            <CustomSelector
-                                onChange={(value) => {
-                                    setRegionalManagersId(value);
+                                onChange={(value, options) => {
+                                    setRegionalManagersId(value); setAllClinics(options?.clinics)
                                 }}
                                 label="Regional Manager"
                                 options={regionalManagers}

@@ -227,7 +227,7 @@ function StepFour({setCurrentStep}) {
                       </label>
                       <DatePicker
                         selected={
-                          row.leave_date ? new Date(row.leave_date) : null
+                          row.leave_date ? new Date(row.leave_date + 'T00:00:00') : null
                         }
                         minDate={new Date()}
                         showMonthDropdown

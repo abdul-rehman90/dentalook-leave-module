@@ -171,7 +171,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             item?.status === 'decline'
                               ? 'bg-red-600'
                               : item?.status === 'pending'
-                              ? 'bg-yellow-300'
+                              ? 'bg-orange-400'
                               : 'bg-green-600'
                           }`}
                         />
@@ -193,8 +193,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                 <span
                                   className={`w-2 h-2 inline-block rounded-full ${
                                     needed !== true
-                                      ? 'bg-red-600'
-                                      : 'bg-green-600'
+                                      ? ' bg-green-600'
+                                      : 'bg-red-600'
                                   }`}
                                 />
                                 <span className="text-[#475467] text-xs">
@@ -213,7 +213,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             {item?.reason?.map((detail, index) => {
                               if (item.coverage_needed?.[index] === false) {
                                 return (
-                                  <div key={index}>
+                                  <div key={index} className='whitespace-nowrap'>
                                     {
                                       item?.status === 'decline' ? null : 
                                       <span
@@ -230,9 +230,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                 (!detail || detail === '')
                               ) {
                                 return (
-                                  <div key={index}>
+                                  <div key={index} className='whitespace-nowrap'>
                                     <span
-                                      className={`w-2 h-2 inline-block rounded-full bg-yellow-300 mr-1`}
+                                      className={`w-2 h-2 inline-block rounded-full bg-orange-400 mr-1`}
                                     />
                                     Looking for Coverage
                                   </div>
@@ -259,7 +259,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                 (!provider || provider === '')
                               ) {
                                 label = 'Looking for Coverage';
-                                color = 'bg-yellow-300';
+                                color = 'bg-orange-400';
                               }
 
                               return (

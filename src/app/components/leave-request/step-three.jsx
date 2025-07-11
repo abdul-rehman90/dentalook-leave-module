@@ -333,14 +333,14 @@ function StepThree({ onNext }) {
                       <DatePicker
                         disabled
                         selected={
-                          row.leave_date ? new Date(row.leave_date) : null
+                          row.leave_date ? new Date(row.leave_date + 'T00:00:00') : null
                         }
                         minDate={new Date()}
                         showMonthDropdown
                         showYearDropdown
                         dropdownMode="select"
                         dateFormat="YYYY-MM-dd"
-                        className="py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        className="py-[8px] disabled:cursor-not-allowed w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
                         name="leave_date"
                         onChange={(date) => {
                           const formatted = date
@@ -365,6 +365,7 @@ function StepThree({ onNext }) {
                         }
                         labelKey="name"
                         valueKey="value"
+                        className='disabled:cursor-not-allowed'
                       />
                     </div>
                     <div>

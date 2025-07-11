@@ -12,10 +12,10 @@ export default function useViewReq() {
 
     const [regionalManagers, setRegionalManagers] = useState([]);
     const [regionalManagersId, setRegionalManagersId] = useState('');
-
+    
     const [allClinics, setAllClinics] = useState([]);
     const [clinicId, setClinicId] = useState('');
-
+    // console.log(regionalManagers, "...allClinics")
     const [docName, setDocName] = useState('');
 
     const [allProviders, setAllProviders] = useState([]);
@@ -61,7 +61,7 @@ export default function useViewReq() {
             const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId}`);
             if(response.status === 200) {
                 setRegionalManagers(response?.data?.regional_managers);
-                setAllClinics(response?.data?.regional_managers[0]?.clinics);
+                // setAllClinics(response?.data?.regional_managers?.clinics);
             }
         }
         catch (error) {
@@ -166,6 +166,7 @@ export default function useViewReq() {
         allClicnicData,
         handleDateChange,
         startDate, endDate,
-        setDateRange
+        setDateRange,
+        setAllClinics
     }
 }
