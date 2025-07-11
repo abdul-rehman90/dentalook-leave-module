@@ -120,7 +120,7 @@ function Canvas({
                                 }}
                                 label="Province"
                                 options={allProvinces}
-                                placeholder="Select Provider Title"
+                                placeholder="Select Province"
                                 labelKey="name"
                                 valueKey="id"
                                 value={provinceId2}
@@ -137,7 +137,7 @@ function Canvas({
                                     }}
                                     label="Province"
                                     options={allProvinces}
-                                    placeholder="Select Provider Title"
+                                    placeholder="Select Province"
                                     labelKey="name"
                                     valueKey="id"
                                     value={provinceId2}
@@ -150,7 +150,7 @@ function Canvas({
                                     }}
                                     label="Regional Manager"
                                     options={regionalManagers}
-                                    placeholder="Surya Rana"
+                                    placeholder="Select Regional Manager"
                                     labelKey="name"
                                     valueKey="id"
                                     value={regionalManagersId2}
@@ -183,16 +183,16 @@ function Canvas({
                                 }}
                                 label="Province"
                                 options={allProvinces}
-                                placeholder="Select Provider Title"
+                                placeholder="Select Province"
                                 labelKey="name"
                                 valueKey="id"
                                 value={provinceId2}
                             />
                         </div>
-                         <div>
+                        <div>
                             <Input
                                 label="City"
-                                placeholder="Enter Coverage"
+                                placeholder="Enter City"
                                 name="city"
                                 onChange={handleProviderFormChange}
                             />
