@@ -5,9 +5,7 @@ export function middleware(req) {
   const { pathname } = req.nextUrl;
 
   // If token exists and user tries to access "/", redirect to /view-request
-  if (token && pathname === "/") {
-    return NextResponse.redirect(new URL("/select-role", req.url));
-  }
+  
 
   // If token exists and user tries to access "/forgot-password", redirect to /
   if (token && pathname === "/forgot-password") {
@@ -22,6 +20,10 @@ export function middleware(req) {
     pathname !== "/forgot-password"
   ) {
     return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (token && pathname === "/") {
+    return NextResponse.redirect(new URL("/select-role", req.url));
   }
 
   // If token does not exist and pathname does not match any allowed URLs, redirect to "/"

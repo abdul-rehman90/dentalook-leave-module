@@ -336,10 +336,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                 <strong>Name:</strong>
                 <p>{modelData.coverage_provider || ""}</p>
               </div>
-              <div className="flex gap-3">
-                <strong>Email:</strong>
-                <p>{modelData.email || ""}</p>
-              </div>
+              
               <div className="flex gap-3">
                 <strong>Coverage Type:</strong>
                 <p>{modelData.reason || ""}</p>

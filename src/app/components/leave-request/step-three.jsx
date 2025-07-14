@@ -476,11 +476,11 @@ function StepThree({ onNext }) {
             text={
               isLoading ? (
                 <span className="flex items-center gap-2">
-                  Update Complete Leave Process
+                  Update Leave Process
                   <Image src={loader} alt="loading" width={24} height={24} />
                 </span>
               ) : (
-                'Update Complete Leave Process'
+                'Update Leave Process'
               )
             }
             bgcolor={true}

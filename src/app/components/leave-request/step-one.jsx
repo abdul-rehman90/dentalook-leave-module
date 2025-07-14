@@ -47,7 +47,7 @@ function StepOne({ onSubmit, onNext }) {
     userData
   } = useLeaveReq();
 
-  // console.log(userData, "..userData")
+
 
   // Update field values
   const handleChange = (index, field, value) => {
@@ -271,7 +271,7 @@ function StepOne({ onSubmit, onNext }) {
                   labelKey={role === "PM" ? "province_name" : "name"}
                   valueKey={role === "PM" ? "province_id" : "id"}
                   value={provinceId || getData?.province}
-                  disabled={role === 'RM' || role === 'PM' ? true : false}
+                  disabled={(role === 'RM') || (role === 'PM') || (formId ? true : false)}
                   className="disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
@@ -288,11 +288,11 @@ function StepOne({ onSubmit, onNext }) {
                   valueKey={role === "PM" ? "regional_manager_id" : "id"}
                   value={regionalManagersId}
                   disabled={
-                    role === "RM" || role === 'PM'
+                   (role === "RM") || (role === 'PM') || (formId
                       ? true
-                      : false || provinceId
+                      : false) || (provinceId
                       ? false
-                      : true
+                      : true)
                   }
                   className="disabled:opacity-50 disabled:cursor-not-allowed"
                 />
@@ -310,7 +310,7 @@ function StepOne({ onSubmit, onNext }) {
                   valueKey="clinic_id"
                   value={clinicId}
                   disabled={
-                    role === 'PM' ? true : false || provinceId ? false : true
+                    (role === 'PM') || (formId ? true : false) || (provinceId ? false : true)
                   }
                   className="disabled:opacity-50 disabled:cursor-not-allowed"
                 />
@@ -327,7 +327,7 @@ function StepOne({ onSubmit, onNext }) {
                     placeholder="Select Provider Name"
                     labelKey="name"
                     value={docName}
-                    disabled={clinicId ? false : true}
+                    disabled={(clinicId ? false : true) || (formId ? true : false)}
                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>
@@ -340,7 +340,7 @@ function StepOne({ onSubmit, onNext }) {
                     labelKey="name"
                     valueKey="id"
                     value={providerId}
-                    disabled={docName ? false : true}
+                    disabled={(formId && true) || (docName ? false : true)}
                     className="disabled:opacity-50 disabled:cursor-not-allowed"
                   />
                 </div>

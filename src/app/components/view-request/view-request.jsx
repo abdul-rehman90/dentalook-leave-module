@@ -160,7 +160,7 @@ function ViewRequest() {
                                 label="Status"
                                 options={[
                                     { name: 'Pending', value: 'pending' },
-                                    { name: 'Decline', value: 'decline' },
+                                    { name: 'Declined', value: 'declined' },
                                     { name: 'Approved', value: 'approved' }
                                 ]}
                                 placeholder="Select Status"
