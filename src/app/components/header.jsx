@@ -30,6 +30,7 @@ function Header() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef();
 
+
   const handleLogout = () => {
     Cookies.remove("access-token");
     Cookies.remove("refresh-token");
@@ -37,8 +38,8 @@ function Header() {
     localStorage.clear();
     setOpen(false);
     console.log("Logout")
-    router.replace('/');
-    // window.location.reload();
+    // router.replace('/');
+    window.location.href = '/';
   };
 
   useEffect(() => {
