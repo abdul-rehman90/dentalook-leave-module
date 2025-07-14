@@ -21,6 +21,9 @@ export default function useViewReq() {
     const [allProviders, setAllProviders] = useState([]);
     const [providerId, setProviderId] = useState('');
 
+   const [leavePlanned, setLeavePlanned] = useState([]);
+   const [leaveStatus, setLeaveStatus] = useState([]);
+
     const [getReqData, setGetReqData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [allClicnicData, setAllClinicData] = useState([]);
@@ -109,7 +112,8 @@ export default function useViewReq() {
                     params.start_date = format(startDate, "yyyy-MM-dd");
                     params.end_date = format(endDate, "yyyy-MM-dd");
                 };
-                // if (endDate) params.end_date = format(endDate, "yyyy-MM-dd");
+                if(leavePlanned) params.leave_type = leavePlanned;
+                if(leaveStatus) params.leave_status = leaveStatus;
                 const response = await axiosInstance.get(`api/v1/get-all-leave-request/`, {
                 params
             });
@@ -124,7 +128,7 @@ export default function useViewReq() {
         if (token) {
             getViewRequests();
         }
-    }, [token, token, providerId, clinicId,startDate, endDate, provinceId, regionalManagersId]);
+    }, [token, token, providerId, clinicId,startDate, endDate, provinceId, regionalManagersId, leavePlanned, leaveStatus]);
 
     const [userData, setUserData] = useState({});
     const userDetail = async () =>{
@@ -191,14 +195,7 @@ export default function useViewReq() {
                     }
                 }
                 }
-            // if (role === "PM") {
-            //     setProvinceId(allProvinces[0]?.id);
-            //     setRegionalManagersId(regionalManagers[0]?.id);  
-            //     if(regionalManagers[0]?.clinics && regionalManagers[0]?.clinics.length > 0){
-            //         setAllClinics(regionalManagers[0]?.clinics);
-            //         setClinicId(regionalManagers[0]?.clinics[0]?.clinic_id);
-            //     }
-            // }
+          
         },[allProvinces, regionalManagers, allClinics]
     );
 
@@ -226,6 +223,8 @@ export default function useViewReq() {
         startDate, endDate,
         setDateRange,
         setAllClinics,
-        userData
+        userData,
+        leavePlanned, setLeavePlanned,
+        leaveStatus, setLeaveStatus
     }
 }

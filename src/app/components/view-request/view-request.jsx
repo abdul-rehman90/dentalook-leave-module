@@ -36,10 +36,11 @@ function ViewRequest() {
         startDate, endDate,
         setDateRange,
         setAllClinics,
-        userData
+        leavePlanned, setLeavePlanned,
+        leaveStatus, setLeaveStatus
     } = useViewReq();
 
-   
+    console.log(leavePlanned, "..leavePlanned")
     
     return (
         <div>
@@ -138,6 +139,35 @@ function ViewRequest() {
                                 }}
                                 isClearable={true}
                                 className="w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-xl px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F]"
+                            />
+                        </div>
+                        <div>
+                            <CustomSelector
+                                label="Leave Type"
+                                options={[
+                                    { name: 'Emergency', value: 'emergency' },
+                                    { name: 'Planned', value: 'planned' }
+                                ]}
+                                placeholder="Select Leave Type"
+                                labelKey="name"
+                                valueKey="value"
+                                value={leavePlanned}
+                                onChange={(value) => setLeavePlanned(value)}
+                            />
+                        </div>
+                        <div>
+                            <CustomSelector
+                                label="Status"
+                                options={[
+                                    { name: 'Pending', value: 'pending' },
+                                    { name: 'Decline', value: 'decline' },
+                                    { name: 'Approved', value: 'approved' }
+                                ]}
+                                placeholder="Select Status"
+                                labelKey="name"
+                                valueKey="value"
+                                value={leaveStatus}
+                                onChange={(value) => setLeaveStatus(value)}
                             />
                         </div>
                        
