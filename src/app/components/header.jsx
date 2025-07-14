@@ -31,9 +31,9 @@ function Header() {
   const dropdownRef = useRef();
 
 
-  const handleLogout = () => {
-    Cookies.remove("access-token");
-    Cookies.remove("refresh-token");
+  const handleLogout = async() => {
+   await Cookies.remove("access-token");
+   await Cookies.remove("refresh-token");
     Cookies.remove("role");
     localStorage.clear();
     setOpen(false);
