@@ -249,7 +249,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
               </div>
             </div>
           ) : (
-            <div className={`flex flex-wrap md:flex-nowrap items-center gap-2`}>
+            <div className={`${role === "PM" ? "hidden" : "block"} flex flex-wrap md:flex-nowrap items-center gap-2`}>
               <Button
                 text={
                   loadingButton === 'decline'
@@ -261,7 +261,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                 onClick={() => handleStatus('decline')}
                 type="button"
                 disabled={loadingButton !== null || !isChecked}
-                className="w-full !bg-red-600 disabled:cursor-not-allowed disabled:opacity-[0.8] md:w-fit"
+                className="w-full !bg-red-600 disabled:cursor-not-allowed disabled:opacity-[0.6] md:w-fit"
               />
               <Button
                 text={
@@ -273,7 +273,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                 onClick={() => handleStatus('approved')}
                 type="button"
                 disabled={loadingButton !== null || !isChecked}
-                className="w-full !bg-green-600 disabled:cursor-not-allowed disabled:opacity-[0.8] md:w-fit"
+                className="w-full !bg-green-600 disabled:cursor-not-allowed disabled:opacity-[0.6] md:w-fit"
               />
             </div>
           )}

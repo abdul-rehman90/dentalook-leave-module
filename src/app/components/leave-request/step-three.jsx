@@ -377,7 +377,7 @@ function StepThree({ onNext }) {
                           { name: 'Yes', value: 'yes' },
                           { name: 'No', value: 'no' }
                         ]}
-                        placeholder="Select Type"
+                        placeholder="Select Coverage Needed"
                         onChange={(value) =>
                           handleChange(index, 'coverage_needed', value)
                         }
@@ -394,9 +394,9 @@ function StepThree({ onNext }) {
                     </div>
                     <div>
                       <CustomSelector
-                        label="Covering Provider"
+                        label="Coverage Provider"
                         options={coverageProviderList}
-                        placeholder="Select Type"
+                        placeholder="Select Provider"
                         value={
                           typeof row.coverage_provider === 'object' &&
                           row.coverage_provider !== null
@@ -476,11 +476,11 @@ function StepThree({ onNext }) {
             text={
               isLoading ? (
                 <span className="flex items-center gap-2">
-                  Complete Leave Process
+                  Update Complete Leave Process
                   <Image src={loader} alt="loading" width={24} height={24} />
                 </span>
               ) : (
-                'Complete Leave Process'
+                'Update Complete Leave Process'
               )
             }
             bgcolor={true}

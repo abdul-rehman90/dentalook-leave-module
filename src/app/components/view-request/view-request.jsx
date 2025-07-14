@@ -35,7 +35,8 @@ function ViewRequest() {
         handleDateChange,
         startDate, endDate,
         setDateRange,
-        setAllClinics
+        setAllClinics,
+        userData
     } = useViewReq();
 
    
@@ -60,8 +61,8 @@ function ViewRequest() {
                                 label="Province"
                                 options={allProvinces}
                                 placeholder="Select Province"
-                                labelKey="name"
-                                valueKey="id"
+                                labelKey={role === "PM" ? "province_name" : "name"}
+                                valueKey={role === "PM" ? "province_id" : "id"}
                                 value={provinceId}
                                 disabled={(role === "RM" || role === "PM") ? true : false}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
@@ -76,8 +77,8 @@ function ViewRequest() {
                                 label="Regional Manager"
                                 options={regionalManagers}
                                 placeholder="Select Regional Manager"
-                                labelKey="name"
-                                valueKey="id"
+                                labelKey={role === "PM" ? "regional_manager_name" : "name"}
+                                valueKey={role === "PM" ? "regional_manager_id" : "id"}
                                 value={regionalManagersId}
                                 disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"

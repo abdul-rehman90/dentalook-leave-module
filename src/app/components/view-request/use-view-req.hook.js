@@ -61,7 +61,6 @@ export default function useViewReq() {
             const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId}`);
             if(response.status === 200) {
                 setRegionalManagers(response?.data?.regional_managers);
-                // setAllClinics(response?.data?.regional_managers?.clinics);
             }
         }
         catch (error) {
@@ -69,11 +68,12 @@ export default function useViewReq() {
         }
     }
     useEffect(()=>{
-        if (provinceId) {
-            clinicByRegionalManager();
+        if(role === "RM" || role === "LT"){
+            if (provinceId) {
+                clinicByRegionalManager();
+            }
         }
-        
-    }, [provinceId]);
+    }, [provinceId, role]);
 
     const getProviders = async () => {
         try {
@@ -86,10 +86,12 @@ export default function useViewReq() {
         }
     }
     useEffect(() => {
-        if (clinicId) {
-            getProviders();
+        if(role === "RM" || role === "LT"){
+            if (clinicId) {
+                getProviders();
+            }
         }
-    }, [clinicId]);
+    }, [clinicId, role]);
 
     useEffect(()=>{
         const data = allProviders?.filter((item) => item.user_type === docName);
@@ -124,7 +126,22 @@ export default function useViewReq() {
         }
     }, [token, token, providerId, clinicId,startDate, endDate, provinceId, regionalManagersId]);
 
-     useEffect(() => {
+    const [userData, setUserData] = useState({});
+    const userDetail = async () =>{
+        const response = await axiosInstance.get(`api/v1/user-detail/`);
+        if(response.status === 200) {
+            setUserData(response?.data);
+            setAllProvinces(response?.data?.provinces);
+            setRegionalManagers(response?.data?.regional_managers);
+        }
+    }
+    useEffect(()=>{
+        if(role === "PM"){
+            userDetail();
+        }
+    }, [])
+
+    useEffect(() => {
     
             if (role === "RM") {
                 setProvinceId(allProvinces[0]?.id);
@@ -139,14 +156,49 @@ export default function useViewReq() {
                     }
                 }
             }
-            if (role === "PM") {
-                setProvinceId(allProvinces[0]?.id);
-                setRegionalManagersId(regionalManagers[0]?.id);  
-                if(regionalManagers[0]?.clinics && regionalManagers[0]?.clinics.length > 0){
-                    setAllClinics(regionalManagers[0]?.clinics);
-                    setClinicId(regionalManagers[0]?.clinics[0]?.clinic_id);
+
+            if(role === "PM"){
+                if (userData.provinces && userData.provinces[0] && allProvinces?.length > 0) {
+                    const matchedProvince = allProvinces.find(
+                    (item) => item.province_name === userData.provinces[0]?.province_name
+                    );
+                    if (matchedProvince) {
+                    setProvinceId(matchedProvince.province_id);
+                    }
                 }
-            }
+                // =================
+
+                if (
+                userData.regional_managers && userData.regional_managers[0] &&
+                    regionalManagers?.length > 0 &&
+                    !regionalManagersId 
+                ) {
+                    const matchedManager = regionalManagers.find(
+                    (item) => item.regional_manager_name === userData.regional_managers[0]?.regional_manager_name
+                    );
+                    if (matchedManager) {
+                    setRegionalManagersId(matchedManager.regional_manager_id);
+                    setAllClinics(matchedManager.clinics);
+                    }
+                }
+                // ====================
+                if (userData.regional_managers && userData.regional_managers[0]?.clinics[0]?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
+                    const matchedManager = allClinics?.find(
+                    (item) => item.clinic_name.trim().toLowerCase() === userData.regional_managers[0]?.clinics[0].clinic_name.trim().toLowerCase()
+                    );
+                    if (matchedManager) {
+                    setClinicId(matchedManager.clinic_id);
+                    }
+                }
+                }
+            // if (role === "PM") {
+            //     setProvinceId(allProvinces[0]?.id);
+            //     setRegionalManagersId(regionalManagers[0]?.id);  
+            //     if(regionalManagers[0]?.clinics && regionalManagers[0]?.clinics.length > 0){
+            //         setAllClinics(regionalManagers[0]?.clinics);
+            //         setClinicId(regionalManagers[0]?.clinics[0]?.clinic_id);
+            //     }
+            // }
         },[allProvinces, regionalManagers, allClinics]
     );
 
@@ -173,6 +225,7 @@ export default function useViewReq() {
         handleDateChange,
         startDate, endDate,
         setDateRange,
-        setAllClinics
+        setAllClinics,
+        userData
     }
 }

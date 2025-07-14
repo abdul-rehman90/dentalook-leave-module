@@ -7,7 +7,7 @@ export default function useLeaveReq() {
     const [provinceId, setProvinceId] = useState('');
     const [allProvinces, setAllProvinces] = useState([]);
     const token = Cookies.get('access-token');
-    
+    const role = Cookies.get('role');
 
     const [allClinics, setAllClinics] = useState([]);
     const [clinicId, setClinicId] = useState('');
@@ -36,7 +36,10 @@ export default function useLeaveReq() {
         }
     }
     useEffect(()=>{
-        getProvinces();
+        if(role === "RM" || role === "LT"){
+          getProvinces();
+        }
+        
     }, [token]);
 
     // get reg and clinic
@@ -45,7 +48,6 @@ export default function useLeaveReq() {
             const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId}`);
             if(response.status === 200) {
                 setRegionalManagers(response?.data?.regional_managers);
-                // setAllClinics(response?.data?.regional_managers[0]?.clinics);
             }
         }
         catch (error) {
@@ -53,8 +55,10 @@ export default function useLeaveReq() {
         }
     }
     useEffect(()=>{
-        if (provinceId) {
-            clinicByRegionalManager();
+        if(role === "RM" || role === "LT"){
+            if (provinceId) {
+                clinicByRegionalManager();
+            }   
         }
     }, [provinceId]);
 
@@ -112,7 +116,20 @@ export default function useLeaveReq() {
         }
     }, []);
 
-   
+    const [userData, setUserData] = useState({});
+    const userDetail = async () =>{
+        const response = await axiosInstance.get(`api/v1/user-detail/`);
+        if(response.status === 200) {
+            setUserData(response?.data);
+            setAllProvinces(response?.data?.provinces);
+            setRegionalManagers(response?.data?.regional_managers);
+        }
+    }
+    useEffect(()=>{
+        if(role === "PM"){
+            userDetail();
+        }
+    }, [])
         
 
     return {
@@ -133,6 +150,7 @@ export default function useLeaveReq() {
         formId,
         allClicnicData,
         docName, setDocName,
-        setAllClinics
+        setAllClinics,
+        userData
     }
 }

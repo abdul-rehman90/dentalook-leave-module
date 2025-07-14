@@ -44,7 +44,7 @@ function Sidebar({ isSidebarOpen = false, onClose = () => { } }) {
 
             <div
                 className={`
-                    fixed z-[9999] md:sticky md:block top-0 md:w-[25%] 
+                    fixed z-[9999] md:sticky md:block top-0 md:w-[17%] 
                     bg-white border border-[#F3F3F5] px-6 h-full min-h-screen rounded-tr-[24px] 
                     transition-transform duration-300 ease-in-out
                     ${isSidebarOpen ? 'translate-x-0 w-[90%]' : '-translate-x-full'}

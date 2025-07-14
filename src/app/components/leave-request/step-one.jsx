@@ -43,8 +43,11 @@ function StepOne({ onSubmit, onNext }) {
     allClicnicData,
     docName,
     setDocName,
-    setAllClinics
+    setAllClinics,
+    userData
   } = useLeaveReq();
+
+  // console.log(userData, "..userData")
 
   // Update field values
   const handleChange = (index, field, value) => {
@@ -149,12 +152,8 @@ function StepOne({ onSubmit, onNext }) {
         }
       
     }
-    if (role === 'PM') {
-      setProvinceId(allProvinces[0]?.id);
-      setRegionalManagersId(regionalManagers[0]?.id);
-      setClinicId(allClinics[0]?.clinic_id);
-    }
-
+    
+ 
     if (getData?.province && allProvinces?.length > 0) {
       const matchedProvince = allProvinces.find(
         (item) => item.name === getData.province
@@ -164,7 +163,43 @@ function StepOne({ onSubmit, onNext }) {
       }
     }
 
-if (
+    if(role === "PM"){
+      if (userData.provinces && userData.provinces[0] && allProvinces?.length > 0) {
+        const matchedProvince = allProvinces.find(
+          (item) => item.province_name === userData.provinces[0]?.province_name
+        );
+        if (matchedProvince) {
+          setProvinceId(matchedProvince.province_id);
+        }
+      }
+      // =================
+
+      if (
+       userData.regional_managers && userData.regional_managers[0] &&
+        regionalManagers?.length > 0 &&
+        !regionalManagersId 
+      ) {
+        const matchedManager = regionalManagers.find(
+          (item) => item.regional_manager_name === userData.regional_managers[0]?.regional_manager_name
+        );
+        if (matchedManager) {
+          setRegionalManagersId(matchedManager.regional_manager_id);
+          setAllClinics(matchedManager.clinics);
+        }
+      }
+      // ====================
+      if (userData.regional_managers && userData.regional_managers[0]?.clinics[0]?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
+        const matchedManager = allClinics?.find(
+          (item) => item.clinic_name.trim().toLowerCase() === userData.regional_managers[0]?.clinics[0].clinic_name.trim().toLowerCase()
+        );
+        if (matchedManager) {
+          setClinicId(matchedManager.clinic_id);
+        }
+      }
+    }
+    
+
+  if (
     getData?.regional_manager &&
     regionalManagers?.length > 0 &&
     !regionalManagersId 
@@ -228,13 +263,13 @@ if (
               <div className="col-span-3 md:col-span-1">
                 <CustomSelector
                   onChange={(value) => {
-                    setProvinceId(value);
+                    setProvinceId(value); 
                   }}
                   label="Province"
                   options={allProvinces}
                   placeholder="Select Provider Title"
-                  labelKey="name"
-                  valueKey="id"
+                  labelKey={role === "PM" ? "province_name" : "name"}
+                  valueKey={role === "PM" ? "province_id" : "id"}
                   value={provinceId || getData?.province}
                   disabled={role === 'RM' || role === 'PM' ? true : false}
                   className="disabled:opacity-50 disabled:cursor-not-allowed"
@@ -249,8 +284,8 @@ if (
                   label="Regional Manager"
                   options={regionalManagers}
                   placeholder="Select Regional Manager"
-                  labelKey="name"
-                  valueKey="id"
+                  labelKey={role === "PM" ? "regional_manager_name" : "name"}
+                  valueKey={role === "PM" ? "regional_manager_id" : "id"}
                   value={regionalManagersId}
                   disabled={
                     role === "RM" || role === 'PM'
