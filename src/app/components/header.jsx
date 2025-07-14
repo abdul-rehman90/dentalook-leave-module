@@ -11,7 +11,7 @@ import { FaCircleUser } from "react-icons/fa6";
 
 
 function Header() {
-    const router = useRouter()
+  const router = useRouter()
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -31,12 +31,12 @@ function Header() {
   const dropdownRef = useRef();
 
   const handleLogout = () => {
-    router.push('/');
     Cookies.remove("access-token");
     Cookies.remove("refresh-token");
     Cookies.remove("role");
     localStorage.clear();
     setOpen(false);
+    router.replace('/');
   };
 
   useEffect(() => {
