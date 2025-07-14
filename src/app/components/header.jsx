@@ -31,12 +31,14 @@ function Header() {
   const dropdownRef = useRef();
 
   const handleLogout = () => {
+    console.log("Logout")
     Cookies.remove("access-token");
     Cookies.remove("refresh-token");
     Cookies.remove("role");
     localStorage.clear();
     setOpen(false);
     router.replace('/');
+    window.location.reload();
   };
 
   useEffect(() => {
