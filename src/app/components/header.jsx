@@ -32,13 +32,11 @@ function Header() {
 
 
   const handleLogout = async() => {
-   await Cookies.remove("access-token");
-   await Cookies.remove("refresh-token");
+    await Cookies.remove("access-token");
+    await Cookies.remove("refresh-token");
     Cookies.remove("role");
     localStorage.clear();
     setOpen(false);
-    console.log("Logout")
-    // router.replace('/');
     window.location.href = '/';
   };
 

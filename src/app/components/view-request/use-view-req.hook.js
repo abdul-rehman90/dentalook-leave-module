@@ -113,7 +113,7 @@ export default function useViewReq() {
                     params.end_date = format(endDate, "yyyy-MM-dd");
                 };
                 if(leavePlanned) params.leave_type = leavePlanned;
-                if(leaveStatus) params.leave_status = leaveStatus;
+                if(leaveStatus) params.status = leaveStatus;
                 const response = await axiosInstance.get(`api/v1/get-all-leave-request/`, {
                 params
             });
