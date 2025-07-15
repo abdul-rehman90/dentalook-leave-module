@@ -39,9 +39,7 @@ function ViewRequest() {
         leavePlanned, setLeavePlanned,
         leaveStatus, setLeaveStatus
     } = useViewReq();
-
-    console.log(leavePlanned, "..leavePlanned")
-    
+ 
     return (
         <div>
             <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-2">

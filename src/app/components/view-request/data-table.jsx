@@ -6,13 +6,13 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FaEye } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
+import { CloudCog } from 'lucide-react';
 
 export default function LeaveTable({ getReqData, isLoading }) {
-  const [newData, setNewData] = React.useState([]);
+  const [newData, setNewData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modelData, setModelData] = useState({});
   const router = useRouter();
-
   useEffect(() => {
     if (getReqData?.length > 0) {
       const transformedData = getReqData?.flatMap((item) =>
@@ -83,7 +83,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
 
   return (
     <div className="">
-      <div className="w-full relative md:min-w-full border border-gray-200 rounded-xl overflow-x-scroll">
+      <div className="w-full relative md:min-w-full border border-gray-200 rounded-xl overflow-x-auto">
         <table className="w-full border border-gray-300 text-sm text-left text-gray-700">
           <thead className="bg-[#F3F3F5] text-xs text-[#475467] font-medium uppercase">
             <tr>
@@ -112,13 +112,24 @@ export default function LeaveTable({ getReqData, isLoading }) {
           </thead>
           <tbody>
             {isLoading ? (
-              <Image
-                src={loading}
-                width={125}
-                height={125}
-                alt=""
-                className="mx-auto "
-              />
+              <tr>
+                <td colSpan="7" className="text-center py-6 text-gray-500">
+                  <Image
+                    src={loading}
+                    width={125}
+                    height={125}
+                    alt=""
+                    className="mx-auto "
+                  />
+                </td>
+            </tr>
+              
+            ) : (getReqData.length === 0 && !isLoading) ? (
+              <tr>
+                <td colSpan="7" className="text-center py-6 text-gray-500">
+                  No data found
+                </td>
+              </tr>
             ) : (
               <>
                 {newData?.map((item) => {
