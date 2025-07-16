@@ -36,9 +36,13 @@ const Login = () => {
         if (!formData.email || !formData.password) {
             return setIsError(true);
         }
+        const paylaod = {
+            email: formData.email.trim(),
+            password: formData.password.trim(),
+        }
         setIsLoading(true);
         try{
-            const res = await axiosInstance.post(`api/v1/login/`, formData);
+            const res = await axiosInstance.post(`api/v1/login/`, paylaod);
             if (res.status === 200) {
                 toast.success('Login successful!');
                 Cookies.set('access-token', res?.data?.access);

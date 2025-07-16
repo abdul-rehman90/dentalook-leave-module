@@ -431,7 +431,7 @@ function StepThree({ onNext }) {
                           typeof row.coverage_provider === 'object' &&
                           row.coverage_provider !== null
                             ? row.coverage_provider.provider_coverage
-                            : covergeType?.provider_coverage
+                            : ""
                         }
                         onChange={(value) =>
                           handleChange(index, 'coverage_type', value)

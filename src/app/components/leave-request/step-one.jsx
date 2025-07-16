@@ -63,6 +63,43 @@ function StepOne({ onSubmit, onNext }) {
   const canAddRow = lastRow.leave_date && lastRow.leave_type && lastRow.reason;
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Sequential validation
+    if (!provinceId) {
+      toast.error('Please select Province');
+      return;
+    }
+    if (!regionalManagersId) {
+      toast.error('Please select Regional Manager');
+      return;
+    }
+    if (!clinicId) {
+      toast.error('Please select Clinic');
+      return;
+    }
+    if (!docName) {
+      toast.error('Please select Provider Title');
+      return;
+    }
+    if (!providerId) {
+      toast.error('Please select Provider Name');
+      return;
+    }
+    // Validate leave rows
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      if (!row.leave_date || row.leave_date === "") {
+        toast.error(`Please select Leave Date for row ${i + 1}`);
+        return;
+      }
+      if (!row.leave_type || row.leave_type === "") {
+        toast.error(`Please select Leave Type for row ${i + 1}`);
+        return;
+      }
+      if (!row.reason || row.reason === "") {
+        toast.error(`Please enter Reason for row ${i + 1}`);
+        return;
+      }
+    }
     setIsLoading(true);
     const paylaod = {
       clinic: clinicId,
@@ -73,6 +110,8 @@ function StepOne({ onSubmit, onNext }) {
         reason: row.reason
       }))
     };
+    
+
     try {
       const response = await axiosInstance.post(
         `api/v1/leave-requests/`,
@@ -105,6 +144,22 @@ function StepOne({ onSubmit, onNext }) {
 
   const handleUpdateLeaveRequest = async (e) => {
     e.preventDefault();
+    // Validate leave rows
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      if (!row.leave_date || row.leave_date === "") {
+        toast.error(`Please select Leave Date for row ${i + 1}`);
+        return;
+      }
+      if (!row.leave_type || row.leave_type === "") {
+        toast.error(`Please select Leave Type for row ${i + 1}`);
+        return;
+      }
+      if (!row.reason || row.reason === "") {
+        toast.error(`Please enter Reason for row ${i + 1}`);
+        return;
+      }
+    }
     setIsLoading(true);
     const paylaod = {
       clinic: clinicId,
@@ -115,7 +170,6 @@ function StepOne({ onSubmit, onNext }) {
         reason: row.reason
       }))
     };
-
     try {
       const response = await axiosInstance.patch(
         `api/v1/update-leave-request/${formId}/`,
@@ -350,13 +404,15 @@ function StepOne({ onSubmit, onNext }) {
             {/* Plus Button */}
             <div className="flex w-full items-center justify-between py-5">
               <Heading title="Add Leave Details" />
-              <div
+              <button
+                type='button'
                 onClick={canAddRow ? handleAddRow : undefined}
-                className="rounded-xl border flex cursor-pointer items-center p-2 gap-1 w-full md:w-fit border-[#D0D5DD]"
+                disabled={!canAddRow ? true : false}
+                className="rounded-xl border flex disabled:cursor-not-allowed cursor-pointer items-center p-2 gap-1 w-full md:w-fit border-[#D0D5DD]"
               >
                 <Plus className={`text-[#7DB02D]`} />
                 Add Day(s)
-              </div>
+              </button>
             </div>
 
             <div>
