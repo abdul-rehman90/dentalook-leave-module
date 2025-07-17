@@ -426,7 +426,7 @@ function StepOne({ onSubmit, onNext }) {
                     <div className="flex flex-col gap-2 md:w-[24%] w-full">
                       {
                         index === 0 &&
-                        <label className="text-[13px] text-[#373940] font-medium block">
+                        <label className="text-[13px] text-[#373940] font-semibold block">
                           Leave Date
                         </label>
                       }
@@ -471,7 +471,7 @@ function StepOne({ onSubmit, onNext }) {
                       
                       {
                         index === 0 &&
-                        <label className="text-[13px] text-[#373940] font-medium block">
+                        <label className="text-[13px] text-[#373940] font-semibold block">
                           Reason
                         </label>
                       }

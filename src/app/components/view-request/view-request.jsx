@@ -125,7 +125,7 @@ function ViewRequest() {
                             />
                         </div>
                         <div className="request_Datepicker">
-                            <label className='text-[13px] mb-2 block font-medium text-[#373940]'>Leave Request Date</label>
+                            <label className='text-[13px] mb-2 block font-semibold text-[#373940]'>Leave Request Date</label>
                             <DatePicker
                                 selectsRange={true}
                                 startDate={startDate}

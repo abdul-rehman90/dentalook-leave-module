@@ -47,7 +47,7 @@ const CustomSelector = ({
 
     return (
         <div ref={selectorRef} className="relative w-full flex flex-col gap-2 custom__class">
-            {label && <label className='text-[13px] font-medium text-[#373940]'>{label}</label>}
+            {label && <label className='text-[13px] text-[#373940] font-semibold'>{label}</label>}
             <div className='w-full'>
                 <button
                     type='button'
