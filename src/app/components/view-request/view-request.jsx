@@ -42,11 +42,11 @@ function ViewRequest() {
  
     return (
         <div>
-            <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-2">
+            <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-2 w-full max-w-[1230px] mx-auto">
                 <div>
                     <div className="flex items-start flex-wrap md:flex-nowrap justify-between gap-4 w-full">
                         <Heading
-                            title='Provider Requiring Coverage'
+                            title='View all Leave Requests here'
                             subtitle='Review all the leave requests submitted here'
                         />
                        

@@ -56,8 +56,8 @@ function Canvas({
             <div className="fixed top-0 right-0 z-[999999] rounded-l-2xl h-screen overflow-y-auto bg-white w-full max-w-[430px]  transition-transform duration-300 shadow-xl">
                 <div className="flex justify-between w-full items-start px-6 py-5 border-b border-[#E6EAEE]">
                     <Heading
-                        title='New Provider Details'
-                        subtitle='Description should be here.'
+                        title='New Covering Provider Details'
+                        subtitle='Please fill out the details of the new covering provider'
                     />
                     <button
                         onClick={onClose}
@@ -200,7 +200,7 @@ function Canvas({
                         </>
                     }       
                    
-                    <div className='flex items-center justify-end gap-4'>
+                    <div className='flex items-center justify-end gap-4 absolute right-[13px] bottom-[29px]'>
                         <Button
                             text='Cancel'
                             border={true}

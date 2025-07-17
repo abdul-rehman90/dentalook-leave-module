@@ -29,6 +29,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
           user_type: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.user_type
           ),
+         
           province_name: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.province_name
           ),
@@ -88,24 +89,33 @@ export default function LeaveTable({ getReqData, isLoading }) {
           <thead className="bg-[#F3F3F5] text-xs text-[#475467] font-medium uppercase">
             <tr>
               <th className="px-3 py-3 whitespace-nowrap text-xs">
-                Provider Name
+                Provider Title
+              </th>
+              <th className="pl-3 pr-1 py-3 whitespace-nowrap text-xs">
+                Provider On Leave
+              </th>
+              <th className="pr-1 pl-2 py-3 whitespace-nowrap text-xs">
+                Regional Manager
+              </th>
+              <th className="px-3 py-3 whitespace-nowrap text-xs">
+                Clinic Name
               </th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">
                 Leave Date Requested
               </th>
-              <th className="px-3 py-3 whitespace-nowrap text-xs">
+              <th className="pr-3 pl-1 py-3 whitespace-nowrap text-xs">
                 Type of Leave
               </th>
-              <th className="px-3 py-3 whitespace-nowrap text-xs">
+              <th className="pr-3 pl-1 py-3 whitespace-nowrap text-xs border-r border-[#D9DADF]">
                 Request Decision
               </th>
               <th className="px-3 py-3 whitespace-nowrap text-xs">
                 Coverage Needed
               </th>
-              <th className="px-3 py-3 whitespace-nowrap text-xs">
-                Provider Type
+              <th className="pr-3 pl-1 py-3 whitespace-nowrap text-xs">
+                Covering Provider Type
               </th>
-              <th className="px-3 py-3 whitespace-nowrap text-xs">
+              <th className="pr-3 pl-1 py-3 whitespace-nowrap text-xs">
                 Covering Provider Name
               </th>
             </tr>
@@ -147,14 +157,30 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       onClick={() => !allPast && handelClick(item)}
                     >
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                        {item?.user_type?.map((date, index) => (
+                          <div key={index}>{date}</div>
+                        ))}
+                      </td>
+                      <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.provider_name || ''}
+                      </td>
+                      <td className="pr-1 pl-2 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                        {item?.regional_manager?.map((date, index) => (
+                          <div title={date} key={index}>{date ? date.slice(0, 10) + '...' : ''}</div>
+                        ))}
+                      </td>
+                      <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                        
+                        {item?.clinic_name?.map((date, index) => (
+                          <div title={date} key={index}>{date ? date.slice(0, 7) + '...' : ''}</div>
+                        ))}
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.leave_date?.map((date, index) => (
                           <div key={index}>{date}</div>
                         ))}
                       </td>
-                      <td className="px-3 py-3 whitespace-nowrap">
+                      <td className="pr-3 pl-1 py-3 whitespace-nowrap">
                         {item?.leave_type.map((type, index) => (
                           <div
                             key={index}
@@ -176,7 +202,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         ))}
                       </td>
 
-                      <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                      <td className="pr-3 pl-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap border-r border-[#D9DADF]">
                         <span
                           className={`w-2 h-2 mr-[6px] inline-block rounded-full ${
                             item?.status === 'decline'
@@ -193,7 +219,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               item?.status.slice(1)}
                         </span>
                       </td>
-                      <td className="px-3 py-3 text-xs font-normal text-[#475467]">
+                      <td className="px-3 text-xs font-normal text-[#475467]">
                         {item?.coverage_needed.map((needed, index) => (
                           <div
                             key={index}
@@ -217,7 +243,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         ))}
                       </td>
 
-                      <td className="px-3 py-3 text-xs font-normal text-[#475467]">
+                      <td className="pr-3 pl-1 text-xs font-normal text-[#475467]">
                         {
                           item?.status === "pending" ? null :
                           <>
@@ -255,7 +281,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         }
                       </td>
 
-                      <td className="px-3 flex flex-col items-start gap-2 py-3 text-xs font-normal text-[#475467]">
+                      <td className="pr-3 pl-1 flex flex-col items-start gap-2 py-3 text-xs font-normal text-[#475467]">
                         {
                           item?.status === "pending" ? null :
                           <>

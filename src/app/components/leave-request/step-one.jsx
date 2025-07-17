@@ -310,11 +310,11 @@ function StepOne({ onSubmit, onNext }) {
         <div className="rounded-2xl">
           <div>
             <Heading
-              title="New Provider Leave Request Form"
+              title="Provider Leave Request Form"
               subtitle="Please complete the form below to initiate the provider leave request process"
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-              <div className="col-span-3 md:col-span-1">
+            <div className="flex gap-6 py-5 flex-wrap">
+              <div className="md:w-[24%] w-full">
                 <CustomSelector
                   onChange={(value) => {
                     setProvinceId(value); 
@@ -329,7 +329,7 @@ function StepOne({ onSubmit, onNext }) {
                   className="disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
-              <div className="col-span-3 md:col-span-1">
+              <div className="md:w-[35%] w-full">
                 <CustomSelector
                   onChange={(value, options) => {
                     setRegionalManagersId(value); 
@@ -351,7 +351,7 @@ function StepOne({ onSubmit, onNext }) {
                   className="disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
-              <div className="col-span-3 md:col-span-1">
+              <div className="md:w-[35%] w-full">
                 <CustomSelector
                   onChange={(value) => {
                     setClinicId(value);
@@ -370,7 +370,7 @@ function StepOne({ onSubmit, onNext }) {
                 />
               </div>
 
-              <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
+              <div className="flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full">
                 <div className="w-full">
                   <CustomSelector
                     onChange={(value) => {
@@ -402,7 +402,7 @@ function StepOne({ onSubmit, onNext }) {
             </div>
 
             {/* Plus Button */}
-            <div className="flex w-full items-center justify-between py-5">
+            <div className="flex items-center justify-between py-5 border-[#D9DADF] border-t w-[99%]">
               <Heading title="Add Leave Details" />
               <button
                 type='button'
@@ -411,83 +411,94 @@ function StepOne({ onSubmit, onNext }) {
                 className="rounded-xl border flex disabled:cursor-not-allowed cursor-pointer items-center p-2 gap-1 w-full md:w-fit border-[#D0D5DD]"
               >
                 <Plus className={`text-[#7DB02D]`} />
-                Add Day(s)
+                Add Leave Day(s)
               </button>
             </div>
 
-            <div>
-              {rows?.map((row, index) => (
-                <div
-                  key={index}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5 relative"
-                >
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[13px] text-[#373940] font-medium block">
-                      Leave Date
-                    </label>
-                    <DatePicker
-                     selected={
-                        row.leave_date
-                          ? new Date(row.leave_date + 'T00:00:00')
-                          : null
+            <div className='relative addBorderClass'>
+              <div className='border-to__Top absolute top-[49px] left-0 right-0 h-[1px] bg-[#D9DADF] w-full'></div>
+              <>
+                {rows?.map((row, index) => (
+                  <div
+                    key={index}
+                    className={`flex flex-wrap gap-6 py-5 relative ${index !== 0 && "border-t border-[#E6EAEE]" }`}
+                  >
+                    <div className="flex flex-col gap-2 md:w-[24%] w-full">
+                      {
+                        index === 0 &&
+                        <label className="text-[13px] text-[#373940] font-medium block">
+                          Leave Date
+                        </label>
                       }
-                      minDate={new Date()}
-                      showMonthDropdown
-                      showYearDropdown
-                      dropdownMode="select"
-                      dateFormat="YYYY-MM-dd"
-                      className="py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
-                      name="leave_date"
-                      onChange={(date) => {
-                        const formatted = date
-                          ? format(date, 'yyyy-MM-dd')
-                          : '';
-                        handleChange(index, 'leave_date', formatted);
-                      }}
-                    />
-                  </div>
-                  <div>
-                    <CustomSelector
-                      label="Leave Type"
-                      options={[
-                        { name: 'Emergency', value: 'emergency' },
-                        { name: 'Planned', value: 'planned' }
-                      ]}
-                      placeholder="Select Leave Type"
-                      value={row.leave_type}
-                      onChange={(value) =>
-                        handleChange(index, 'leave_type', value)
+                      <DatePicker
+                      selected={
+                          row.leave_date
+                            ? new Date(row.leave_date + 'T00:00:00')
+                            : null
+                        }
+                        minDate={new Date()}
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        dateFormat="YYYY-MM-dd"
+                        className="py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        name="leave_date"
+                        onChange={(date) => {
+                          const formatted = date
+                            ? format(date, 'yyyy-MM-dd')
+                            : '';
+                          handleChange(index, 'leave_date', formatted);
+                        }}
+                      />
+                    </div>
+                    <div className='md:w-[35%] w-full'>
+                      <CustomSelector
+                        label={index === 0 && "Leave Type"}
+                        options={[
+                          { name: 'Emergency', value: 'emergency' },
+                          { name: 'Planned', value: 'planned' }
+                        ]}
+                        placeholder="Select Leave Type"
+                        value={row.leave_type}
+                        onChange={(value) =>
+                          handleChange(index, 'leave_type', value)
+                        }
+                        labelKey="name"
+                        valueKey="value"
+                      />
+                    </div>
+                    <div className='md:w-[35%] w-full'>
+                      
+                      {
+                        index === 0 &&
+                        <label className="text-[13px] text-[#373940] font-medium block">
+                          Reason
+                        </label>
                       }
-                      labelKey="name"
-                      valueKey="value"
-                    />
+                      <textarea rows={1} value={row.reason} typ="text" placeholder="Enter Reason" name="reason"
+                      className="disabled:cursor-not-allowed mt-[10px] w-full disabled:opacity-[0.8] py-[8px] px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        onChange={(e) =>
+                          handleChange(index, 'reason', e.target.value)
+                        }>
+                        {row.reason}
+                      </textarea>
+                    </div>
+                    {index > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newRows = [...rows];
+                          newRows.splice(index, 1);
+                          setRows(newRows);
+                        }}
+                        className="absolute right-0 top-0 text-red-500 hover:bg-red-50 rounded-full cursor-pointer"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    )}
                   </div>
-                  <div>
-                    <Input
-                      label="Reason"
-                      placeholder="Enter Reason"
-                      name="reason"
-                      value={row.reason}
-                      onChange={(e) =>
-                        handleChange(index, 'reason', e.target.value)
-                      }
-                    />
-                  </div>
-                  {index > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newRows = [...rows];
-                        newRows.splice(index, 1);
-                        setRows(newRows);
-                      }}
-                      className="absolute right-0 top-5 text-red-500 hover:bg-red-50 rounded-full cursor-pointer"
-                    >
-                      <X className="w-5 h-5" />
-                    </button>
-                  )}
-                </div>
-              ))}
+                ))}
+              </>
             </div>
           </div>
           {formId ? (

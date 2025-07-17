@@ -117,7 +117,7 @@ const LeaveRequest = () => {
                         />
                     </div>
                     {/* Each step handles its own form and submit */}
-                    <div className="w-full p-5 border border-[#E6EAEE] rounded-2xl mt-6">
+                    <div className="w-full p-5 border border-[#E6EAEE] rounded-2xl mt-6 max-w-[1230px] mx-auto">
                         {steps[currentStep].component}
                     </div>
                 </div>

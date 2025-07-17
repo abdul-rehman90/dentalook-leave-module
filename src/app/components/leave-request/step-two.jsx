@@ -89,7 +89,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
   return (
     <div className="">
       <Heading
-        title="Review Leave Request"
+        title="Review Leave Request Details"
         subtitle="Please review the leave request before taking any decision."
       />
       <form>
@@ -119,13 +119,16 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 py-2 md:py-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-[27px] py-2 md:py-5 border-[#D9DADF] border-t">
                   {formData1?.map((day, dayIdx) => (
                     <React.Fragment key={dayIdx}>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[13px] text-[#373940] font-medium block">
-                          Leave Date
-                        </label>
+                      <div className="flex flex-col gap-2 mb-1">
+                        {
+                          dayIdx === 0 &&
+                          <label className="text-[13px] text-[#373940] font-medium block">
+                            Leave Date
+                          </label>
+                        }
                         <DatePicker
                           
                           selected={
@@ -152,7 +155,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                         />
                       </div>
                       <CustomSelector
-                        label="Leave Type"
+                        label={dayIdx === 0 && "Leave Type"}
                         options={[
                           { name: 'Emergency', value: 'emergency' },
                           { name: 'Planned', value: 'planned' }
@@ -168,8 +171,8 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                         className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                       />
 
-                      <Input
-                        label="Reason"
+                      {/* <Input
+                        label={dayIdx === 0 && "Reason"}
                         placeholder="Reason"
                         value={day.reason}
                         onChange={(e) => {
@@ -179,7 +182,26 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                         }}
                         disabled
                         className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                      />
+                      /> */}
+                      <div>
+
+                      
+                      {
+                        dayIdx === 0 &&
+                        <label className="text-[13px] text-[#373940] font-medium block">
+                          Reason
+                        </label>
+                      }
+                      <textarea disabled rows={1} value={day.reason} typ="text" placeholder="Enter Reason" name="reason"
+                        className="disabled:cursor-not-allowed resize-none mt-[8px] w-full disabled:opacity-[0.8] pb-[10px] pt-[6px]  px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        onChange={(e) => {
+                          const updated = [...formData1];
+                          updated[dayIdx].reason = e.target.value;
+                          setFormData2(updated);
+                        }}>
+                        {day.reason}
+                      </textarea>
+                      </div>
                     </React.Fragment>
                   ))}
                 </div>

@@ -231,8 +231,8 @@ function StepThree({ onNext }) {
                 title="Provider Requiring Coverage"
                 subtitle="Please complete the form below to initiate the provider requiring coverages"
               />
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-                <div className="col-span-3 md:col-span-1 ">
+              <div className="flex flex-wrap gap-6 py-5">
+                <div className="md:w-[24%] w-full">
                   <CustomSelector
                     onChange={(value) => {
                       setProvinceId(value);
@@ -247,7 +247,7 @@ function StepThree({ onNext }) {
                     className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                   />
                 </div>
-                <div className="col-span-3 md:col-span-1">
+                <div className="md:w-[35%] w-full">
                   <CustomSelector
                      onChange={(value, options) => {
                         setRegionalManagersId(value); 
@@ -263,7 +263,7 @@ function StepThree({ onNext }) {
                     className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                   />
                 </div>
-                <div className="col-span-3 md:col-span-1">
+                <div className="md:w-[35%] w-full">
                   <CustomSelector
                     onChange={(value) => {
                       setClinicId(value);
@@ -279,7 +279,7 @@ function StepThree({ onNext }) {
                   />
                 </div>
 
-                <div className="col-span-3 flex flex-wrap md:flex-nowrap items-center gap-6">
+                <div className="flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full">
                   <div className="w-full">
                     <CustomSelector
                       onChange={(value) => setDocName(value)}
@@ -318,7 +318,7 @@ function StepThree({ onNext }) {
                   className="rounded-xl border flex cursor-pointer items-center px-2.5 py-2 gap-3 w-full md:w-fit border-[#D0D5DD]"
                 >
                   <Plus className="text-[#7DB02D] hidden md:block" />
-                  <p>Add Provider Details</p>
+                  <p>Add New Covering Provider Details</p>
                 </button>
               </div>
               {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-2 py-5"></div> */}
@@ -326,12 +326,17 @@ function StepThree({ onNext }) {
                 {rows?.map((row, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-2 py-5"
+                    className={`flex gap-2 ${
+                      index !== rows.length - 1 ? 'border-b border-[#D9DADF]' : ''
+                    }`}
                   >
-                    <div className="flex flex-col gap-2">
-                      <label className="text-[13px] text-[#373940] font-medium block">
-                        Leave Date
-                      </label>
+                    <div className="flex flex-col gap-2 md:w-[15%] w-full pb-3 pt-3">
+                      {
+                        index === 0 &&
+                        <label className="text-[13px] text-[#373940] font-medium block">
+                          Leave Date
+                        </label>
+                      }
                       <DatePicker
                         disabled
                         selected={
@@ -352,10 +357,10 @@ function StepThree({ onNext }) {
                         }}
                       />
                     </div>
-                    <div>
+                    <div className='md:w-[22%] w-full pb-3 md:border-[#D9DADF] md:border-r pt-3 custom__Selector'>
                       <CustomSelector
                         disabled
-                        label="Leave Type"
+                        label={index === 0 && "Leave Type"}
                         options={[
                           { name: 'Emergency', value: 'emergency' },
                           { name: 'Planned', value: 'planned' }
@@ -370,9 +375,9 @@ function StepThree({ onNext }) {
                         className='disabled:cursor-not-allowed'
                       />
                     </div>
-                    <div>
+                    <div className='md:w-[18%] w-full pb-3 pt-3'>
                       <CustomSelector
-                        label="Coverage Needed"
+                        label={index === 0 && "Secure Coverage Details"}
                         options={[
                           { name: 'Yes', value: 'yes' },
                           { name: 'No', value: 'no' }
@@ -392,9 +397,9 @@ function StepThree({ onNext }) {
                         }
                       />
                     </div>
-                    <div>
+                    <div className='md:w-[24%] w-full pb-3 pt-3' >
                       <CustomSelector
-                        label="Coverage Provider"
+                        label={index === 0 && "Covering Provider Name"}
                         options={coverageProviderList}
                         placeholder="Select Provider"
                         value={
@@ -417,9 +422,9 @@ function StepThree({ onNext }) {
                         className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
-                    <div>
+                    <div className='md:w-[20%] w-full pb-3 pt-3'>
                       <CustomSelector
-                        label="Coverage Type"
+                        label={index === 0 && "Coverage Type"}
                         options={[
                           { name: 'Internal', value: 'Internal' },
                           { name: 'External', value: 'External' },
@@ -446,9 +451,9 @@ function StepThree({ onNext }) {
                       />
                     </div>
 
-                    <div>
+                    <div className='md:w-[20%] w-full pb-3 pt-3'>
                       <Input
-                        label="Coverage Found By"
+                        label={index === 0 && "Coverage Found By"}
                         placeholder="Enter Coverage"
                         name="coverage_found_by"
                         value={userData?.name}
@@ -462,6 +467,7 @@ function StepThree({ onNext }) {
                         disabled
                         className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
+                      
                     </div>
                   </div>
                 ))}
@@ -476,11 +482,11 @@ function StepThree({ onNext }) {
             text={
               isLoading ? (
                 <span className="flex items-center gap-2">
-                  Update Leave Process
+                  Update Leave Request Details
                   <Image src={loader} alt="loading" width={24} height={24} />
                 </span>
               ) : (
-                'Update Leave Process'
+                'Update Leave Request Details'
               )
             }
             bgcolor={true}
