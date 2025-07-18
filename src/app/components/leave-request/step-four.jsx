@@ -272,7 +272,7 @@ function StepFour({setCurrentStep}) {
                     </div>
                     <div className='md:w-[22%] w-full pb-3 pt-3'>
                       <CustomSelector
-                        label={index === 0 && "Secure Coverage Details"}
+                        label={index === 0 && "Coverage Needed"}
                         options={[
                           { name: "Yes", value: "yes" },
                           { name: "No", value: "no" },

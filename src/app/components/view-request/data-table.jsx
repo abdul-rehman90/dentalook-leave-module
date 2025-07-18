@@ -16,7 +16,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
   useEffect(() => {
     if (getReqData?.length > 0) {
       const transformedData = getReqData?.flatMap((item) =>
-        item?.days?.map((day) => ({
+        ({
           provider_name: item?.provider_name,
           status: item?.status,
           id: item?.id,
@@ -55,7 +55,6 @@ export default function LeaveTable({ getReqData, isLoading }) {
             (nestedDay) => nestedDay?.coverage_needed
           )
         }))
-      );
       setNewData(transformedData);
     }
   }, [getReqData]);
