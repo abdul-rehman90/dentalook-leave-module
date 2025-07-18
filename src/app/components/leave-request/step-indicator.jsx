@@ -41,9 +41,9 @@ const StepIndicator = ({ stepTitles, currentStep }) => {
                                 {index < stepTitles.length - 1 && (
                                     <div className="absolute top-1/2 left-[50px] md:left-[80px] lg:left-[100px] xl:left-[120px] transform -translate-y-1/2 translate-x-2 sm:translate-x-3  w-[26px] lg:w-[60px]">
 
-                                        <div className="absolute inset-0 border border-dashed border-[#D9DADF] rounded-full"></div>
+                                        <div className="absolute inset-0 border border-[#D9DADF] rounded-full"></div>
                                         <div
-                                            className={`absolute inset-0 border border-[#00465F] border-dashed rounded-full transition-all duration-500`}
+                                            className={`absolute inset-0 border border-[#00465F] rounded-full transition-all duration-500`}
                                             style={{
                                                 width:
                                                     index < currentStep

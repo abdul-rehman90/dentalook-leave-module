@@ -270,7 +270,7 @@ function StepFour({setCurrentStep}) {
                         className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
-                    <div className='md:w-[19%] w-full pb-3 pt-3'>
+                    <div className='md:w-[22%] w-full pb-3 pt-3'>
                       <CustomSelector
                         label={index === 0 && "Secure Coverage Details"}
                         options={[

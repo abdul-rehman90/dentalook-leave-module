@@ -451,7 +451,7 @@ function StepOne({ onSubmit, onNext }) {
                         }}
                       />
                     </div>
-                    <div className='md:w-[35%] w-full'>
+                    <div className='md:w-[25%] w-full'>
                       <CustomSelector
                         label={index === 0 && "Leave Type"}
                         options={[
@@ -467,7 +467,7 @@ function StepOne({ onSubmit, onNext }) {
                         valueKey="value"
                       />
                     </div>
-                    <div className='md:w-[35%] w-full'>
+                    <div className='md:w-[45%] w-full'>
                       
                       {
                         index === 0 &&
