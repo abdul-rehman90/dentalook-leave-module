@@ -156,23 +156,21 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       onClick={() => !allPast && handelClick(item)}
                     >
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.user_type?.map((date, index) => (
-                          <div key={index}>{date}</div>
-                        ))}
+                          <div >{item?.user_type[0]}</div>
                       </td>
                       <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.provider_name || ''}
                       </td>
                       <td className="pr-1 pl-2 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.regional_manager?.map((date, index) => (
+                        {/* {item?.regional_manager?.map((date, index) => (
                           <div title={date} key={index}>{date ? date.slice(0, 10) + '...' : ''}</div>
-                        ))}
+                        ))} */}
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        
+{/*                         
                         {item?.clinic_name?.map((date, index) => (
                           <div title={date} key={index}>{date ? date.slice(0, 7) + '...' : ''}</div>
-                        ))}
+                        ))} */}
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.leave_date?.map((date, index) => (
@@ -316,14 +314,14 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                         className="cursor-pointer ml-2"
                                         onClick={(e) => {
                                           handleModelOpen({
-                                            province_name: item.province_name,
-                                            user_type: item.user_type,
+                                            province_name: item.province_name[index],
+                                            user_type: item.user_type[index],
                                             email: item.email,
-                                            reason: item.reason,
+                                            reason: item.reason[index],
                                             coverage_provider: provider,
-                                            clinic_name: item.clinic_name,
-                                            regional_manager: item.regional_manager,
-                                            name: item.name
+                                            clinic_name: item.clinic_name[index],
+                                            regional_manager: item.regional_manager[index],
+                                            name: item.name[index]
                                           });
                                           e.stopPropagation();
                                         }}
@@ -370,7 +368,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
               </div>
               <div className="flex gap-3 justify-between">
                 <strong>Name:</strong>
-                <p>{modelData.coverage_provider || ""}</p>
+                <p>{modelData.name || ""}</p>
               </div>
               
               <div className="flex gap-3 justify-between">
