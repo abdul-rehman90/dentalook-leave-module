@@ -347,7 +347,7 @@ function StepThree({ onNext }) {
                         showYearDropdown
                         dropdownMode="select"
                         dateFormat="YYYY-MM-dd"
-                        className="py-[8px] disabled:cursor-not-allowed w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        className="py-[8px] disabled:cursor-not-allowed w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                         name="leave_date"
                         onChange={(date) => {
                           const formatted = date

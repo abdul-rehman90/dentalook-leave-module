@@ -53,7 +53,7 @@ const CustomSelector = ({
                     type='button'
                     onClick={() => setIsOpen(!isOpen)}
                     disabled={disabled}
-                    className={`${className} w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-xl px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F] ${selectorstyle || ''}`}
+                    className={`${className} w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-[8px] px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F] ${selectorstyle || ''}`}
                 >
                     <span className='text-[#1f1f1fa9]'>
                         {selected ? selected[labelKey] : placeholder}

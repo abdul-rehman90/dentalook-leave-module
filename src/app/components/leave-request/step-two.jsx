@@ -141,7 +141,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                           showYearDropdown
                           dropdownMode="select"
                           dateFormat="YYYY-MM-dd"
-                          className="py-[8px] w-full px-4 disabled:opacity-[0.8] disabled:cursor-not-allowed text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                          className="py-[8px] w-full px-4 disabled:opacity-[0.8] disabled:cursor-not-allowed text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                           name="leave_date"
                           placeholderText="Leave Date"
                           onChange={(date) => {
@@ -193,7 +193,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                         </label>
                       }
                       <textarea disabled rows={1} value={day.reason} typ="text" placeholder="Enter Reason" name="reason"
-                        className="disabled:cursor-not-allowed resize-none mt-[8px] w-full disabled:opacity-[0.8] pb-[10px] pt-[6px]  px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        className="disabled:cursor-not-allowed resize-none mt-[8px] w-full disabled:opacity-[0.8] pb-[10px] pt-[6px]  px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                         onChange={(e) => {
                           const updated = [...formData1];
                           updated[dayIdx].reason = e.target.value;

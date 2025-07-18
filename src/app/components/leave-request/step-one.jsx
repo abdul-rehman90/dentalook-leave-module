@@ -441,7 +441,7 @@ function StepOne({ onSubmit, onNext }) {
                         showYearDropdown
                         dropdownMode="select"
                         dateFormat="YYYY-MM-dd"
-                        className="py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                        className="py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                         name="leave_date"
                         onChange={(date) => {
                           const formatted = date
@@ -476,7 +476,7 @@ function StepOne({ onSubmit, onNext }) {
                         </label>
                       }
                       <textarea rows={1} value={row.reason} typ="text" placeholder="Enter Reason" name="reason"
-                      className="disabled:cursor-not-allowed mt-[10px] w-full disabled:opacity-[0.8] py-[8px] px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-xl border border-[#D9DADF]"
+                      className="disabled:cursor-not-allowed mt-[10px] w-full disabled:opacity-[0.8] py-[8px] px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                         onChange={(e) =>
                           handleChange(index, 'reason', e.target.value)
                         }>

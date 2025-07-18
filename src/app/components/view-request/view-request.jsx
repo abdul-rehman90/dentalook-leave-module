@@ -9,10 +9,10 @@ import DataTabel from './data-table'
 import useViewReq from "./use-view-req.hook"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import Image from "next/image";
+import loading from "../../../common/assets/icons/loader.svg"
 
 function ViewRequest() {
-   
     const {
         provinceId, 
         setProvinceId,
@@ -39,6 +39,39 @@ function ViewRequest() {
         leavePlanned, setLeavePlanned,
         leaveStatus, setLeaveStatus
     } = useViewReq();
+    const [filterLoader, setFilterLoader] = useState(false);
+    const handleClearFilter = () => {
+        setFilterLoader(true);
+        if (role === "LT") {
+            setProvinceId('');
+            setRegionalManagersId('');
+            setClinicId('');
+            setAllClinics([]);
+            setDocName('');
+            setProviderId('');
+            setLeaveStatus('');
+            setLeavePlanned(''); 
+            setDateRange([null, null]);
+        } else if (role === "RM") {
+            setClinicId('');
+            setAllClinics([]);
+            setDocName('');
+            setProviderId('');
+            setLeaveStatus('');
+            setLeavePlanned('');
+            setDateRange([null, null]);
+        } else if(role === "PM"){
+            setDocName('');
+            setProviderId('');
+            setLeaveStatus('');
+            setLeavePlanned('');
+            setDateRange([null, null]);
+        }
+        setTimeout(() => {
+            setFilterLoader(false);
+        }, 1000);
+    };
+
  
     return (
         <div>
@@ -136,7 +169,7 @@ function ViewRequest() {
                                     handleDateChange(update);
                                 }}
                                 isClearable={true}
-                                className="w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-xl px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F]"
+                                className="w-full flex rounded-[8px] items-center justify-between bg-transparent border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F]"
                             />
                         </div>
                         <div>
@@ -166,6 +199,23 @@ function ViewRequest() {
                                 valueKey="value"
                                 value={leaveStatus}
                                 onChange={(value) => setLeaveStatus(value)}
+                            />
+                        </div>
+                        <div className="flex items-end">
+                            <Button
+                                // text="Clear filters"
+                                text={
+                                    filterLoader ? (
+                                        <Image src={loading} alt="loading" width={24} height={24} />
+                                    ) : (
+                                        'Clear filters'
+                                    )
+                                    }
+                                bgcolor={true}
+                                type="button"
+                                disabled={filterLoader}
+                                onClick={handleClearFilter}
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                        

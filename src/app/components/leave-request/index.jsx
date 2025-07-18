@@ -110,14 +110,14 @@ const LeaveRequest = () => {
         <div className="w-full h-full ">
             <div className="flex flex-col lg:flex-row w-full h-full">
                 <div className="w-full flex flex-col">
-                    <div className="w-full max-w-[1230px] mx-auto">
+                    <div className="w-full max-w-[1200px] mx-auto">
                         <StepIndicator
                             stepTitles={stepTitles}
                             currentStep={currentStep}
                         />
                     </div>
                     {/* Each step handles its own form and submit */}
-                    <div className="w-full p-5 border border-[#E6EAEE] rounded-2xl mt-6 max-w-[1230px] mx-auto">
+                    <div className="w-full p-5 border border-[#E6EAEE] rounded-2xl mt-6 max-w-[976px] mx-auto">
                         {steps[currentStep].component}
                     </div>
                 </div>

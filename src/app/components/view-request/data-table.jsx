@@ -365,16 +365,16 @@ export default function LeaveTable({ getReqData, isLoading }) {
               Coverage Provider Details
             </h2>
             <div className="space-y-2 text-sm">
-              <div className="flex gap-3">
+              <div className="flex gap-3 justify-between">
                 <strong>Provider Title:</strong>
                 <p>{modelData.user_type || ""}</p>
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-3 justify-between">
                 <strong>Name:</strong>
                 <p>{modelData.coverage_provider || ""}</p>
               </div>
               
-              <div className="flex gap-3">
+              <div className="flex gap-3 justify-between">
                 <strong>Coverage Type:</strong>
                 <p>{modelData.reason || ""}</p>
               </div>
@@ -383,15 +383,15 @@ export default function LeaveTable({ getReqData, isLoading }) {
               {
                 modelData.reason.includes("Internal") && (
                   <>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 justify-between">
                       <strong>Province:</strong>
                       <p>{modelData.province_name || ""}</p>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 justify-between">
                       <strong>Regional Manager:</strong>
                       <p>{modelData.regional_manager || ""}</p>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 justify-between">
                       <strong>Clinic:</strong>
                       <p>{modelData.clinic_name || ""}</p>
                     </div>
@@ -400,7 +400,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
               }
               {
                 (modelData.reason.includes("ACE") || modelData.reason.includes("External")) && (
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 justify-between">
                     <strong>Name:</strong>
                     <p>{modelData.name}</p>
                   </div>
