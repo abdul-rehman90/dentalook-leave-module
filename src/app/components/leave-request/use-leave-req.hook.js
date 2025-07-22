@@ -55,7 +55,7 @@ export default function useLeaveReq() {
         }
     }
     useEffect(()=>{
-        if(role === "RM" ){
+        if(role === "RM"){
             if (provinceId) {
                 clinicByRegionalManager();
             }   
