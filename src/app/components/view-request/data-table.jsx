@@ -163,21 +163,15 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.provider_name || ''}
                       </td>
-<<<<<<< HEAD
                       {/* <td className="pr-1 pl-2 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.regional_manager?.map((date, index) => (
-=======
-                      <td className="pr-1 pl-2 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {/* {item?.regional_manager?.map((date, index) => (
->>>>>>> c0e049c0b0a6fc5be6c04cab1ab5e0057deb3ac0
                           <div title={date} key={index}>{date ? date.slice(0, 10) + '...' : ''}</div>
                         ))} */}
-                      </td>
-                      <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                      {/* </td> */}
+                      {/* <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap"> */}
 {/*                         
                         {item?.clinic_name?.map((date, index) => (
                           <div title={date} key={index}>{date ? date.slice(0, 7) + '...' : ''}</div>
-<<<<<<< HEAD
                         ))}
                       </td> */}
                       <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
@@ -185,9 +179,6 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       </td>
                        <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.clinic_name_c || ''}
-=======
-                        ))} */}
->>>>>>> c0e049c0b0a6fc5be6c04cab1ab5e0057deb3ac0
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.leave_date?.map((date, index) => (
