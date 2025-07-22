@@ -147,6 +147,7 @@ function StepOne({ onSubmit, onNext }) {
     // Validate leave rows
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
+     
       if (!row.leave_date || row.leave_date === "") {
         toast.error(`Please select Leave Date for row ${i + 1}`);
         return;

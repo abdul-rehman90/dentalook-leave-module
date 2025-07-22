@@ -21,6 +21,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
           status: item?.status,
           id: item?.id,
           status: item?.status,
+          regional_manager_c: item?.regional_manager,
+          clinic_name_c: item?.clinic_name,
           leave_date: item?.days?.map((nestedDay) => nestedDay?.leave_date),
           leave_type: item?.days?.map((nestedDay) => nestedDay?.leave_type),
           email: item?.days?.map(
@@ -164,7 +166,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.provider_name || ''}
                       </td>
-                      <td className="pr-1 pl-2 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                      {/* <td className="pr-1 pl-2 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.regional_manager?.map((date, index) => (
                           <div title={date} key={index}>{date ? date.slice(0, 10) + '...' : ''}</div>
                         ))}
@@ -174,6 +176,12 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         {item?.clinic_name?.map((date, index) => (
                           <div title={date} key={index}>{date ? date.slice(0, 7) + '...' : ''}</div>
                         ))}
+                      </td> */}
+                      <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                        {item?.regional_manager_c || ''}
+                      </td>
+                       <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                        {item?.clinic_name_c || ''}
                       </td>
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.leave_date?.map((date, index) => (

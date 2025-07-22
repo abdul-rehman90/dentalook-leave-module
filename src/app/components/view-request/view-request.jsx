@@ -37,7 +37,13 @@ function ViewRequest() {
         setDateRange,
         setAllClinics,
         leavePlanned, setLeavePlanned,
-        leaveStatus, setLeaveStatus
+        leaveStatus, setLeaveStatus,
+        handleProvice,
+        handleChangeRM,
+        clinics,
+        handleChangeClinic,
+        handleChangeProvider,
+        handleChangeProviderName
     } = useViewReq();
     const [filterLoader, setFilterLoader] = useState(false);
     const handleClearFilter = () => {
@@ -87,24 +93,31 @@ function ViewRequest() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
                         <div>
                             <CustomSelector
-                                onChange={(value) => {
-                                    setProvinceId(value);
+                                 onChange={(value) => {
+                                    setProvinceId(value);     
+                                    handleProvice(value);   
                                 }}
+                                // onChange={(value) => {
+                                //     setProvinceId(value);
+                                //     handleProvice(value)
+                                // }}
                                 label="Province"
                                 options={allProvinces}
                                 placeholder="Select Province"
                                 labelKey={role === "PM" ? "province_name" : "name"}
                                 valueKey={role === "PM" ? "province_id" : "id"}
                                 value={provinceId}
-                                disabled={(role === "RM" || role === "PM") ? true : false}
+                                // disabled={(role === "RM" || role === "PM") ? true : false}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
-                           <CustomSelector
+                            <CustomSelector
                                 onChange={(value, options) => {
                                     setRegionalManagersId(value); 
-                                    setAllClinics(options?.clinics)
+                                    handleChangeRM(value)
+                                    // console.log(options)
+                                    // setAllClinics(options?.clinics)
                                 }}
                                 label="Regional Manager"
                                 options={regionalManagers}
@@ -112,48 +125,54 @@ function ViewRequest() {
                                 labelKey={role === "PM" ? "regional_manager_name" : "name"}
                                 valueKey={role === "PM" ? "regional_manager_id" : "id"}
                                 value={regionalManagersId}
-                                disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
+                                // disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                            />
+                        </div>
+                        <div>
+                            <CustomSelector
+                                onChange={(value, options) => {
+                                    setClinicId(value);
+                                    handleChangeClinic(value, options)
+                                }}
+                                label="Clinic"
+                                options={clinics}
+                                placeholder="Select Clinic"
+                                labelKey="name"
+                                valueKey="id"
+                                value={clinicId}
+                                // disabled={role === "PM" ? true : false || provinceId ? false : true}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
                             <CustomSelector
                                 onChange={(value) => {
-                                    setClinicId(value);
-                                    setDocName("");
+                                    setDocName(value);
+                                    handleChangeProvider(value)
                                 }}
-                                label="Clinic"
-                                options={allClinics}
-                                placeholder="Select Clinic"
-                                labelKey="clinic_name"
-                                valueKey="clinic_id"
-                                value={clinicId}
-                                disabled={role === "PM" ? true : false || provinceId ? false : true}
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => setDocName(value)}
                                 label="Provider Title"
                                 options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
                                 placeholder="Select Provider Title"
                                 labelKey="name"
                                 value={docName}
-                                disabled={clinicId ? false : true }
+                                // disabled={clinicId ? false : true }
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div>
                             <CustomSelector
-                                onChange={(value) => setProviderId(value)}
+                                onChange={(value, options) => {
+                                    setProviderId(value); 
+                                    handleChangeProviderName(value, options)
+                                }}
                                 label="Provider Name"
                                 options={allClicnicData}
                                 placeholder="Select Provider Name"
                                 labelKey="name"
                                 valueKey="id"
                                 value={providerId}
-                                disabled={docName ? false : true}
+                                // disabled={docName ? false : true}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
