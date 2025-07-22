@@ -44,7 +44,13 @@ function StepOne({ onSubmit, onNext }) {
     docName,
     setDocName,
     setAllClinics,
-    userData
+    userData,
+    handleProvice,
+    handleChangeRM,
+    clinics,
+    handleChangeClinic,
+    handleChangeProvider,
+    handleChangeProviderName
   } = useLeaveReq();
 
 
@@ -110,7 +116,7 @@ function StepOne({ onSubmit, onNext }) {
         reason: row.reason
       }))
     };
-    
+
 
     try {
       const response = await axiosInstance.post(
@@ -147,7 +153,7 @@ function StepOne({ onSubmit, onNext }) {
     // Validate leave rows
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
-     
+
       if (!row.leave_date || row.leave_date === "") {
         toast.error(`Please select Leave Date for row ${i + 1}`);
         return;
@@ -195,20 +201,20 @@ function StepOne({ onSubmit, onNext }) {
   useEffect(() => {
     if (role === 'RM') {
       setProvinceId(allProvinces[0]?.id);
-        if(typeof window !== "undefined"){
-          const userData = JSON.parse(localStorage.getItem('userData'));
-          if(userData) {
-            setRegionalManagersId(userData?.id);
-            const rmObj = regionalManagers?.find(rm => rm.id === userData?.id);
-              if (rmObj && rmObj.clinics) {
-              setAllClinics(rmObj.clinics);
-            }
+      if (typeof window !== "undefined") {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (userData) {
+          setRegionalManagersId(userData?.id);
+          const rmObj = regionalManagers?.find(rm => rm.id === userData?.id);
+          if (rmObj && rmObj.clinics) {
+            setAllClinics(rmObj.clinics);
           }
         }
-      
+      }
+
     }
-    
- 
+
+
     if (getData?.province && allProvinces?.length > 0) {
       const matchedProvince = allProvinces.find(
         (item) => item.name === getData.province
@@ -218,7 +224,7 @@ function StepOne({ onSubmit, onNext }) {
       }
     }
 
-    if(role === "PM"){
+    if (role === "PM") {
       if (userData.provinces && userData.provinces[0] && allProvinces?.length > 0) {
         const matchedProvince = allProvinces.find(
           (item) => item.province_name === userData.provinces[0]?.province_name
@@ -230,9 +236,9 @@ function StepOne({ onSubmit, onNext }) {
       // =================
 
       if (
-       userData.regional_managers && userData.regional_managers[0] &&
+        userData.regional_managers && userData.regional_managers[0] &&
         regionalManagers?.length > 0 &&
-        !regionalManagersId 
+        !regionalManagersId
       ) {
         const matchedManager = regionalManagers.find(
           (item) => item.regional_manager_name === userData.regional_managers[0]?.regional_manager_name
@@ -252,13 +258,13 @@ function StepOne({ onSubmit, onNext }) {
         }
       }
     }
-    
 
-  if (
-    getData?.regional_manager &&
-    regionalManagers?.length > 0 &&
-    !regionalManagersId 
-  ) {
+
+    if (
+      getData?.regional_manager &&
+      regionalManagers?.length > 0 &&
+      !regionalManagersId
+    ) {
       const matchedManager = regionalManagers.find(
         (item) => item.name === getData?.regional_manager
       );
@@ -267,15 +273,17 @@ function StepOne({ onSubmit, onNext }) {
         setAllClinics(matchedManager.clinics);
       }
     }
-   
+
     if (getData?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
       const matchedManager = allClinics?.find(
-        (item) => item.clinic_name === getData.clinic_name
+        (item) => item.name.trim().toLowerCase() === getData.clinic_name.trim().toLowerCase()
       );
+
       if (matchedManager) {
-        setClinicId(matchedManager.clinic_id);
+        setClinicId(matchedManager.id);
       }
     }
+
 
     if (getData?.provider_name && allProviders?.length > 0) {
       const matchedManager = allProviders?.find((item) => {
@@ -314,7 +322,7 @@ function StepOne({ onSubmit, onNext }) {
               title="Provider Leave Request Form"
               subtitle="Please complete the form below to initiate the provider leave request process"
             />
-            <div className="flex gap-6 py-5 flex-wrap">
+            {/* <div className="flex gap-6 py-5 flex-wrap">
               <div className="md:w-[24%] w-full">
                 <CustomSelector
                   onChange={(value) => {
@@ -400,6 +408,108 @@ function StepOne({ onSubmit, onNext }) {
                   />
                 </div>
               </div>
+            </div> */}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
+              <div>
+                <CustomSelector
+                  onChange={(value) => {
+                    setDocName(value);
+                    handleChangeProvider(value)
+                  }}
+                  label="Provider Title"
+                  options={[
+                    { name: 'DDS', value: 'DDS' },
+                    { name: 'RDH', value: 'RDH' },
+                    { name: 'RDT', value: 'RDT' },
+                  ]}
+                  placeholder="Select Provider Title"
+                  labelKey="name"
+                  value={docName}
+                  disabled={(role === 'RM') || (role === 'PM') || (formId ? true : false)}
+                  className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                />
+              </div>
+              <div>
+                <CustomSelector
+                  onChange={(value, options) => {
+                    setProviderId(value);
+                    handleChangeProviderName(value, options)
+                  }}
+                  label="Provider Name"
+                  options={allClicnicData}
+                  placeholder="Select Provider Name"
+                  labelKey="name"
+                  valueKey="id"
+                  value={providerId}
+                  disabled={formId ? true : false}
+
+                  className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                />
+              </div>
+              <div></div>
+              <div>
+                <CustomSelector
+                  onChange={(value) => {
+                    setProvinceId(value);
+                    role === "LT" && handleProvice(value);
+                  }}
+
+                  label="Province"
+                  options={allProvinces}
+                  placeholder="Select Province"
+                  labelKey={
+                    role === 'PM' ? 'province_name' : 'name'
+                  }
+                  valueKey={role === 'PM' ? 'province_id' : 'id'}
+                  value={provinceId}
+                  // disabled={(role === "RM" || role === "PM") ? true : false}
+                  className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                  disabled={formId ? true : false}
+                />
+              </div>
+              <div>
+                <CustomSelector
+                  onChange={(value, options) => {
+                    setRegionalManagersId(value);
+                    role === "LT" && handleChangeRM(value)
+                    // setAllClinics(options?.clinics)
+                  }}
+                  label="Regional Manager"
+                  options={regionalManagers}
+                  placeholder="Select Regional Manager"
+                  labelKey={
+                    role === 'PM'
+                      ? 'regional_manager_name'
+                      : 'name'
+                  }
+                  valueKey={
+                    role === 'PM' ? 'regional_manager_id' : 'id'
+                  }
+                  value={regionalManagersId}
+                  disabled={formId ? true : false}
+                  // disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
+                  className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                />
+              </div>
+              <div>
+                <CustomSelector
+                  onChange={(value, options) => {
+                    setClinicId(value);
+                    role === "LT" && handleChangeClinic(value, options)
+                  }}
+                  label="Clinic"
+                  options={role === "LT" ? clinics : allClinics}
+                  placeholder="Select Clinic"
+                  labelKey={role === "LT" ? "name" : "_name" }
+                  valueKey={role === "LT" ? "id" : "id" }
+                 
+                  value={clinicId}
+                  disabled={formId ? true : false}
+                  // disabled={role === "PM" ? true : false || provinceId ? false : true}
+                  className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                />
+              </div>
             </div>
 
             {/* Plus Button */}
@@ -422,7 +532,7 @@ function StepOne({ onSubmit, onNext }) {
                 {rows?.map((row, index) => (
                   <div
                     key={index}
-                    className={`flex flex-wrap gap-6 py-5 relative ${index !== 0 && "border-t border-[#E6EAEE]" }`}
+                    className={`flex flex-wrap gap-6 py-5 relative ${index !== 0 && "border-t border-[#E6EAEE]"}`}
                   >
                     <div className="flex flex-col gap-2 md:w-[24%] w-full">
                       {
@@ -432,7 +542,7 @@ function StepOne({ onSubmit, onNext }) {
                         </label>
                       }
                       <DatePicker
-                      selected={
+                        selected={
                           row.leave_date
                             ? new Date(row.leave_date + 'T00:00:00')
                             : null
@@ -469,7 +579,7 @@ function StepOne({ onSubmit, onNext }) {
                       />
                     </div>
                     <div className='md:w-[45%] w-full'>
-                      
+
                       {
                         index === 0 &&
                         <label className="text-[13px] text-[#373940] font-semibold block">
@@ -477,7 +587,7 @@ function StepOne({ onSubmit, onNext }) {
                         </label>
                       }
                       <textarea rows={1} value={row.reason} typ="text" placeholder="Enter Reason" name="reason"
-                      className="disabled:cursor-not-allowed mt-[10px] w-full disabled:opacity-[0.8] py-[8px] px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                        className="disabled:cursor-not-allowed mt-[10px] w-full disabled:opacity-[0.8] py-[8px] px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                         onChange={(e) =>
                           handleChange(index, 'reason', e.target.value)
                         }>
@@ -501,6 +611,7 @@ function StepOne({ onSubmit, onNext }) {
                 ))}
               </>
             </div>
+
           </div>
           {formId ? (
             <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">

@@ -92,68 +92,6 @@ function ViewRequest() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
                         <div>
                             <CustomSelector
-                                 onChange={(value) => {
-                                    setProvinceId(value);     
-                                    handleProvice(value);   
-                                }}
-                                // onChange={(value) => {
-                                //     setProvinceId(value);
-                                //     handleProvice(value)
-                                // }}
-                                label="Province"
-                                options={allProvinces}
-                                placeholder="Select Province"
-                                labelKey={
-                                    role === 'PM' ? 'province_name' : 'name'
-                                }
-                                valueKey={role === 'PM' ? 'province_id' : 'id'}
-                                value={provinceId}
-                                // disabled={(role === "RM" || role === "PM") ? true : false}
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value, options) => {
-                                    setRegionalManagersId(value); 
-                                    handleChangeRM(value)
-                                    // console.log(options)
-                                    // setAllClinics(options?.clinics)
-                                }}
-                                label="Regional Manager"
-                                options={regionalManagers}
-                                placeholder="Select Regional Manager"
-                                labelKey={
-                                    role === 'PM'
-                                        ? 'regional_manager_name'
-                                        : 'name'
-                                }
-                                valueKey={
-                                    role === 'PM' ? 'regional_manager_id' : 'id'
-                                }
-                                value={regionalManagersId}
-                                // disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value, options) => {
-                                    setClinicId(value);
-                                    handleChangeClinic(value, options)
-                                }}
-                                label="Clinic"
-                                options={clinics}
-                                placeholder="Select Clinic"
-                                labelKey="name"
-                                valueKey="id"
-                                value={clinicId}
-                                // disabled={role === "PM" ? true : false || provinceId ? false : true}
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
-                        </div>
-                        <div>
-                            <CustomSelector
                                 onChange={(value) => {
                                     setDocName(value);
                                     handleChangeProvider(value)
@@ -187,6 +125,66 @@ function ViewRequest() {
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
+                        <div></div>
+                        <div>
+                            <CustomSelector
+                                 onChange={(value) => {
+                                    setProvinceId(value);     
+                                    role === "LT" && handleProvice(value);   
+                                }}
+
+                                label="Province"
+                                options={allProvinces}
+                                placeholder="Select Province"
+                                labelKey={
+                                    role === 'PM' ? 'province_name' : 'name'
+                                }
+                                valueKey={role === 'PM' ? 'province_id' : 'id'}
+                                value={provinceId}
+                                disabled={(role === "RM" || role === "PM") ? true : false}
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                            />
+                        </div>
+                        <div>
+                            <CustomSelector
+                                onChange={(value, options) => {
+                                    setRegionalManagersId(value); 
+                                    role === "LT" && handleChangeRM(value)
+                                    // setAllClinics(options?.clinics)
+                                }}
+                                label="Regional Manager"
+                                options={regionalManagers}
+                                placeholder="Select Regional Manager"
+                                labelKey={
+                                    role === 'PM'
+                                        ? 'regional_manager_name'
+                                        : 'name'
+                                }
+                                valueKey={
+                                    role === 'PM' ? 'regional_manager_id' : 'id'
+                                }
+                                value={regionalManagersId}
+                                // disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                            />
+                        </div>
+                        <div>
+                            <CustomSelector
+                                onChange={(value, options) => {
+                                    setClinicId(value);
+                                    role === "LT" && handleChangeClinic(value, options)
+                                }}
+                                label="Clinic"
+                                options={ role === "LT" ? clinics : allClinics}
+                                placeholder="Select Clinic"
+                                labelKey="name"
+                                valueKey="id"
+                                value={clinicId}
+                                // disabled={role === "PM" ? true : false || provinceId ? false : true}
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                            />
+                        </div>
+                        
                         <div className="request_Datepicker">
                             <label className="text-[13px] mb-2 block font-semibold text-[#373940]">
                                 Leave Request Date
@@ -233,7 +231,7 @@ function ViewRequest() {
                                 onChange={(value) => setLeaveStatus(value)}
                             />
                         </div>
-                        <div className="flex items-end justify-end">
+                        <div className="flex items-end">
                             <Button
                                 // text="Clear filters"
                                 text={

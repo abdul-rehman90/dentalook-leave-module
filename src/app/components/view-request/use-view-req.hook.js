@@ -61,47 +61,49 @@ export default function useViewReq() {
 
 
     // get reg and clinic
-    // const clinicByRegionalManager = async () => {
-    //     try{
-    //         const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId}`);
-    //         if(response.status === 200) {
-    //             setRegionalManagers(response?.data?.regional_managers);
-    //         }
-    //     }
-    //     catch (error) {
-    //         console.error("Error fetching provinces:", error);
-    //     }
-    // }
-    // useEffect(()=>{
-    //     if(role === "RM" || role === "LT"){
-    //         if (provinceId) {
-    //             clinicByRegionalManager();
-    //         }
-    //     }
-    // }, [provinceId, role]);
+    const clinicByRegionalManager = async () => {
+        try{
+            const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId}`);
+            if(response.status === 200) {
+                setRegionalManagers(response?.data?.regional_managers);
+            }
+        }
+        catch (error) {
+            console.error("Error fetching provinces:", error);
+        }
+    }
+    useEffect(()=>{
+        if(role === "RM" ){
+            if (provinceId) {
+                clinicByRegionalManager();
+            }
+        }
+    }, [provinceId, role]);
 
     const getProviders = async () => {
         try {
             const response = await axiosInstance.get(`api/v1/provider-by-clinic/${clinicId}`);
             if (response.status === 200) {
-                // setAllProviders(response?.data?.providers)
+                setAllProviders(response?.data?.providers)
             }
         } catch (error) {
             console.error("Error fetching providers:", error);
         }
     }
-    // useEffect(() => {
-    //     if(role === "RM" || role === "LT"){
-    //         if (clinicId) {
-    //             getProviders();
-    //         }
-    //     }
-    // }, [clinicId, role]);
+    useEffect(() => {
+        if(role === "RM"){
+            if (clinicId) {
+                getProviders();
+            }
+        }
+    }, [clinicId, role]);
 
-    // useEffect(()=>{
-    //     const data = allProviders?.filter((item) => item.user_type === docName);
-    //     setAllClinicData(data)
-    // }, [allProviders, docName])
+    useEffect(()=>{
+        if(role === "PM" || role === "RM"){
+            const data = allProviders?.filter((item) => item.user_type === docName);
+            setAllClinicData(data)
+        }
+    }, [allProviders, docName])
 
     const getViewRequests = async () => {
         try {
@@ -147,59 +149,61 @@ export default function useViewReq() {
         }
     }, [])
 
-    // useEffect(() => {
 
-    //         if (role === "RM") {
-    //             setProvinceId(allProvinces[0]?.id);
-    //             if(typeof window !== "undefined"){
-    //                 const userData = JSON.parse(localStorage.getItem('userData'));
-    //                 if(userData) {
-    //                     setRegionalManagersId(userData?.id);
-    //                     const rmObj = regionalManagers?.find(rm => rm.id === userData?.id);
-    //                     if (rmObj && rmObj.clinics) {
-    //                         setAllClinics(rmObj.clinics);
-    //                     }
-    //                 }
-    //             }
-    //         }
+   
+    useEffect(() => {
 
-    //         if(role === "PM"){
-    //             if (userData.provinces && userData.provinces[0] && allProvinces?.length > 0) {
-    //                 const matchedProvince = allProvinces.find(
-    //                 (item) => item.province_name === userData.provinces[0]?.province_name
-    //                 );
-    //                 if (matchedProvince) {
-    //                 setProvinceId(matchedProvince.province_id);
-    //                 }
-    //             }
-    //             // =================
+            if (role === "RM") {
+                setProvinceId(allProvinces[0]?.id);
+                if(typeof window !== "undefined"){
+                    const userData = JSON.parse(localStorage.getItem('userData'));
+                    if(userData) {
+                        setRegionalManagersId(userData?.id);
+                        const rmObj = regionalManagers?.find(rm => rm.id === userData?.id);
+                        if (rmObj && rmObj.clinics) {
+                            setAllClinics(rmObj.clinics);
+                        }
+                    }
+                }
+            }
 
-    //             if (
-    //             userData.regional_managers && userData.regional_managers[0] &&
-    //                 regionalManagers?.length > 0 &&
-    //                 !regionalManagersId 
-    //             ) {
-    //                 const matchedManager = regionalManagers.find(
-    //                 (item) => item.regional_manager_name === userData.regional_managers[0]?.regional_manager_name
-    //                 );
-    //                 if (matchedManager) {
-    //                 setRegionalManagersId(matchedManager.regional_manager_id);
-    //                 setAllClinics(matchedManager.clinics);
-    //                 }
-    //             }
-    //             // ====================
-    //             if (userData.regional_managers && userData.regional_managers[0]?.clinics[0]?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
-    //                 const matchedManager = allClinics?.find(
-    //                 (item) => item.clinic_name.trim().toLowerCase() === userData.regional_managers[0]?.clinics[0].clinic_name.trim().toLowerCase()
-    //                 );
-    //                 if (matchedManager) {
-    //                 setClinicId(matchedManager.clinic_id);
-    //                 }
-    //             }
-    //             }
+            if(role === "PM"){
+                if (userData.provinces && userData.provinces[0] && allProvinces?.length > 0) {
+                    const matchedProvince = allProvinces.find(
+                    (item) => item.province_name === userData.provinces[0]?.province_name
+                    );
+                    if (matchedProvince) {
+                    setProvinceId(matchedProvince.province_id);
+                    }
+                }
+                // =================
 
-    //     },[allProvinces, regionalManagers, allClinics]
-    // );
+                if (
+                userData.regional_managers && userData.regional_managers[0] &&
+                    regionalManagers?.length > 0 &&
+                    !regionalManagersId 
+                ) {
+                    const matchedManager = regionalManagers.find(
+                    (item) => item.regional_manager_name === userData.regional_managers[0]?.regional_manager_name
+                    );
+                    if (matchedManager) {
+                    setRegionalManagersId(matchedManager.regional_manager_id);
+                    setAllClinics(matchedManager.clinics);
+                    }
+                }
+                // ====================
+                if (userData.regional_managers && userData.regional_managers[0]?.clinics[0]?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
+                    const matchedManager = allClinics?.find(
+                    (item) => item.clinic_name.trim().toLowerCase() === userData.regional_managers[0]?.clinics[0].clinic_name.trim().toLowerCase()
+                    );
+                    if (matchedManager) {
+                    setClinicId(matchedManager.clinic_id);
+                    }
+                }
+            }
+        
+        },[allProvinces, regionalManagers, allClinics]
+    );
 
     // get all RM
     const hanleGetAllRM = async () => {
@@ -215,9 +219,11 @@ export default function useViewReq() {
     }
 
     useEffect(() => {
-        hanleGetAllRM();
-        handleGetAllClinic();
-        handleGetAllProviders()
+        if(role === "LT"){
+            hanleGetAllRM();
+            handleGetAllClinic();
+            handleGetAllProviders()
+        }
     }, []);
 
     // get clinics
@@ -265,6 +271,10 @@ export default function useViewReq() {
                 (rm) => rm.provinces && rm.provinces[0]?.id === id
             );
             setRegionalManagers(data);
+            setRegionalManagersId('');
+            setClinicId('');
+            setDocName('');
+            setProviderId('')
         } else {
             setRegionalManagers(allRegionalManagers);
         }
@@ -278,6 +288,9 @@ export default function useViewReq() {
                 (clinic) => clinic.regional_manager && clinic.regional_manager[0]?.id === id
             );
             setClinics(data);
+            setClinicId('');
+            setDocName('');
+            setProviderId('')
         } else {
             setClinics(allClinics);
         }
@@ -307,7 +320,7 @@ export default function useViewReq() {
         }
 
     }
-    console.log(allClinics, "allClinics")
+
     const handleChangeProviderName = (id, options) => {
         setDocName(options?.user_type);
         setProvinceId(options?.provinces ? options?.provinces[0]?.id : "");

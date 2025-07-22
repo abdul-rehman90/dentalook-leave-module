@@ -137,6 +137,33 @@ function StepFour({setCurrentStep}) {
                 subtitle="Please complete the form below to initiate the provider requiring coverages"
               />
               <div className="flex flex-wrap gap-6 py-5">
+                <div className="flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full">
+                  <div className="w-full">
+                    <CustomSelector
+                      onChange={(value) => setDocName(value)}
+                      label="Provider Title"
+                      options={providerTitleOptions}
+                      placeholder="Select Provider Name"
+                      labelKey="name"
+                      value={docName || getData?.provider_type}
+                      disabled={step === "4" ? true : false}
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+                    />
+                  </div>
+                  <div className="w-full">
+                    <CustomSelector
+                      onChange={(value) => setProviderId(value)}
+                      label="Provider Name"
+                      options={allProviders}
+                      placeholder="Select Provider Title"
+                      labelKey="name"
+                      valueKey="id"
+                      value={providerId}
+                      disabled={step === "4" ? true : false}
+                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+                    />
+                  </div>
+                </div>
                 <div className="md:w-[24%] w-full">
                   <CustomSelector
                     onChange={(value) => {
@@ -184,33 +211,7 @@ function StepFour({setCurrentStep}) {
                   />
                 </div>
 
-                <div className="flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full">
-                  <div className="w-full">
-                    <CustomSelector
-                      onChange={(value) => setDocName(value)}
-                      label="Provider Title"
-                      options={providerTitleOptions}
-                      placeholder="Select Provider Name"
-                      labelKey="name"
-                      value={docName || getData?.provider_type}
-                      disabled={step === "4" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
-                    />
-                  </div>
-                  <div className="w-full">
-                    <CustomSelector
-                      onChange={(value) => setProviderId(value)}
-                      label="Provider Name"
-                      options={allProviders}
-                      placeholder="Select Provider Title"
-                      labelKey="name"
-                      valueKey="id"
-                      value={providerId}
-                      disabled={step === "4" ? true : false}
-                      className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
-                    />
-                  </div>
-                </div>
+                
               </div>
 
               <div className="flex flex-wrap md:flex-nowrap gap-4 w-full items-center justify-between py-4">
