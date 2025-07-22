@@ -1,39 +1,40 @@
-'use client'
+'use client';
 
-import { useState } from "react";
-import Heading from "../ui/heading";
-import Button from "../ui/button";
-import CustomSelector from "../ui/selector";
-import Input from "../ui/input";
-import DataTabel from './data-table'
-import useViewReq from "./use-view-req.hook"
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Image from "next/image";
-import loading from "../../../common/assets/icons/loader.svg"
+import { useState } from 'react';
+import Heading from '../ui/heading';
+import Button from '../ui/button';
+import CustomSelector from '../ui/selector';
+import Input from '../ui/input';
+import DataTabel from './data-table';
+import useViewReq from './use-view-req.hook';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import Image from 'next/image';
+import loading from '../../../common/assets/icons/loader.svg';
 
 function ViewRequest() {
     const {
-        provinceId, 
+        provinceId,
         setProvinceId,
         allProvinces,
-        clinicId, 
+        clinicId,
         setClinicId,
         allClinics,
         regionalManagers,
-        regionalManagersId, 
+        regionalManagersId,
         setRegionalManagersId,
-        docName, 
+        docName,
         setDocName,
         allProviders,
-        providerId, 
+        providerId,
         setProviderId,
         getReqData,
         isLoading,
         role,
         allClicnicData,
         handleDateChange,
-        startDate, endDate,
+        startDate,
+        endDate,
         setDateRange,
         setAllClinics,
         leavePlanned, setLeavePlanned,
@@ -48,7 +49,7 @@ function ViewRequest() {
     const [filterLoader, setFilterLoader] = useState(false);
     const handleClearFilter = () => {
         setFilterLoader(true);
-        if (role === "LT") {
+        if (role === 'LT') {
             setProvinceId('');
             setRegionalManagersId('');
             setClinicId('');
@@ -56,9 +57,9 @@ function ViewRequest() {
             setDocName('');
             setProviderId('');
             setLeaveStatus('');
-            setLeavePlanned(''); 
+            setLeavePlanned('');
             setDateRange([null, null]);
-        } else if (role === "RM") {
+        } else if (role === 'RM') {
             setClinicId('');
             setAllClinics([]);
             setDocName('');
@@ -66,7 +67,7 @@ function ViewRequest() {
             setLeaveStatus('');
             setLeavePlanned('');
             setDateRange([null, null]);
-        } else if(role === "PM"){
+        } else if (role === 'PM') {
             setDocName('');
             setProviderId('');
             setLeaveStatus('');
@@ -78,17 +79,15 @@ function ViewRequest() {
         }, 1000);
     };
 
- 
     return (
         <div>
             <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-2 w-full max-w-[1230px] mx-auto">
                 <div>
                     <div className="flex items-start flex-wrap md:flex-nowrap justify-between gap-4 w-full">
                         <Heading
-                            title='View all Leave Requests here'
-                            subtitle='Review all the leave requests submitted here'
+                            title="View all Leave Requests here"
+                            subtitle="Review all the leave requests submitted here"
                         />
-                       
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
                         <div>
@@ -104,8 +103,10 @@ function ViewRequest() {
                                 label="Province"
                                 options={allProvinces}
                                 placeholder="Select Province"
-                                labelKey={role === "PM" ? "province_name" : "name"}
-                                valueKey={role === "PM" ? "province_id" : "id"}
+                                labelKey={
+                                    role === 'PM' ? 'province_name' : 'name'
+                                }
+                                valueKey={role === 'PM' ? 'province_id' : 'id'}
                                 value={provinceId}
                                 // disabled={(role === "RM" || role === "PM") ? true : false}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
@@ -122,8 +123,14 @@ function ViewRequest() {
                                 label="Regional Manager"
                                 options={regionalManagers}
                                 placeholder="Select Regional Manager"
-                                labelKey={role === "PM" ? "regional_manager_name" : "name"}
-                                valueKey={role === "PM" ? "regional_manager_id" : "id"}
+                                labelKey={
+                                    role === 'PM'
+                                        ? 'regional_manager_name'
+                                        : 'name'
+                                }
+                                valueKey={
+                                    role === 'PM' ? 'regional_manager_id' : 'id'
+                                }
                                 value={regionalManagersId}
                                 // disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
@@ -152,7 +159,11 @@ function ViewRequest() {
                                     handleChangeProvider(value)
                                 }}
                                 label="Provider Title"
-                                options={[{name:"DDS", value:"DDS"},{name:"RDH", value:"RDH"},{name:"RDT", value:"RDT"}]}
+                                options={[
+                                    { name: 'DDS', value: 'DDS' },
+                                    { name: 'RDH', value: 'RDH' },
+                                    { name: 'RDT', value: 'RDT' },
+                                ]}
                                 placeholder="Select Provider Title"
                                 labelKey="name"
                                 value={docName}
@@ -177,7 +188,9 @@ function ViewRequest() {
                             />
                         </div>
                         <div className="request_Datepicker">
-                            <label className='text-[13px] mb-2 block font-semibold text-[#373940]'>Leave Request Date</label>
+                            <label className="text-[13px] mb-2 block font-semibold text-[#373940]">
+                                Leave Request Date
+                            </label>
                             <DatePicker
                                 selectsRange={true}
                                 startDate={startDate}
@@ -196,7 +209,7 @@ function ViewRequest() {
                                 label="Leave Type"
                                 options={[
                                     { name: 'Emergency', value: 'emergency' },
-                                    { name: 'Planned', value: 'planned' }
+                                    { name: 'Planned', value: 'planned' },
                                 ]}
                                 placeholder="Select Leave Type"
                                 labelKey="name"
@@ -211,7 +224,7 @@ function ViewRequest() {
                                 options={[
                                     { name: 'Pending', value: 'pending' },
                                     { name: 'Declined', value: 'decline' },
-                                    { name: 'Approved', value: 'approved' }
+                                    { name: 'Approved', value: 'approved' },
                                 ]}
                                 placeholder="Select Status"
                                 labelKey="name"
@@ -220,16 +233,21 @@ function ViewRequest() {
                                 onChange={(value) => setLeaveStatus(value)}
                             />
                         </div>
-                        <div className="flex items-end">
+                        <div className="flex items-end justify-end">
                             <Button
                                 // text="Clear filters"
                                 text={
                                     filterLoader ? (
-                                        <Image src={loading} alt="loading" width={24} height={24} />
+                                        <Image
+                                            src={loading}
+                                            alt="loading"
+                                            width={24}
+                                            height={24}
+                                        />
                                     ) : (
                                         'Clear filters'
                                     )
-                                    }
+                                }
                                 bgcolor={true}
                                 type="button"
                                 disabled={filterLoader}
@@ -237,16 +255,17 @@ function ViewRequest() {
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
-                       
                     </div>
                     <div className="overflow-auto">
-                        <DataTabel getReqData={getReqData} isLoading={isLoading} />
+                        <DataTabel
+                            getReqData={getReqData}
+                            isLoading={isLoading}
+                        />
                     </div>
                 </div>
-
             </div>
         </div>
-    )
+    );
 }
 
-export default ViewRequest
+export default ViewRequest;
