@@ -415,7 +415,7 @@ function StepOne({ onSubmit, onNext }) {
                 <CustomSelector
                   onChange={(value) => {
                     setDocName(value);
-                    handleChangeProvider(value)
+                    role === "LT" && handleChangeProvider(value)
                   }}
                   label="Provider Title"
                   options={[
@@ -426,7 +426,7 @@ function StepOne({ onSubmit, onNext }) {
                   placeholder="Select Provider Title"
                   labelKey="name"
                   value={docName}
-                  disabled={(role === 'RM') || (role === 'PM') || (formId ? true : false)}
+                  disabled={formId ? true : false}
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
               </div>
@@ -434,7 +434,7 @@ function StepOne({ onSubmit, onNext }) {
                 <CustomSelector
                   onChange={(value, options) => {
                     setProviderId(value);
-                    handleChangeProviderName(value, options)
+                    role === "LT" && handleChangeProviderName(value, options)
                   }}
                   label="Provider Name"
                   options={allClicnicData}
@@ -442,7 +442,7 @@ function StepOne({ onSubmit, onNext }) {
                   labelKey="name"
                   valueKey="id"
                   value={providerId}
-                  disabled={formId ? true : false}
+                  disabled={formId ? true : false }
 
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
@@ -463,9 +463,8 @@ function StepOne({ onSubmit, onNext }) {
                   }
                   valueKey={role === 'PM' ? 'province_id' : 'id'}
                   value={provinceId}
-                  // disabled={(role === "RM" || role === "PM") ? true : false}
+                  disabled={(role === "RM" || role === "PM") ? true : false || (formId ? true : false)}
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                  disabled={formId ? true : false}
                 />
               </div>
               <div>
@@ -478,17 +477,10 @@ function StepOne({ onSubmit, onNext }) {
                   label="Regional Manager"
                   options={regionalManagers}
                   placeholder="Select Regional Manager"
-                  labelKey={
-                    role === 'PM'
-                      ? 'regional_manager_name'
-                      : 'name'
-                  }
-                  valueKey={
-                    role === 'PM' ? 'regional_manager_id' : 'id'
-                  }
+                  labelKey={ role === 'PM' ? 'regional_manager_name' : 'name'}
+                  valueKey={ role === 'PM' ? 'regional_manager_id' : 'id'}
                   value={regionalManagersId}
-                  disabled={formId ? true : false}
-                  // disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
+                  disabled={(role === "RM" || role === "PM") ? true : false || (formId ? true : false)}
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
               </div>
@@ -501,12 +493,11 @@ function StepOne({ onSubmit, onNext }) {
                   label="Clinic"
                   options={role === "LT" ? clinics : allClinics}
                   placeholder="Select Clinic"
-                  labelKey={role === "LT" ? "name" : "_name" }
-                  valueKey={role === "LT" ? "id" : "id" }
+                  labelKey={role === "LT" ? "name" : (role === "PM" || role === "RM") ? "clinic_name" : "name" }
+                  valueKey={role === "LT" ? "id" : (role === "PM" || role === "RM" )? "clinic_id" : "id" }
                  
                   value={clinicId}
-                  disabled={formId ? true : false}
-                  // disabled={role === "PM" ? true : false || provinceId ? false : true}
+                  disabled={(role === "PM") ? true : false || (formId ? true : false)}
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
               </div>

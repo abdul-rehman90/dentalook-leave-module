@@ -91,7 +91,7 @@ export default function useViewReq() {
         }
     }
     useEffect(() => {
-        if(role === "RM"){
+        if(role === "RM" || role === "PM"){
             if (clinicId) {
                 getProviders();
             }

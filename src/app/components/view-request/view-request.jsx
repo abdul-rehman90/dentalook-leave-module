@@ -94,7 +94,7 @@ function ViewRequest() {
                             <CustomSelector
                                 onChange={(value) => {
                                     setDocName(value);
-                                    handleChangeProvider(value)
+                                    role === "LT" && handleChangeProvider(value)
                                 }}
                                 label="Provider Title"
                                 options={[
@@ -105,7 +105,7 @@ function ViewRequest() {
                                 placeholder="Select Provider Title"
                                 labelKey="name"
                                 value={docName}
-                                // disabled={clinicId ? false : true }
+                   
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
@@ -113,7 +113,7 @@ function ViewRequest() {
                             <CustomSelector
                                 onChange={(value, options) => {
                                     setProviderId(value); 
-                                    handleChangeProviderName(value, options)
+                                    role === "LT" && handleChangeProviderName(value, options)
                                 }}
                                 label="Provider Name"
                                 options={allClicnicData}
@@ -121,16 +121,16 @@ function ViewRequest() {
                                 labelKey="name"
                                 valueKey="id"
                                 value={providerId}
-                                // disabled={docName ? false : true}
+                              
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
                         <div></div>
                         <div>
                             <CustomSelector
-                                 onChange={(value) => {
-                                    setProvinceId(value);     
-                                    role === "LT" && handleProvice(value);   
+                                onChange={(value) => {
+                                   setProvinceId(value);
+                                    role === "LT" && handleProvice(value);
                                 }}
 
                                 label="Province"
@@ -164,7 +164,7 @@ function ViewRequest() {
                                     role === 'PM' ? 'regional_manager_id' : 'id'
                                 }
                                 value={regionalManagersId}
-                                // disabled={role === "RM" || role === "PM" ? true : false || provinceId ? false : true}
+                                disabled={(role === "RM" || role === "PM") ? true : false }
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
@@ -177,10 +177,10 @@ function ViewRequest() {
                                 label="Clinic"
                                 options={ role === "LT" ? clinics : allClinics}
                                 placeholder="Select Clinic"
-                                labelKey="name"
-                                valueKey="id"
+                                labelKey={role === "LT" ? "name" : (role === "PM" || role === "RM") ? "clinic_name" : "name" }
+                                valueKey={role === "LT" ? "id" : (role === "PM" || role === "RM" )? "clinic_id" : "id" }
                                 value={clinicId}
-                                // disabled={role === "PM" ? true : false || provinceId ? false : true}
+                                disabled={(role === "PM") ? true : false }
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>

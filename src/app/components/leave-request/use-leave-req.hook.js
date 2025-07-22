@@ -48,6 +48,7 @@ export default function useLeaveReq() {
             const response = await axiosInstance.get(`api/v1/clinic-by-regional-manager/${provinceId}`);
             if(response.status === 200) {
                 setRegionalManagers(response?.data?.regional_managers);
+                console.log(response?.data?.regional_managers, "...response?.data?.regional_managers")
             }
         }
         catch (error) {
@@ -64,21 +65,23 @@ export default function useLeaveReq() {
 
    
     // get providers
-    // const getProviders = async () => {
-    //     try {
-    //         const response = await axiosInstance.get(`api/v1/provider-by-clinic/${clinicId}`);
-    //         if(response.status === 200) {
-    //             setAllProviders(response?.data?.providers)
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching providers:", error);
-    //     }
-    // }
-    // useEffect(() => {
-    //     if (clinicId) {
-    //         getProviders();
-    //     }
-    // }, [clinicId]);
+    const getProviders = async () => {
+        try {
+            const response = await axiosInstance.get(`api/v1/provider-by-clinic/${clinicId}`);
+            if(response.status === 200) {
+                setAllProviders(response?.data?.providers)
+            }
+        } catch (error) {
+            console.error("Error fetching providers:", error);
+        }
+    }
+    useEffect(() => {
+        if(role === "RM" || role === "PM"){
+            if (clinicId) {
+                getProviders();
+            }
+        }
+    }, [clinicId]);
 
     useEffect(()=>{
         if(role === "PM" || role === "RM"){
