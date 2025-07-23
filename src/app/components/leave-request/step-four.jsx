@@ -103,7 +103,6 @@ function StepFour({setCurrentStep}) {
       }
 
       if (getData?.days && getData?.days?.length > 0) {
-        // setRows(getData.days);
         setRows(
           getData.days.map((row) => ({
             ...row,
@@ -296,7 +295,7 @@ function StepFour({setCurrentStep}) {
                       />
                     </div>
                     <div className='md:w-[25%] w-full pb-3 pt-3'>
-                      <CustomSelector
+                      {/* <CustomSelector
                         label={index === 0 && "Covering Provider Name"}
                         options={coverageProviderList}
                         placeholder="Select Type"
@@ -309,10 +308,24 @@ function StepFour({setCurrentStep}) {
                           handleChange(index, "coverage_provider", value)
                         }
                         labelKey="name"
-                        valueKey="id"
+                        valueKey="name"
                         disabled={row.coverage_needed === "no" || step === "4" ? true : false}
                         className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                         
+                      /> */}
+
+                      <Input
+                        label={index === 0 && "Covering Provider Name"}
+                        placeholder="Enter Coverage"
+                        name="coverage_provider"
+                        value={
+                          typeof row.coverage_provider === "object" && row.coverage_provider !== null
+                          ? row.coverage_provider.name
+                          : row.coverage_provider
+                        }
+                       
+                        disabled
+                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
                     <div className='md:w-[19%] w-full pb-3 pt-3'>

@@ -44,6 +44,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
           name: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.name
           ),
+          city: item?.days?.map(
+            (nestedDay) => nestedDay?.coverage_provider?.city
+          ),
           reason: item?.days?.map(
             (nestedDay) => nestedDay?.coverage_provider?.provider_coverage
           ),
@@ -334,7 +337,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                             coverage_provider: provider,
                                             clinic_name: item.clinic_name[index],
                                             regional_manager: item.regional_manager[index],
-                                            name: item.name[index]
+                                            name: item.name[index],
+                                            city: item.city[index]
                                           });
                                           e.stopPropagation();
                                         }}
@@ -420,7 +424,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                 (modelData.reason.includes("External")) && (
                   <div className="flex gap-3 justify-between">
                     <strong>City:</strong>
-                    <p>{modelData.name}</p>
+                    <p>{modelData.city}</p>
                   </div>
                 )}
               

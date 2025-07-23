@@ -444,6 +444,7 @@ function StepOne({ onSubmit, onNext }) {
                     labelKey="name"
                     valueKey="id"
                     value={providerId}
+                    showSearch={true}
                     disabled={formId ? true : false }
 
                     className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
@@ -483,6 +484,7 @@ function StepOne({ onSubmit, onNext }) {
                   labelKey={ role === 'PM' ? 'regional_manager_name' : 'name'}
                   valueKey={ role === 'PM' ? 'regional_manager_id' : 'id'}
                   value={regionalManagersId}
+                  showSearch={true}
                   disabled={(role === "RM" || role === "PM") ? true : false || (formId ? true : false)}
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
@@ -498,7 +500,7 @@ function StepOne({ onSubmit, onNext }) {
                   placeholder="Select Clinic"
                   labelKey={role === "LT" ? "name" : (role === "PM" || role === "RM") ? "clinic_name" : "name" }
                   valueKey={role === "LT" ? "id" : (role === "PM" || role === "RM" )? "clinic_id" : "id" }
-                 
+                  showSearch={true}
                   value={clinicId}
                   disabled={(role === "PM") ? true : false || (formId ? true : false)}
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"

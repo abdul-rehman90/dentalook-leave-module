@@ -147,7 +147,7 @@ function ViewRequest() {
                                     labelKey="name"
                                     valueKey="id"
                                     value={providerId}
-                                
+                                    showSearch={true}
                                     className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                                 />
                             </div>
@@ -190,6 +190,7 @@ function ViewRequest() {
                                 valueKey={
                                     role === 'PM' ? 'regional_manager_id' : 'id'
                                 }
+                                showSearch={true}
                                 value={regionalManagersId}
                                 disabled={(role === "RM" || role === "PM") ? true : false }
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
@@ -207,6 +208,7 @@ function ViewRequest() {
                                 labelKey={role === "LT" ? "name" : (role === "PM" || role === "RM") ? "clinic_name" : "name" }
                                 valueKey={role === "LT" ? "id" : (role === "PM" || role === "RM" )? "clinic_id" : "id" }
                                 value={clinicId}
+                                showSearch={true}
                                 disabled={(role === "PM") ? true : false }
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
