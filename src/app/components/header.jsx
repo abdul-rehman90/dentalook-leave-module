@@ -85,7 +85,7 @@ function Header() {
             {
               pathname === "/reports" ? "Dental Look Leave Reports" : 
               pathname === "/view-request" ? "Provider Leave Request Dashboard" : 
-              pathname === "/leave-request" ? "Dental Look Provider Leave Request Application" : ""
+              pathname === "/leave-request" ? "Dentalook Provider Leave Request Application" : ""
             }
           </Link>
 

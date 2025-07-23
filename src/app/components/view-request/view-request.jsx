@@ -83,50 +83,77 @@ function ViewRequest() {
         <div>
             <div className="p-5 border border-[#E6EAEE] rounded-2xl mt-2 w-full max-w-[1230px] mx-auto">
                 <div>
-                    <div className="flex items-start flex-wrap md:flex-nowrap justify-between gap-4 w-full">
-                        <Heading
-                            title="View all Leave Requests here"
-                            subtitle="Review all the leave requests submitted here"
-                        />
+                    <div className="flex justify-between md:flex-row flex-col gap-4 w-full">
+                        <div>
+                            <Heading
+                                title="View all Leave Requests here"
+                                subtitle="Review all the leave requests submitted here"
+                            />
+                        </div>
+                        <div>
+                            <Button
+                                // text="Clear filters"
+                                text={
+                                    filterLoader ? (
+                                        <Image
+                                            src={loading}
+                                            alt="loading"
+                                            width={24}
+                                            height={24}
+                                        />
+                                    ) : (
+                                        'Clear filters'
+                                    )
+                                }
+                                bgcolor={true}
+                                type="button"
+                                disabled={filterLoader}
+                                onClick={handleClearFilter}
+                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                            />
+                        </div>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-                        <div>
-                            <CustomSelector
-                                onChange={(value) => {
-                                    setDocName(value);
-                                    role === "LT" && handleChangeProvider(value)
-                                }}
-                                label="Provider Title"
-                                options={[
-                                    { name: 'DDS', value: 'DDS' },
-                                    { name: 'RDH', value: 'RDH' },
-                                    { name: 'RDT', value: 'RDT' },
-                                ]}
-                                placeholder="Select Provider Title"
-                                labelKey="name"
-                                value={docName}
-                   
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
+                    <div className="flex flex-wrap gap-5 py-5">
+                        <div className='flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[98.5%] w-full'>
+
+                            <div className=' w-full'>
+                                <CustomSelector
+                                    onChange={(value) => {
+                                        setDocName(value);
+                                        role === "LT" && handleChangeProvider(value)
+                                    }}
+                                    label="Provider Title"
+                                    options={[
+                                        { name: 'DDS', value: 'DDS' },
+                                        { name: 'RDH', value: 'RDH' },
+                                        { name: 'RDT', value: 'RDT' },
+                                    ]}
+                                    placeholder="Select Provider Title"
+                                    labelKey="name"
+                                    value={docName}
+                    
+                                    className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                                />
+                            </div>
+                            <div className=' w-full'>
+                                <CustomSelector
+                                    onChange={(value, options) => {
+                                        setProviderId(value); 
+                                        role === "LT" && handleChangeProviderName(value, options)
+                                    }}
+                                    label="Provider Name"
+                                    options={allClicnicData}
+                                    placeholder="Select Provider Name"
+                                    labelKey="name"
+                                    valueKey="id"
+                                    value={providerId}
+                                
+                                    className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <CustomSelector
-                                onChange={(value, options) => {
-                                    setProviderId(value); 
-                                    role === "LT" && handleChangeProviderName(value, options)
-                                }}
-                                label="Provider Name"
-                                options={allClicnicData}
-                                placeholder="Select Provider Name"
-                                labelKey="name"
-                                valueKey="id"
-                                value={providerId}
-                              
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
-                        </div>
-                        <div></div>
-                        <div>
+                 
+                        <div className='md:w-[31.5%] w-full'>
                             <CustomSelector
                                 onChange={(value) => {
                                    setProvinceId(value);
@@ -145,7 +172,7 @@ function ViewRequest() {
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
-                        <div>
+                        <div className='md:w-[31.5%] w-full'>
                             <CustomSelector
                                 onChange={(value, options) => {
                                     setRegionalManagersId(value); 
@@ -168,7 +195,7 @@ function ViewRequest() {
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
                         </div>
-                        <div>
+                        <div className='md:w-[31.5%] w-full'>
                             <CustomSelector
                                 onChange={(value, options) => {
                                     setClinicId(value);
@@ -185,7 +212,7 @@ function ViewRequest() {
                             />
                         </div>
                         
-                        <div className="request_Datepicker">
+                        <div className="request_Datepicker md:w-[31.5%] w-full">
                             <label className="text-[13px] mb-2 block font-semibold text-[#373940]">
                                 Leave Request Date
                             </label>
@@ -199,10 +226,10 @@ function ViewRequest() {
                                     handleDateChange(update);
                                 }}
                                 isClearable={true}
-                                className="w-full flex rounded-[8px] items-center justify-between bg-transparent border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F]"
+                                className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between bg-transparent border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F]"
                             />
                         </div>
-                        <div>
+                        <div className='md:w-[31.5%] w-full'>
                             <CustomSelector
                                 label="Leave Type"
                                 options={[
@@ -216,7 +243,7 @@ function ViewRequest() {
                                 onChange={(value) => setLeavePlanned(value)}
                             />
                         </div>
-                        <div>
+                        <div className='md:w-[31.5%] w-full'>
                             <CustomSelector
                                 label="Status"
                                 options={[
@@ -231,28 +258,7 @@ function ViewRequest() {
                                 onChange={(value) => setLeaveStatus(value)}
                             />
                         </div>
-                        <div className="flex items-end">
-                            <Button
-                                // text="Clear filters"
-                                text={
-                                    filterLoader ? (
-                                        <Image
-                                            src={loading}
-                                            alt="loading"
-                                            width={24}
-                                            height={24}
-                                        />
-                                    ) : (
-                                        'Clear filters'
-                                    )
-                                }
-                                bgcolor={true}
-                                type="button"
-                                disabled={filterLoader}
-                                onClick={handleClearFilter}
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
-                        </div>
+                        
                     </div>
                     <div className="overflow-auto">
                         <DataTabel

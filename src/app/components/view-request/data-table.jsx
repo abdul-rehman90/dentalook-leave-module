@@ -257,10 +257,10 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                 return (
                                   <div key={index} className='whitespace-nowrap'>
                                     {
-                                      item?.status === 'decline' ? null : 
-                                      <span
-                                        className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
-                                      />
+                                      item?.status === 'decline' ? null : ""
+                                      // <span
+                                      //   className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
+                                      // /> 
                                     }
                                     
                                     {item?.status === 'decline' ? "" : "No Coverage Needed"}
@@ -273,14 +273,19 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               ) {
                                 return (
                                   <div key={index} className='whitespace-nowrap'>
-                                    <span
+                                    {/* <span
                                       className={`w-2 h-2 inline-block rounded-full bg-orange-400 mr-1`}
-                                    />
+                                    /> */}
                                     Looking for Coverage
                                   </div>
                                 );
                               }
-                              return <div key={index}>{detail}</div>;
+                              return <div key={index}>
+                                <span
+                                  className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
+                                />
+                                {detail}
+                                </div>;
                             })}
                           </>
                         }
@@ -404,9 +409,17 @@ export default function LeaveTable({ getReqData, isLoading }) {
                 )
               }
               {
-                (modelData.reason.includes("ACE") || modelData.reason.includes("External")) && (
+                (modelData.reason.includes("ACE")) && (
                   <div className="flex gap-3 justify-between">
                     <strong>Name:</strong>
+                    <p>{modelData.name}</p>
+                  </div>
+                )}
+
+{
+                (modelData.reason.includes("External")) && (
+                  <div className="flex gap-3 justify-between">
+                    <strong>City:</strong>
                     <p>{modelData.name}</p>
                   </div>
                 )}

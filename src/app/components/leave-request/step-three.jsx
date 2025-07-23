@@ -46,7 +46,7 @@ function StepThree({ onNext }) {
     setProvinceId2,
     regionalManagersId2,
     setRegionalManagersId2,
-    setAllClinics
+    setAllClinics,
   } = useStepThree();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -221,6 +221,10 @@ function StepThree({ onNext }) {
     }
   };
 
+  const handleGetProviderList = (item) => {
+    providerList(item)
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -229,7 +233,7 @@ function StepThree({ onNext }) {
             <div>
               <Heading
                 title="Provider Requiring Coverage"
-                subtitle="Please complete the form below to initiate the provider requiring coverages"
+                subtitle=""
               />
               <div className="flex flex-wrap gap-6 py-5">
                 <div className="flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full">
@@ -312,7 +316,10 @@ function StepThree({ onNext }) {
               <div className="my-3 w-full bg-[#E6EAEE] h-[1px]" />
 
               <div className="flex flex-wrap md:flex-nowrap gap-4 w-full items-center justify-between py-4">
-                <Heading title="Add Leave Details" />
+                <Heading 
+                  title="Secure Coverage Details" 
+                  subtitle="Please complete the form below to add coverage details for the following leave request" 
+                />
                 <button
                   type="button"
                   onClick={() => setOpen(true)}
@@ -331,10 +338,10 @@ function StepThree({ onNext }) {
                       index !== rows.length - 1 ? 'border-b border-[#D9DADF]' : ''
                     }`}
                   >
-                    <div className="flex flex-col gap-2 md:w-[15%] w-full pb-3 pt-3">
+                    <div className="flex flex-col gap-2 md:w-[18%] w-full pb-3 pt-3">
                       {
                         index === 0 &&
-                        <label className="text-[13px] text-[#373940] font-medium block">
+                        <label className="text-[13px] text-[#373940] font-bold block">
                           Leave Date
                         </label>
                       }
@@ -348,7 +355,7 @@ function StepThree({ onNext }) {
                         showYearDropdown
                         dropdownMode="select"
                         dateFormat="YYYY-MM-dd"
-                        className="py-[8px] disabled:cursor-not-allowed w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                        className="py-[8px] bg-white text-[#000] disabled:cursor-not-allowed w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                         name="leave_date"
                         onChange={(date) => {
                           const formatted = date
@@ -376,7 +383,7 @@ function StepThree({ onNext }) {
                         className='disabled:cursor-not-allowed'
                       />
                     </div>
-                    <div className='md:w-[22%] w-full pb-3 pt-3'>
+                    <div className='md:w-[18%] w-full pb-3 pt-3'>
                       <CustomSelector
                         label={index === 0 && "Coverage Needed"}
                         options={[
@@ -398,7 +405,7 @@ function StepThree({ onNext }) {
                         }
                       />
                     </div>
-                    <div className='md:w-[24%] w-full pb-3 pt-3' >
+                    <div className='md:w-[25%] w-full pb-3 pt-3' >
                       <CustomSelector
                         label={index === 0 && "Covering Provider Name"}
                         options={coverageProviderList}
@@ -413,6 +420,7 @@ function StepThree({ onNext }) {
                           handleChange(index, 'coverage_provider', option);
                           setCoverageType(option);
                         }}
+                        onOpen={() => handleGetProviderList(row.leave_date)}
                         labelKey="name"
                         valueKey="id"
                         disabled={
@@ -423,7 +431,7 @@ function StepThree({ onNext }) {
                         className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                       />
                     </div>
-                    <div className='md:w-[20%] w-full pb-3 pt-3'>
+                    <div className='md:w-[19%] w-full pb-3 pt-3'>
                       <CustomSelector
                         label={index === 0 && "Coverage Type"}
                         options={[

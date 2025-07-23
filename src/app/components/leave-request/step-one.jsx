@@ -410,45 +410,48 @@ function StepOne({ onSubmit, onNext }) {
               </div>
             </div> */}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-5">
-              <div>
-                <CustomSelector
-                  onChange={(value) => {
-                    setDocName(value);
-                    role === "LT" && handleChangeProvider(value)
-                  }}
-                  label="Provider Title"
-                  options={[
-                    { name: 'DDS', value: 'DDS' },
-                    { name: 'RDH', value: 'RDH' },
-                    { name: 'RDT', value: 'RDT' },
-                  ]}
-                  placeholder="Select Provider Title"
-                  labelKey="name"
-                  value={docName}
-                  disabled={formId ? true : false}
-                  className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                />
-              </div>
-              <div>
-                <CustomSelector
-                  onChange={(value, options) => {
-                    setProviderId(value);
-                    role === "LT" && handleChangeProviderName(value, options)
-                  }}
-                  label="Provider Name"
-                  options={allClicnicData}
-                  placeholder="Select Provider Name"
-                  labelKey="name"
-                  valueKey="id"
-                  value={providerId}
-                  disabled={formId ? true : false }
+            <div className="flex flex-wrap gap-5 py-5">
+              <div className='flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full'>
 
-                  className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                />
+                <div className='w-full'>
+                  <CustomSelector
+                    onChange={(value) => {
+                      setDocName(value);
+                      role === "LT" && handleChangeProvider(value)
+                    }}
+                    label="Provider Title"
+                    options={[
+                      { name: 'DDS', value: 'DDS' },
+                      { name: 'RDH', value: 'RDH' },
+                      { name: 'RDT', value: 'RDT' },
+                    ]}
+                    placeholder="Select Provider Title"
+                    labelKey="name"
+                    value={docName}
+                    disabled={formId ? true : false}
+                    className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                  />
+                </div>
+                <div className='w-full'>
+                  <CustomSelector
+                    onChange={(value, options) => {
+                      setProviderId(value);
+                      role === "LT" && handleChangeProviderName(value, options)
+                    }}
+                    label="Provider Name"
+                    options={allClicnicData}
+                    placeholder="Select Provider Name"
+                    labelKey="name"
+                    valueKey="id"
+                    value={providerId}
+                    disabled={formId ? true : false }
+
+                    className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                  />
+                </div>
               </div>
-              <div></div>
-              <div>
+ 
+              <div className='md:w-[31.5%] w-full'>
                 <CustomSelector
                   onChange={(value) => {
                     setProvinceId(value);
@@ -467,7 +470,7 @@ function StepOne({ onSubmit, onNext }) {
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
               </div>
-              <div>
+              <div className='md:w-[31.5%] w-full'>
                 <CustomSelector
                   onChange={(value, options) => {
                     setRegionalManagersId(value);
@@ -484,7 +487,7 @@ function StepOne({ onSubmit, onNext }) {
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
               </div>
-              <div>
+              <div className='md:w-[31.5%] w-full'>
                 <CustomSelector
                   onChange={(value, options) => {
                     setClinicId(value);
@@ -543,7 +546,7 @@ function StepOne({ onSubmit, onNext }) {
                         showYearDropdown
                         dropdownMode="select"
                         dateFormat="YYYY-MM-dd"
-                        className="py-[8px] w-full px-4 text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                        className="py-[8px] w-full px-4 bg-white text-[#000] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                         name="leave_date"
                         onChange={(date) => {
                           const formatted = date
@@ -578,7 +581,7 @@ function StepOne({ onSubmit, onNext }) {
                         </label>
                       }
                       <textarea rows={1} value={row.reason} typ="text" placeholder="Enter Reason" name="reason"
-                        className="disabled:cursor-not-allowed mt-[10px] w-full disabled:opacity-[0.8] py-[8px] px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                        className="disabled:cursor-not-allowed bg-white text-[#000] mt-[10px] w-full disabled:opacity-[0.8] py-[8px] px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                         onChange={(e) =>
                           handleChange(index, 'reason', e.target.value)
                         }>

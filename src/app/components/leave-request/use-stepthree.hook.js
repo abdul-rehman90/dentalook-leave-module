@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Cookies from "js-cookie";
 import axios from 'axios';
 import axiosInstance from '../../../utils/axios-instance';
+import { useSearchParams } from 'next/navigation';
 
 export default function useStepThree() {
     const [provinceId, setProvinceId] = useState('');
@@ -91,12 +92,12 @@ export default function useStepThree() {
     const getLeaveDeatils = async (id) => {
         // setIsLoading(true);
         try {
-        const response = await axiosInstance.get(
-            `api/v1/leave-requests/${id}`
-        );
-        if (response.status === 200) {
-            setGetData(response?.data);
-        }
+            const response = await axiosInstance.get(
+                `api/v1/leave-requests/${id}`
+            );
+            if (response.status === 200) {
+                setGetData(response?.data);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -116,9 +117,10 @@ export default function useStepThree() {
 
     const [coverageProviderList, setCoverageProviderList] = useState([]);
 
-    const providerList = async () => {
+    const providerList = async (item) => {
         try {
-            const response = await axiosInstance.get(`api/v1/provider-list/`);
+            const response = await
+            axiosInstance.get(`api/v1/provider-list/?provider_title=${getData?.provider_name?.user_type}&date=${item}`);
             if(response.status === 200) {
                 setCoverageProviderList(response?.data)
             }
@@ -127,15 +129,11 @@ export default function useStepThree() {
         }
     }
 
-    useEffect(() => {
-       if(token) {
-            providerList();
-        }
-    }, [token]);
-
-
-   
-        
+    // useEffect(() => {
+    //    if(getData !== undefined) {
+    //         providerList();
+    //     }
+    // }, [getData]);
 
     return {
         allProvinces,

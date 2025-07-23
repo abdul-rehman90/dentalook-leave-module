@@ -13,12 +13,14 @@ const CustomSelector = ({
     value,
     disabled = false,
     className = '',
-    showSearch = false, // NEW PROP
+    showSearch = false,
+    handleClick,
+    onOpen
 }) => {
-    const [isOpen, setIsOpen] = useState(false);
+
     const [searchTerm, setSearchTerm] = useState('');
     const selectorRef = useRef(null);
-
+    const [isOpen, setIsOpen] = useState(false);
     const selected = options?.find(option => option[valueKey] === value) || null;
 
     const handleSelect = (option) => {
@@ -45,17 +47,25 @@ const CustomSelector = ({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    const handleButtonClick = () => {
+        if (!isOpen) {
+            onOpen && onOpen();
+        }
+        setIsOpen(!isOpen);
+        handleClick && handleClick();
+    };
+
     return (
         <div ref={selectorRef} className="relative w-full flex flex-col gap-2 custom__class">
             {label && <label className='text-[13px] text-[#373940] font-semibold'>{label}</label>}
             <div className='w-full'>
                 <button
                     type='button'
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={handleButtonClick}
                     disabled={disabled}
-                    className={`${className} w-full flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-[8px] px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F] ${selectorstyle || ''}`}
+                    className={`${className} w-full bg-white flex items-center justify-between bg-transparent border border-[#D9DADF] rounded-[8px] px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F] ${selectorstyle || ''}`}
                 >
-                    <span className='text-[#1f1f1fa9]'>
+                    <span className='text-[#000]'>
                         {selected ? selected[labelKey] : placeholder}
                     </span>
                     <ChevronDown className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} size={18} />
