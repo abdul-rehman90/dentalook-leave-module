@@ -266,7 +266,12 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                       // /> 
                                     }
                                     
-                                    {item?.status === 'decline' ? "" : "No Coverage Needed"}
+                                    {item?.status === 'decline' ? "" : <>
+                                    <span
+                                      className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
+                                    />
+                                    No Coverage Needed
+                                    </>}
                                   </div>
                                 );
                               }
@@ -276,9 +281,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               ) {
                                 return (
                                   <div key={index} className='whitespace-nowrap'>
-                                    {/* <span
+                                    <span
                                       className={`w-2 h-2 inline-block rounded-full bg-orange-400 mr-1`}
-                                    /> */}
+                                    />
                                     Looking for Coverage
                                   </div>
                                 );
