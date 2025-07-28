@@ -1,26 +1,26 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import Heading from '../ui/heading';
-import CustomSelector from '../ui/selector';
-import Input from '../ui/input';
-import { Plus, X } from 'lucide-react';
-import useLeaveReq from './use-leave-req.hook';
-import Button from '../ui/button';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import loading from '../../../common/assets/icons/loader.svg';
-import Image from 'next/image';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import toast from 'react-hot-toast';
-import { format } from 'date-fns';
-import { useRouter } from 'next/navigation';
-import axiosInstance from '../../../utils/axios-instance';
+"use client";
+import React, { useEffect, useState } from "react";
+import Heading from "../ui/heading";
+import CustomSelector from "../ui/selector";
+import Input from "../ui/input";
+import { Plus, X } from "lucide-react";
+import useLeaveReq from "./use-leave-req.hook";
+import Button from "../ui/button";
+import axios from "axios";
+import Cookies from "js-cookie";
+import loading from "../../../common/assets/icons/loader.svg";
+import Image from "next/image";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import toast from "react-hot-toast";
+import { format } from "date-fns";
+import { useRouter } from "next/navigation";
+import axiosInstance from "../../../utils/axios-instance";
 
 function StepOne({ onSubmit, onNext }) {
   const router = useRouter();
-  const token = Cookies.get('access-token');
-  const role = Cookies.get('role');
+  const token = Cookies.get("access-token");
+  const role = Cookies.get("role");
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -50,10 +50,8 @@ function StepOne({ onSubmit, onNext }) {
     clinics,
     handleChangeClinic,
     handleChangeProvider,
-    handleChangeProviderName
+    handleChangeProviderName,
   } = useLeaveReq();
-
-
 
   // Update field values
   const handleChange = (index, field, value) => {
@@ -63,7 +61,7 @@ function StepOne({ onSubmit, onNext }) {
   };
 
   const handleAddRow = () => {
-    setRows([...rows, { leave_date: '', leave_type: '', reason: '' }]);
+    setRows([...rows, { leave_date: "", leave_type: "", reason: "" }]);
   };
   const lastRow = rows[rows.length - 1];
   const canAddRow = lastRow.leave_date && lastRow.leave_type && lastRow.reason;
@@ -71,23 +69,23 @@ function StepOne({ onSubmit, onNext }) {
     e.preventDefault();
     // Sequential validation
     if (!provinceId) {
-      toast.error('Please select Province');
+      toast.error("Please select Province");
       return;
     }
     if (!regionalManagersId) {
-      toast.error('Please select Regional Manager');
+      toast.error("Please select Regional Manager");
       return;
     }
     if (!clinicId) {
-      toast.error('Please select Clinic');
+      toast.error("Please select Clinic");
       return;
     }
     if (!docName) {
-      toast.error('Please select Provider Title');
+      toast.error("Please select Provider Title");
       return;
     }
     if (!providerId) {
-      toast.error('Please select Provider Name');
+      toast.error("Please select Provider Name");
       return;
     }
     // Validate leave rows
@@ -113,10 +111,9 @@ function StepOne({ onSubmit, onNext }) {
       leave_requests: rows?.map((row) => ({
         leave_date: row.leave_date,
         leave_type: row.leave_type,
-        reason: row.reason
-      }))
+        reason: row.reason,
+      })),
     };
-
 
     try {
       const response = await axiosInstance.post(
@@ -124,7 +121,7 @@ function StepOne({ onSubmit, onNext }) {
         paylaod
       );
       if (response.status === 201) {
-        localStorage.setItem('leaveRequestId', response.data?.id);
+        localStorage.setItem("leaveRequestId", response.data?.id);
         onNext();
         router.replace(`${window.location.pathname}?step=2`);
       }
@@ -141,7 +138,7 @@ function StepOne({ onSubmit, onNext }) {
           });
         });
       } else {
-        toast.error('An error occurred');
+        toast.error("An error occurred");
       }
     } finally {
       setIsLoading(false);
@@ -174,8 +171,8 @@ function StepOne({ onSubmit, onNext }) {
       leave_requests: rows?.map((row) => ({
         leave_date: row.leave_date,
         leave_type: row.leave_type,
-        reason: row.reason
-      }))
+        reason: row.reason,
+      })),
     };
     try {
       const response = await axiosInstance.patch(
@@ -194,26 +191,24 @@ function StepOne({ onSubmit, onNext }) {
   };
 
   const providerTitleOptions = [
-    { name: 'DDS', value: 'DDS' },
-    { name: 'RDH', value: 'RDH' },
-    { name: 'RDT', value: 'RDT' }
+    { name: "DDS", value: "DDS" },
+    { name: "RDH", value: "RDH" },
+    { name: "RDT", value: "RDT" },
   ];
   useEffect(() => {
-    if (role === 'RM') {
+    if (role === "RM") {
       setProvinceId(allProvinces[0]?.id);
       if (typeof window !== "undefined") {
-        const userData = JSON.parse(localStorage.getItem('userData'));
+        const userData = JSON.parse(localStorage.getItem("userData"));
         if (userData) {
           setRegionalManagersId(userData?.id);
-          const rmObj = regionalManagers?.find(rm => rm.id === userData?.id);
+          const rmObj = regionalManagers?.find((rm) => rm.id === userData?.id);
           if (rmObj && rmObj.clinics) {
             setAllClinics(rmObj.clinics);
           }
         }
       }
-
     }
-
 
     if (getData?.province && allProvinces?.length > 0) {
       const matchedProvince = allProvinces.find(
@@ -225,7 +220,11 @@ function StepOne({ onSubmit, onNext }) {
     }
 
     if (role === "PM") {
-      if (userData.provinces && userData.provinces[0] && allProvinces?.length > 0) {
+      if (
+        userData.provinces &&
+        userData.provinces[0] &&
+        allProvinces?.length > 0
+      ) {
         const matchedProvince = allProvinces.find(
           (item) => item.province_name === userData.provinces[0]?.province_name
         );
@@ -236,12 +235,15 @@ function StepOne({ onSubmit, onNext }) {
       // =================
 
       if (
-        userData.regional_managers && userData.regional_managers[0] &&
+        userData.regional_managers &&
+        userData.regional_managers[0] &&
         regionalManagers?.length > 0 &&
         !regionalManagersId
       ) {
         const matchedManager = regionalManagers.find(
-          (item) => item.regional_manager_name === userData.regional_managers[0]?.regional_manager_name
+          (item) =>
+            item.regional_manager_name ===
+            userData.regional_managers[0]?.regional_manager_name
         );
         if (matchedManager) {
           setRegionalManagersId(matchedManager.regional_manager_id);
@@ -249,16 +251,24 @@ function StepOne({ onSubmit, onNext }) {
         }
       }
       // ====================
-      if (userData.regional_managers && userData.regional_managers[0]?.clinics[0]?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
+      if (
+        userData.regional_managers &&
+        userData.regional_managers[0]?.clinics[0]?.clinic_name &&
+        regionalManagers?.length > 0 &&
+        !clinicId
+      ) {
         const matchedManager = allClinics?.find(
-          (item) => item.clinic_name.trim().toLowerCase() === userData.regional_managers[0]?.clinics[0].clinic_name.trim().toLowerCase()
+          (item) =>
+            item.clinic_name.trim().toLowerCase() ===
+            userData.regional_managers[0]?.clinics[0].clinic_name
+              .trim()
+              .toLowerCase()
         );
         if (matchedManager) {
           setClinicId(matchedManager.clinic_id);
         }
       }
     }
-
 
     if (
       getData?.regional_manager &&
@@ -276,14 +286,15 @@ function StepOne({ onSubmit, onNext }) {
 
     if (getData?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
       const matchedManager = allClinics?.find(
-        (item) => item.name.trim().toLowerCase() === getData.clinic_name.trim().toLowerCase()
+        (item) =>
+          item.name.trim().toLowerCase() ===
+          getData.clinic_name.trim().toLowerCase()
       );
 
       if (matchedManager) {
         setClinicId(matchedManager.id);
       }
     }
-
 
     if (getData?.provider_name && allProviders?.length > 0) {
       const matchedManager = allProviders?.find((item) => {
@@ -313,6 +324,31 @@ function StepOne({ onSubmit, onNext }) {
     }
   }, [role, getData, allProvinces, regionalManagers, allClinics, allProviders]);
 
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedId, setSelectedId] = useState("");
+  const isAllSelected = rows.length > 0 && selectedRows.length === rows.length;
+
+  const handleSelectAll = (checked) => {
+    if (checked) {
+      setSelectedRows(rows.map((_, idx) => idx));
+    } else {
+      setSelectedRows([]);
+    }
+  };
+
+  const handleRowSelect = (index, checked) => {
+    setSelectedRows((prev) =>
+      checked ? [...prev, index] : prev.filter((i) => i !== index)
+    );
+  };
+
+  const handleBatchChange = (field, value) => {
+    const updatedRows = rows.map((row, index) =>
+      selectedRows.includes(index) ? { ...row, [field]: value } : row
+    );
+    setRows(updatedRows);
+  };
+
   return (
     <div>
       <form onSubmit={formId ? handleUpdateLeaveRequest : handleSubmit}>
@@ -322,108 +358,20 @@ function StepOne({ onSubmit, onNext }) {
               title="Provider Leave Request Form"
               subtitle="Please complete the form below to initiate the provider leave request process"
             />
-            {/* <div className="flex gap-6 py-5 flex-wrap">
-              <div className="md:w-[24%] w-full">
-                <CustomSelector
-                  onChange={(value) => {
-                    setProvinceId(value); 
-                  }}
-                  label="Province"
-                  options={allProvinces}
-                  placeholder="Select Provider Title"
-                  labelKey={role === "PM" ? "province_name" : "name"}
-                  valueKey={role === "PM" ? "province_id" : "id"}
-                  value={provinceId || getData?.province}
-                  disabled={(role === 'RM') || (role === 'PM') || (formId ? true : false)}
-                  className="disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-              </div>
-              <div className="md:w-[35%] w-full">
-                <CustomSelector
-                  onChange={(value, options) => {
-                    setRegionalManagersId(value); 
-                    setAllClinics(options?.clinics)
-                  }}
-                  label="Regional Manager"
-                  options={regionalManagers}
-                  placeholder="Select Regional Manager"
-                  labelKey={role === "PM" ? "regional_manager_name" : "name"}
-                  valueKey={role === "PM" ? "regional_manager_id" : "id"}
-                  value={regionalManagersId}
-                  disabled={
-                   (role === "RM") || (role === 'PM') || (formId
-                      ? true
-                      : false) || (provinceId
-                      ? false
-                      : true)
-                  }
-                  className="disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-              </div>
-              <div className="md:w-[35%] w-full">
-                <CustomSelector
-                  onChange={(value) => {
-                    setClinicId(value);
-                    setDocName('');
-                  }}
-                  label="Clinic"
-                  options={allClinics}
-                  placeholder="Select Clinic"
-                  labelKey="clinic_name"
-                  valueKey="clinic_id"
-                  value={clinicId}
-                  disabled={
-                    (role === 'PM') || (formId ? true : false) || (provinceId ? false : true)
-                  }
-                  className="disabled:opacity-50 disabled:cursor-not-allowed"
-                />
-              </div>
 
+            <div className="flex flex-wrap gap-5 py-5">
               <div className="flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full">
                 <div className="w-full">
                   <CustomSelector
                     onChange={(value) => {
                       setDocName(value);
-                    }}
-                    label="Provider Title"
-                    options={providerTitleOptions}
-                    placeholder="Select Provider Name"
-                    labelKey="name"
-                    value={docName}
-                    disabled={(clinicId ? false : true) || (formId ? true : false)}
-                    className="disabled:opacity-50 disabled:cursor-not-allowed"
-                  />
-                </div>
-                <div className="w-full">
-                  <CustomSelector
-                    onChange={(value) => setProviderId(value)}
-                    label="Provider Name"
-                    options={allClicnicData}
-                    placeholder="Select Provider Title"
-                    labelKey="name"
-                    valueKey="id"
-                    value={providerId}
-                    disabled={(formId && true) || (docName ? false : true)}
-                    className="disabled:opacity-50 disabled:cursor-not-allowed"
-                  />
-                </div>
-              </div>
-            </div> */}
-
-            <div className="flex flex-wrap gap-5 py-5">
-              <div className='flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full'>
-
-                <div className='w-full'>
-                  <CustomSelector
-                    onChange={(value) => {
-                      setDocName(value);
-                      role === "LT" && handleChangeProvider(value)
+                      role === "LT" && handleChangeProvider(value);
                     }}
                     label="Provider Title"
                     options={[
-                      { name: 'DDS', value: 'DDS' },
-                      { name: 'RDH', value: 'RDH' },
-                      { name: 'RDT', value: 'RDT' },
+                      { name: "DDS", value: "DDS" },
+                      { name: "RDH", value: "RDH" },
+                      { name: "RDT", value: "RDT" },
                     ]}
                     placeholder="Select Provider Title"
                     labelKey="name"
@@ -432,11 +380,11 @@ function StepOne({ onSubmit, onNext }) {
                     className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                   />
                 </div>
-                <div className='w-full'>
+                <div className="w-full">
                   <CustomSelector
                     onChange={(value, options) => {
                       setProviderId(value);
-                      role === "LT" && handleChangeProviderName(value, options)
+                      role === "LT" && handleChangeProviderName(value, options);
                     }}
                     label="Provider Name"
                     options={allClicnicData}
@@ -445,64 +393,82 @@ function StepOne({ onSubmit, onNext }) {
                     valueKey="id"
                     value={providerId}
                     showSearch={true}
-                    disabled={formId ? true : false }
-
+                    disabled={formId ? true : false}
                     className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                   />
                 </div>
               </div>
- 
-              <div className='md:w-[31.5%] w-full'>
+
+              <div className="md:w-[31.5%] w-full">
                 <CustomSelector
                   onChange={(value) => {
                     setProvinceId(value);
                     role === "LT" && handleProvice(value);
                   }}
-
                   label="Province"
                   options={allProvinces}
                   placeholder="Select Province"
-                  labelKey={
-                    role === 'PM' ? 'province_name' : 'name'
-                  }
-                  valueKey={role === 'PM' ? 'province_id' : 'id'}
+                  labelKey={role === "PM" ? "province_name" : "name"}
+                  valueKey={role === "PM" ? "province_id" : "id"}
                   value={provinceId}
-                  disabled={(role === "RM" || role === "PM") ? true : false || (formId ? true : false)}
+                  disabled={
+                    role === "RM" || role === "PM"
+                      ? true
+                      : false || (formId ? true : false)
+                  }
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
               </div>
-              <div className='md:w-[31.5%] w-full'>
+              <div className="md:w-[31.5%] w-full">
                 <CustomSelector
                   onChange={(value, options) => {
                     setRegionalManagersId(value);
-                    role === "LT" && handleChangeRM(value)
+                    role === "LT" && handleChangeRM(value);
                     // setAllClinics(options?.clinics)
                   }}
                   label="Regional Manager"
                   options={regionalManagers}
                   placeholder="Select Regional Manager"
-                  labelKey={ role === 'PM' ? 'regional_manager_name' : 'name'}
-                  valueKey={ role === 'PM' ? 'regional_manager_id' : 'id'}
+                  labelKey={role === "PM" ? "regional_manager_name" : "name"}
+                  valueKey={role === "PM" ? "regional_manager_id" : "id"}
                   value={regionalManagersId}
                   showSearch={true}
-                  disabled={(role === "RM" || role === "PM") ? true : false || (formId ? true : false)}
+                  disabled={
+                    role === "RM" || role === "PM"
+                      ? true
+                      : false || (formId ? true : false)
+                  }
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
               </div>
-              <div className='md:w-[31.5%] w-full'>
+              <div className="md:w-[31.5%] w-full">
                 <CustomSelector
                   onChange={(value, options) => {
                     setClinicId(value);
-                    role === "LT" && handleChangeClinic(value, options)
+                    role === "LT" && handleChangeClinic(value, options);
                   }}
                   label="Clinic"
                   options={role === "LT" ? clinics : allClinics}
                   placeholder="Select Clinic"
-                  labelKey={role === "LT" ? "name" : (role === "PM" || role === "RM") ? "clinic_name" : "name" }
-                  valueKey={role === "LT" ? "id" : (role === "PM" || role === "RM" )? "clinic_id" : "id" }
+                  labelKey={
+                    role === "LT"
+                      ? "name"
+                      : role === "PM" || role === "RM"
+                      ? "clinic_name"
+                      : "name"
+                  }
+                  valueKey={
+                    role === "LT"
+                      ? "id"
+                      : role === "PM" || role === "RM"
+                      ? "clinic_id"
+                      : "id"
+                  }
                   showSearch={true}
                   value={clinicId}
-                  disabled={(role === "PM") ? true : false || (formId ? true : false)}
+                  disabled={
+                    role === "PM" ? true : false || (formId ? true : false)
+                  }
                   className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                 />
               </div>
@@ -512,7 +478,7 @@ function StepOne({ onSubmit, onNext }) {
             <div className="flex items-center justify-between py-5 border-[#D9DADF] border-t w-[99%]">
               <Heading title="Add Leave Details" />
               <button
-                type='button'
+                type="button"
                 onClick={canAddRow ? handleAddRow : undefined}
                 disabled={!canAddRow ? true : false}
                 className="rounded-xl border flex disabled:cursor-not-allowed cursor-pointer items-center p-2 gap-1 w-full md:w-fit border-[#D0D5DD]"
@@ -522,9 +488,9 @@ function StepOne({ onSubmit, onNext }) {
               </button>
             </div>
 
-            <div className='relative addBorderClass'>
-              <div className='border-to__Top absolute top-[49px] left-0 right-0 h-[1px] bg-[#D9DADF] w-full'></div>
-              <>
+            <div className="relative addBorderClass">
+              <div className="border-to__Top absolute top-[49px] left-0 right-0 h-[1px] bg-[#D9DADF] w-full"></div>
+              {/* <>
                 {rows?.map((row, index) => (
                   <div
                     key={index}
@@ -605,9 +571,166 @@ function StepOne({ onSubmit, onNext }) {
                     )}
                   </div>
                 ))}
-              </>
-            </div>
+              </> */}
 
+              <div className="relative addBorderClass">
+                <div className="border-to__Top absolute top-[49px] left-0 right-0 h-[1px] bg-[#D9DADF] w-full"></div>
+
+                {/* Select All Checkbox */}
+                <div className="flex items-center gap-2 py-3">
+                  <input
+                    type="checkbox"
+                    checked={isAllSelected}
+                    onChange={(e) => handleSelectAll(e.target.checked)}
+                  />
+                </div>
+
+               
+
+                {rows?.map((row, index) => {
+                  const isSelected = selectedRows.includes(index);
+                  return (
+                    <div
+                      key={index}
+                      className={`flex flex-wrap gap-6 py-5 relative items-center ${
+                        index !== 0 && "border-t border-[#E6EAEE]"
+                      }`}
+                    >
+                     <div className={`w-[2%] flex items-center gap-2 ${index === 0 ? "md:mt-[46px]" : "md:mt-[12px]"}`}>
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={(e) =>
+                            handleRowSelect(index, e.target.checked)
+                          }
+                        />
+                      </div>
+                      
+                      {/* Leave Date */}
+                      <div className="flex flex-col gap-2 md:w-[20%] w-full">
+                        {index === 0 && (
+                          <label className="text-[13px] text-[#373940] font-semibold block">
+                            Leave Date
+                          </label>
+                        )}
+                        <DatePicker
+                          selected={
+                            row.leave_date
+                              ? new Date(row.leave_date + "T00:00:00")
+                              : null
+                          }
+                          minDate={new Date()}
+                          showMonthDropdown
+                          showYearDropdown
+                          dropdownMode="select"
+                          dateFormat="yyyy-MM-dd"
+                          className="py-[8px] w-full px-4 bg-white text-[#000] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                          name="leave_date"
+                          onChange={(date) => {
+                            const formatted = date
+                              ? format(date, "yyyy-MM-dd")
+                              : "";
+                            handleChange(index, "leave_date", formatted);
+                          }}
+                        />
+                      </div>
+
+                      {/* Leave Type */}
+                      <div className="md:w-[22%] w-full">
+                        <CustomSelector
+                          label={index === 0 && "Leave Type"}
+                          options={[
+                            { name: "Emergency", value: "emergency" },
+                            { name: "Planned", value: "planned" },
+                          ]}
+                          placeholder="Select Leave Type"
+                          value={row.leave_type}
+                          onChange={(value) =>
+                            handleChange(index, "leave_type", value)
+                          }
+                          labelKey="name"
+                          valueKey="value"
+                        />
+                      </div>
+
+                      {/* Reason */}
+                      <div className="md:w-[47%] w-full">
+                        {index === 0 && (
+                          <label className="text-[13px] text-[#373940] font-semibold block">
+                            Reason
+                          </label>
+                        )}
+                        <textarea
+                          rows={1}
+                          value={row.reason}
+                          placeholder="Enter Reason"
+                          className="bg-white text-[#000] mt-[10px] w-full py-[8px] px-4  placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                          onChange={(e) =>
+                            handleChange(index, "reason", e.target.value)
+                          }
+                        />
+                      </div>
+
+                      {/* Remove Button */}
+                      {index > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newRows = [...rows];
+                            newRows.splice(index, 1);
+                            setRows(newRows);
+                            setSelectedRows((prev) =>
+                              prev.filter((i) => i !== index)
+                            );
+                          }}
+                          className="absolute right-0 top-0 text-red-500 hover:bg-red-50 rounded-full cursor-pointer"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {selectedRows.length > 0 && (
+                  <div className="flex flex-wrap gap-6 py-4 border border-dashed border-[#ccc] rounded-md p-4 mb-4 bg-[#f9f9f9]">
+                    <div className="md:w-[25%] w-full">
+                      <CustomSelector
+                        label={`Leave Type (${
+                          isAllSelected ? "All" : selectedRows.length
+                        } Selected)`}
+                        options={[
+                          { name: "Emergency", value: "emergency" },
+                          { name: "Planned", value: "planned" },
+                        ]}
+                        placeholder="Select Leave Type"
+                        onChange={(value) =>{
+                          setSelectedId(value)
+                          handleBatchChange("leave_type", value);
+                        }}
+                        labelKey="name"
+                        valueKey="value"
+                        value={selectedId}
+                      />
+                    </div>
+                    <div className="md:w-[45%] w-full">
+                      <label className="text-[13px] text-[#373940] font-semibold block">
+                        Reason ({isAllSelected ? "All" : selectedRows.length}{" "}
+                        Selected)
+                      </label>
+                      <textarea
+                        rows={1}
+                        placeholder="Enter Reason"
+                        className="bg-white text-[#000] mt-[10px] w-full py-[8px] px-4  placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                        onChange={(e) =>
+                          handleBatchChange("reason", e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
           {formId ? (
             <div className="flex justify-end gap-3.5 py-4 mt-0 md:mt-5">
@@ -616,7 +739,7 @@ function StepOne({ onSubmit, onNext }) {
                   isLoading ? (
                     <Image src={loading} alt="loading" width={24} height={24} />
                   ) : (
-                    'Update'
+                    "Update"
                   )
                 }
                 bgcolor={true}
@@ -632,7 +755,7 @@ function StepOne({ onSubmit, onNext }) {
                   isLoading ? (
                     <Image src={loading} alt="loading" width={24} height={24} />
                   ) : (
-                    'Submit for Review'
+                    "Submit for Review"
                   )
                 }
                 bgcolor={true}
