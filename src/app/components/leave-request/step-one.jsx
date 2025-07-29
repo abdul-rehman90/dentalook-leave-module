@@ -64,7 +64,7 @@ function StepOne({ onSubmit, onNext }) {
     setRows([...rows, { leave_date: "", leave_type: "", reason: "" }]);
   };
   const lastRow = rows[rows.length - 1];
-  const canAddRow = lastRow.leave_date && lastRow.leave_type && lastRow.reason;
+  const canAddRow = lastRow.leave_date;
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Sequential validation
@@ -490,89 +490,7 @@ function StepOne({ onSubmit, onNext }) {
 
             <div className="relative addBorderClass">
               <div className="border-to__Top absolute top-[49px] left-0 right-0 h-[1px] bg-[#D9DADF] w-full"></div>
-              {/* <>
-                {rows?.map((row, index) => (
-                  <div
-                    key={index}
-                    className={`flex flex-wrap gap-6 py-5 relative ${index !== 0 && "border-t border-[#E6EAEE]"}`}
-                  >
-                    <div className="flex flex-col gap-2 md:w-[24%] w-full">
-                      {
-                        index === 0 &&
-                        <label className="text-[13px] text-[#373940] font-semibold block">
-                          Leave Date
-                        </label>
-                      }
-                      <DatePicker
-                        selected={
-                          row.leave_date
-                            ? new Date(row.leave_date + 'T00:00:00')
-                            : null
-                        }
-                        minDate={new Date()}
-                        showMonthDropdown
-                        showYearDropdown
-                        dropdownMode="select"
-                        dateFormat="YYYY-MM-dd"
-                        className="py-[8px] w-full px-4 bg-white text-[#000] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
-                        name="leave_date"
-                        onChange={(date) => {
-                          const formatted = date
-                            ? format(date, 'yyyy-MM-dd')
-                            : '';
-                          handleChange(index, 'leave_date', formatted);
-                        }}
-                      />
-                    </div>
-                    <div className='md:w-[25%] w-full'>
-                      <CustomSelector
-                        label={index === 0 && "Leave Type"}
-                        options={[
-                          { name: 'Emergency', value: 'emergency' },
-                          { name: 'Planned', value: 'planned' }
-                        ]}
-                        placeholder="Select Leave Type"
-                        value={row.leave_type}
-                        onChange={(value) =>
-                          handleChange(index, 'leave_type', value)
-                        }
-                        labelKey="name"
-                        valueKey="value"
-                      />
-                    </div>
-                    <div className='md:w-[45%] w-full'>
-
-                      {
-                        index === 0 &&
-                        <label className="text-[13px] text-[#373940] font-semibold block">
-                          Reason
-                        </label>
-                      }
-                      <textarea rows={1} value={row.reason} typ="text" placeholder="Enter Reason" name="reason"
-                        className="disabled:cursor-not-allowed bg-white text-[#000] mt-[10px] w-full disabled:opacity-[0.8] py-[8px] px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
-                        onChange={(e) =>
-                          handleChange(index, 'reason', e.target.value)
-                        }>
-                        {row.reason}
-                      </textarea>
-                    </div>
-                    {index > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newRows = [...rows];
-                          newRows.splice(index, 1);
-                          setRows(newRows);
-                        }}
-                        className="absolute right-0 top-0 text-red-500 hover:bg-red-50 rounded-full cursor-pointer"
-                      >
-                        <X className="w-5 h-5" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </> */}
-
+             
               <div className="relative addBorderClass">
                 <div className="border-to__Top absolute top-[49px] left-0 right-0 h-[1px] bg-[#D9DADF] w-full"></div>
 
@@ -583,9 +501,8 @@ function StepOne({ onSubmit, onNext }) {
                     checked={isAllSelected}
                     onChange={(e) => handleSelectAll(e.target.checked)}
                   />
+                  <label className="!mb-0 font-semibold">Select All</label>
                 </div>
-
-               
 
                 {rows?.map((row, index) => {
                   const isSelected = selectedRows.includes(index);
@@ -650,6 +567,8 @@ function StepOne({ onSubmit, onNext }) {
                           }
                           labelKey="name"
                           valueKey="value"
+                          className="disabled:cursor-not-allowed"
+                          disabled={isSelected}
                         />
                       </div>
 
@@ -664,10 +583,11 @@ function StepOne({ onSubmit, onNext }) {
                           rows={1}
                           value={row.reason}
                           placeholder="Enter Reason"
-                          className="bg-white text-[#000] mt-[10px] w-full py-[8px] px-4  placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                          className="bg-white disabled:cursor-not-allowed text-[#000] mt-[10px] w-full py-[8px] px-4  placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                           onChange={(e) =>
                             handleChange(index, "reason", e.target.value)
                           }
+                          disabled={isSelected}
                         />
                       </div>
 
@@ -683,7 +603,7 @@ function StepOne({ onSubmit, onNext }) {
                               prev.filter((i) => i !== index)
                             );
                           }}
-                          className="absolute right-0 top-0 text-red-500 hover:bg-red-50 rounded-full cursor-pointer"
+                          className="absolute right-[11px] top-0 text-red-500 hover:bg-red-50 rounded-full cursor-pointer"
                         >
                           <X className="w-5 h-5" />
                         </button>
