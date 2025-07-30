@@ -23,6 +23,8 @@ export default function useStepThree() {
     const [regionalManagersId, setRegionalManagersId] = useState('');
     const [regionalManagersId2, setRegionalManagersId2] = useState('');
     const [formId, setFormId] = useState('');
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [isAllSelected, setIsAllSelected] = useState(false);
 
     // get province
     const getProvinces = async () => {
@@ -117,23 +119,34 @@ export default function useStepThree() {
 
     const [coverageProviderList, setCoverageProviderList] = useState([]);
 
+    // const providerList = async (item) => {
+    //     try {
+    //         const response = await
+    //         axiosInstance.get(`api/v1/provider-list/?provider_title=${getData?.provider_name?.user_type}&date=${item}`);
+    //         if(response.status === 200) {
+    //             setCoverageProviderList(response?.data)
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching coverage providers:", error);
+    //     }
+    // }
+
     const providerList = async (item) => {
         try {
-            const response = await
-            axiosInstance.get(`api/v1/provider-list/?provider_title=${getData?.provider_name?.user_type}&date=${item}`);
-            if(response.status === 200) {
-                setCoverageProviderList(response?.data)
+            let url = "api/v1/provider-list/";
+            if (item) {
+                const providerType = getData?.provider_name?.user_type;
+                url += `?provider_title=${providerType}&date=${item}`;
             }
-        } catch (error) {
+            const response = await axiosInstance.get(url);
+            if (response.status === 200) {
+                setCoverageProviderList(response.data);
+            }
+        }
+        catch (error) {
             console.error("Error fetching coverage providers:", error);
         }
-    }
-
-    // useEffect(() => {
-    //    if(getData !== undefined) {
-    //         providerList();
-    //     }
-    // }, [getData]);
+    };
 
     return {
         allProvinces,
@@ -158,6 +171,8 @@ export default function useStepThree() {
         providerList,
         provinceId2, setProvinceId2,
         regionalManagersId2, setRegionalManagersId2,
-        setAllClinics
+        setAllClinics,
+        isAllSelected, setIsAllSelected,
+        selectedRows, setSelectedRows
     }
 }
