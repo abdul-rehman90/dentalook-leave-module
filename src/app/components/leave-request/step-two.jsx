@@ -12,13 +12,13 @@ import { format } from "date-fns";
 import loader from "../../../common/assets/icons/blue-loader.svg";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 function StepTwo({ onPrev, onNext, setCurrentStep }) {
   const [formData, setFormData] = useState({});
   const param = useSearchParams();
-  const getIdParam = param.get('leaveRequestId');
-  const getStatusParam = param.get('status');
+  const getIdParam = param.get("leaveRequestId");
+  const getStatusParam = param.get("status");
   const [isChecked, setIsChecked] = useState(false);
   const router = useRouter();
   const role = Cookies.get("role");
@@ -34,7 +34,10 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
         days.map((day) => ({
           leave_date: day.leave_date,
           leave_type: day.leave_type,
-          reason: day.reason
+          reason: day.reason,
+          start_date: day.start_date,
+          end_date: day.end_date,
+          entry_type: day.entry_type,
         }))
       );
     }
@@ -46,44 +49,46 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
 
   const rightSideSteps = [
     {
-      title: '1. Review the Provider Contract',
-      description: 'Verify the vacation entitlement as outlined in the contract'
-    },
-    {
-      title: '2. Confirm Vacation Allowance',
-      description: 'Check the remaining vacation days available to the provider'
-    },
-    {
-      title: '3. Assess Notification Requirement ',
+      title: "1. Review the Provider Contract",
       description:
-        'Review the required notice period for leave requests as stipulated in the contract'
+        "Verify the vacation entitlement as outlined in the contract",
     },
     {
-      title: '4. Connect with the provider',
+      title: "2. Confirm Vacation Allowance",
       description:
-        'Get in touch with the provider to understand their reason for the request'
+        "Check the remaining vacation days available to the provider",
     },
     {
-      title: '5. Decide on Approval',
-      description: 'Approve or decline the request based on the evaluation'
-    }
+      title: "3. Assess Notification Requirement ",
+      description:
+        "Review the required notice period for leave requests as stipulated in the contract",
+    },
+    {
+      title: "4. Connect with the provider",
+      description:
+        "Get in touch with the provider to understand their reason for the request",
+    },
+    {
+      title: "5. Decide on Approval",
+      description: "Approve or decline the request based on the evaluation",
+    },
   ];
 
   const providerInfo = [
-    { label: 'Provider Title', value: getData?.provider_name?.user_type },
-    { label: 'Provider’s Name', value: getData?.provider_name?.name }
+    { label: "Provider Title", value: getData?.provider_name?.user_type },
+    { label: "Provider’s Name", value: getData?.provider_name?.name },
   ];
 
   const locationInfo = [
-    { label: 'Province', value: getData?.province },
-    { label: 'Regional Manager', value: getData?.regional_manager },
-    { label: 'Clinic', value: getData?.clinic_name }
+    { label: "Province", value: getData?.province },
+    { label: "Regional Manager", value: getData?.regional_manager },
+    { label: "Clinic", value: getData?.clinic_name },
   ];
 
   const handleClick = () => {
-    localStorage.removeItem('leaveRequestId');
+    localStorage.removeItem("leaveRequestId");
     setCurrentStep(0);
-    router.replace('/leave-request');
+    router.replace("/leave-request");
   };
 
   return (
@@ -119,98 +124,114 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mt-[27px] py-2 md:py-5 border-[#D9DADF] border-t">
+                <>
                   {formData1?.map((day, dayIdx) => (
-                    <React.Fragment key={dayIdx}>
+                    <div className={`grid grid-cols-1 md:grid-cols-2 ${day.entry_type?.includes("date range") ? "lg:[grid-template-columns:205px_123px_124px]" : "lg:[grid-template-columns:133px_123px_184px]" } gap-2 ${dayIdx === 0 && "mt-[27px] border-[#D9DADF] border-t"} pt-2 md:pt-5 `} key={dayIdx}>
                       <div className="flex flex-col gap-2 mb-1">
-                        {
-                          dayIdx === 0 &&
+                        {dayIdx === 0 && (
                           <label className="text-[13px] text-[#373940] font-medium block">
                             Leave Date
                           </label>
+                        )}
+                        {
+                          day.entry_type?.includes("date range") ?
+                          <DatePicker
+                            selectsRange
+                            startDate={
+                              day.start_date ? new Date(day.start_date + "T00:00:00") : null
+                            }
+                            endDate={
+                              day.end_date ? new Date(day.end_date + "T00:00:00") : null
+                            }
+                            minDate={new Date()}
+                            showMonthDropdown
+                            showYearDropdown
+                            dropdownMode="select"
+                            dateFormat="yyyy-MM-dd"
+                            isClearable={false}
+                            className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
+                          />
+
+                          : 
+                        
+                          <DatePicker
+                            
+                            selected={
+                              day.leave_date
+                                ? new Date(day.leave_date + 'T00:00:00')
+                                : null
+                            }
+                            minDate={new Date()}
+                            showMonthDropdown
+                            showYearDropdown
+                            dropdownMode="select"
+                            dateFormat="YYYY-MM-dd"
+                            className="py-[8px] w-full px-4 bg-white text-[#000] disabled:opacity-[0.8] disabled:cursor-not-allowed  block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                            name="leave_date"
+                            placeholderText="Leave Date"
+                            onChange={(date) => {
+                              const updated = [...formData1];
+                              updated[dayIdx].leave_date = date
+                                ? format(date, 'yyyy-MM-dd')
+                                : '';
+                              setFormData2(updated);
+                            }}
+                            disabled
+                          />
                         }
-                        <DatePicker
-                          
-                          selected={
-                            day.leave_date
-                              ? new Date(day.leave_date + 'T00:00:00')
-                              : null
-                          }
-                          minDate={new Date()}
-                          showMonthDropdown
-                          showYearDropdown
-                          dropdownMode="select"
-                          dateFormat="YYYY-MM-dd"
-                          className="py-[8px] w-full px-4 bg-white text-[#000] disabled:opacity-[0.8] disabled:cursor-not-allowed text-[#1F1F1F] block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
-                          name="leave_date"
-                          placeholderText="Leave Date"
-                          onChange={(date) => {
+                      </div>
+                      <div>
+                        <CustomSelector
+                          label={dayIdx === 0 && "Leave Type"}
+                          options={[
+                            { name: "Emergency", value: "emergency" },
+                            { name: "Planned", value: "planned" },
+                          ]}
+                          value={day.leave_type}
+                          onChange={(value, option) => {
                             const updated = [...formData1];
-                            updated[dayIdx].leave_date = date
-                              ? format(date, 'yyyy-MM-dd')
-                              : '';
+                            updated[dayIdx].leave_type = value;
                             setFormData2(updated);
                           }}
+                          labelKey="name"
                           disabled
+                          className="disabled:opacity-[0.9] disabled:cursor-not-allowed"
                         />
                       </div>
-                      <CustomSelector
-                        label={dayIdx === 0 && "Leave Type"}
-                        options={[
-                          { name: 'Emergency', value: 'emergency' },
-                          { name: 'Planned', value: 'planned' }
-                        ]}
-                        value={day.leave_type}
-                        onChange={(value, option) => {
-                          const updated = [...formData1];
-                          updated[dayIdx].leave_type = value;
-                          setFormData2(updated);
-                        }}
-                        labelKey="name"
-                        disabled
-                        className="disabled:opacity-[0.9] disabled:cursor-not-allowed"
-                      />
-
-                      {/* <Input
-                        label={dayIdx === 0 && "Reason"}
-                        placeholder="Reason"
-                        value={day.reason}
-                        onChange={(e) => {
-                          const updated = [...formData1];
-                          updated[dayIdx].reason = e.target.value;
-                          setFormData2(updated);
-                        }}
-                        disabled
-                        className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                      /> */}
+                    
                       <div>
-
-                      
-                      {
-                        dayIdx === 0 &&
-                        <label className="text-[13px] font-[600] text-[#373940] block">
-                          Reason
-                        </label>
-                      }
-                      <textarea disabled rows={1} value={day.reason} typ="text" placeholder="Enter Reason" name="reason"
-                        className="disabled:cursor-not-allowed bg-white text-[#000] resize-none mt-[8px] w-full disabled:opacity-[0.9] pb-[10px] pt-[6px]  px-4 text-[#1F1F1F] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
-                        onChange={(e) => {
-                          const updated = [...formData1];
-                          updated[dayIdx].reason = e.target.value;
-                          setFormData2(updated);
-                        }}>
-                        {day.reason}
-                      </textarea>
+                        {dayIdx === 0 && (
+                          <label className="text-[13px] font-[600] text-[#373940] block">
+                            Reason
+                          </label>
+                        )}
+                        <textarea
+                          title={day.reason}
+                          disabled
+                          rows={1}
+                          value={day.reason}
+                          typ="text"
+                          placeholder="Enter Reason"
+                          name="reason"
+                          className={`disabled:cursor-not-allowed bg-white text-[#000] resize-none ${dayIdx === 0 && "mt-[8px]"}  w-full disabled:opacity-[0.9] pb-[10px] pt-[6px]  px-4  placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]`}
+                          onChange={(e) => {
+                            const updated = [...formData1];
+                            updated[dayIdx].reason = e.target.value;
+                            setFormData2(updated);
+                          }}
+                        >
+                          {day.reason}
+                        </textarea>
                       </div>
-                    </React.Fragment>
+                    </div>
                   ))}
-                </div>
+                </>
               </div>
             </div>
           )}
           <div className="bg-[#F8F8F8] p-4.5 border-l border-[#D9DADF]">
             {rightSideSteps.map((step, index) => (
-              <div className={`mt-${index === 0 ? '0' : '5'}`} key={index}>
+              <div className={`mt-${index === 0 ? "0" : "5"}`} key={index}>
                 <h2 className="text-base font-medium text-[#111B2B]">
                   {step.title}
                 </h2>
@@ -242,14 +263,16 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
             className={` w-full md:w-fit py-[6px] md:py-[11px] rounded-xl text-base bg-[#335679] text-[#fff] font-medium px-[75px] cursor-pointer`}
             onClick={() => {
               onPrev();
-              router.replace('/leave-request?step=1');
+              router.replace("/leave-request?step=1");
             }}
           >
             Edit Request
           </button>
-          {getStatusParam === 'decline' || declineReq === true ? (
+          {getStatusParam === "decline" || declineReq === true ? (
             <div className="flex flex-col gap-2 items-end">
-              <p className="text-red-600">The Leave Request has been declined.</p>
+              <p className="text-red-600">
+                The Leave Request has been declined.
+              </p>
               <div
                 className={`flex flex-wrap md:flex-nowrap items-center gap-2`}
               >
@@ -271,28 +294,32 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
               </div>
             </div>
           ) : (
-            <div className={`${role === "PM" ? "hidden" : "block"} flex flex-wrap md:flex-nowrap items-center gap-2`}>
+            <div
+              className={`${
+                role === "PM" ? "hidden" : "block"
+              } flex flex-wrap md:flex-nowrap items-center gap-2`}
+            >
               <Button
                 text={
-                  loadingButton === 'decline'
-                    ? 'Declining...'
-                    : 'Decline Request'
+                  loadingButton === "decline"
+                    ? "Declining..."
+                    : "Decline Request"
                 }
                 // textcolor={true}
                 // bgcolor={true}
-                onClick={() => handleStatus('decline')}
+                onClick={() => handleStatus("decline")}
                 type="button"
                 disabled={loadingButton !== null || !isChecked}
                 className="w-full !bg-red-600 disabled:cursor-not-allowed disabled:opacity-[0.6] md:w-fit"
               />
               <Button
                 text={
-                  loadingButton === 'approved'
-                    ? 'Approving...'
-                    : 'Approve Request'
+                  loadingButton === "approved"
+                    ? "Approving..."
+                    : "Approve Request"
                 }
                 // bgcolor={true}
-                onClick={() => handleStatus('approved')}
+                onClick={() => handleStatus("approved")}
                 type="button"
                 disabled={loadingButton !== null || !isChecked}
                 className="w-full !bg-green-600 disabled:cursor-not-allowed disabled:opacity-[0.6] md:w-fit"

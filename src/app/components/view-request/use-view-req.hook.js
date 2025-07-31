@@ -305,7 +305,8 @@ export default function useViewReq() {
 
             filterClinicByRM(currentRM?.regional_manager[0]?.id);
             filterRMByProvince(currentRM?.province?.id);
-
+            setDocName('');
+            setProviderId('')
         }
     }
 

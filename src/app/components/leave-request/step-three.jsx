@@ -47,8 +47,10 @@ function StepThree({ onNext }) {
     regionalManagersId2,
     setRegionalManagersId2,
     setAllClinics,
-    isAllSelected, setIsAllSelected,
-    selectedRows, setSelectedRows
+    isAllSelected,
+    setIsAllSelected,
+    selectedRows,
+    setSelectedRows,
   } = useStepThree();
 
   const router = useRouter();
@@ -65,7 +67,7 @@ function StepThree({ onNext }) {
   const [providerLoader, setProviderLoader] = useState(false);
   const [covergeType, setCoverageType] = useState("");
   const [appendConerageNeeded, setAppendConerageNeeded] = useState("");
-  const [checkCoveringProvider, setCheckCoveringProvider] = useState(null)
+  const [checkCoveringProvider, setCheckCoveringProvider] = useState(null);
   const [providerFormData, setProviderFormData] = useState({
     firstName: "",
     lastName: "",
@@ -199,32 +201,41 @@ function StepThree({ onNext }) {
     setRows(newRows);
   };
 
-  const handleCheckedSubmit = async (e) =>{
+  const handleCheckedSubmit = async (e) => {
     e.preventDefault();
-      setIsLoading(true);
-      const payload = rows?.map((row) => ({
-        provider_id: row?.coverage_provider?.id,
-        date: row?.leave_date
-      }));
-    try{
-      const res = await axiosInstance.post(`api/v1/provider-availability/`, payload);
-      if(res.status === 200){
-        if(res?.data?.unavailable_dates.length > 0){
-          toast.error(`Provider is unavailable on these dates. ${res?.data?.unavailable_dates.map((item)=>item).join(", ")}`);
+    setIsLoading(true);
+    const payload = rows?.map((row) => ({
+      provider_id: row?.coverage_provider?.id,
+      date: row?.leave_date,
+    }));
+    try {
+      const res = await axiosInstance.post(
+        `api/v1/provider-availability/`,
+        payload
+      );
+      if (res.status === 200) {
+        if (res?.data?.unavailable_dates.length > 0) {
+          toast.error(
+            `Provider is unavailable on these dates. ${res?.data?.unavailable_dates
+              .map((item) => item)
+              .join(", ")}`
+          );
           return;
         }
         handleSubmit();
       }
-    }
-    catch(error){
-      toast.error(error?.response?.data?.error.includes("provider_id and dates are required") 
-      ? "Covering Provider is required." : error?.response?.data?.error);
-    }
-    finally {
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.error.includes(
+          "provider_id and dates are required"
+        )
+          ? "Covering Provider is required."
+          : error?.response?.data?.error
+      );
+    } finally {
       setIsLoading(false);
     }
-    
-  }
+  };
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -250,8 +261,7 @@ function StepThree({ onNext }) {
       }
     } catch (error) {
       toast.error(error.response?.data?.error);
-    } 
-    finally {
+    } finally {
       setIsLoading(false);
     }
   };
@@ -259,7 +269,6 @@ function StepThree({ onNext }) {
   const handleGetProviderList = (item) => {
     providerList(item);
   };
-
 
   const handleRowSelect = (index, checked) => {
     const newSelected = checked
@@ -385,7 +394,7 @@ function StepThree({ onNext }) {
                   <p>Add New Covering Provider Details</p>
                 </button>
               </div>
-    
+
               <div className="flex items-center gap-2 py-3">
                 <input
                   type="checkbox"
@@ -398,7 +407,6 @@ function StepThree({ onNext }) {
               <div>
                 {rows?.map((row, index) => {
                   const isSelected = selectedRows.includes(index);
-                  // console.log(isSelected, "..isSelected");
                   return (
                     <div
                       key={index}
@@ -417,13 +425,37 @@ function StepThree({ onNext }) {
                           }
                         />
                       </div>
-                      <div className="flex flex-col gap-2 md:w-[18%] w-full pb-3 pt-3">
-                        {index === 0 && (
-                          <label className="text-[13px] text-[#373940] font-bold block">
+                      
+                      <div className={`flex flex-col gap-2 ${row.entry_type?.includes("date range") ? "md:w-[26%]" : "md:w-[18%]"} md:w-[18%] w-full pb-3 pt-3`}>
+                         {index === 0 && (
+                          <label className="text-[11px] text-[#373940] font-bold block">
                             Leave Date
                           </label>
                         )}
-                        <DatePicker
+                        {row.entry_type?.includes("date range") ? (
+                         
+                          <DatePicker
+                            selectsRange
+                            startDate={
+                              row.start_date
+                                ? new Date(row.start_date + "T00:00:00")
+                                : null
+                            }
+                            endDate={
+                              row.end_date
+                                ? new Date(row.end_date + "T00:00:00")
+                                : null
+                            }
+                            minDate={new Date()}
+                            showMonthDropdown
+                            showYearDropdown
+                            dropdownMode="select"
+                            dateFormat="yyyy-MM-dd"
+                            isClearable={false}
+                            className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
+                          />
+                        ) : (
+                          <DatePicker
                           disabled
                           selected={
                             row.leave_date
@@ -444,8 +476,9 @@ function StepThree({ onNext }) {
                             handleChange(index, "leave_date", formatted);
                           }}
                         />
+                        )}
                       </div>
-                      <div className="md:w-[22%] w-full pb-3 md:border-[#D9DADF] md:border-r pt-3 custom__Selector">
+                      <div className="md:w-[17%] w-full pb-3 md:border-[#D9DADF] md:border-r pt-3 custom__Selector">
                         <CustomSelector
                           disabled
                           label={index === 0 && "Leave Type"}
@@ -463,7 +496,7 @@ function StepThree({ onNext }) {
                           className="disabled:cursor-not-allowed"
                         />
                       </div>
-                      <div className="md:w-[18%] w-full pb-3 pt-3">
+                      <div className="md:w-[12%] w-full pb-3 pt-3">
                         <CustomSelector
                           label={index === 0 && "Coverage Needed"}
                           options={[
@@ -487,7 +520,7 @@ function StepThree({ onNext }) {
                           className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                         />
                       </div>
-                      <div className="md:w-[25%] w-full pb-3 pt-3">
+                      <div className="md:w-[20%] w-full pb-3 pt-3">
                         <CustomSelector
                           label={index === 0 && "Covering Provider Name"}
                           options={coverageProviderList}
@@ -543,7 +576,7 @@ function StepThree({ onNext }) {
                         />
                       </div>
 
-                      <div className="md:w-[20%] w-full pb-3 pt-3">
+                      <div className="md:w-[14%] w-full pb-3 pt-3">
                         <Input
                           label={index === 0 && "Coverage Found By"}
                           placeholder="Enter Coverage"
@@ -575,7 +608,7 @@ function StepThree({ onNext }) {
                         { name: "No", value: "no" },
                       ]}
                       placeholder="Select Coverage"
-                      onChange={(value) =>{
+                      onChange={(value) => {
                         handleBatchChange("coverage_needed", value);
                         setAppendConerageNeeded(value);
                       }}
@@ -590,9 +623,9 @@ function StepThree({ onNext }) {
                       options={coverageProviderList}
                       placeholder="Select Provider"
                       onChange={(value, option) => {
-                        handleBatchChange("coverage_provider", option); 
+                        handleBatchChange("coverage_provider", option);
                         setCoverageType(value);
-                        setCheckCoveringProvider(value)
+                        setCheckCoveringProvider(value);
                       }}
                       onOpen={() => providerList()}
                       labelKey="name"
@@ -601,12 +634,14 @@ function StepThree({ onNext }) {
                       showSearch={true}
                       disabled={
                         appendConerageNeeded === "no" ||
-                        appendConerageNeeded === false || appendConerageNeeded === "" ? true : false
+                        appendConerageNeeded === false ||
+                        appendConerageNeeded === ""
+                          ? true
+                          : false
                       }
                       className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                     />
                   </div>
-
                 </div>
               )}
             </div>
@@ -627,7 +662,11 @@ function StepThree({ onNext }) {
               )
             }
             bgcolor={true}
-            onClick={isAllSelected === true && checkCoveringProvider !== null ? handleCheckedSubmit : handleSubmit}
+            onClick={
+              isAllSelected === true && checkCoveringProvider !== null
+                ? handleCheckedSubmit
+                : handleSubmit
+            }
             type="button"
           />
         </div>

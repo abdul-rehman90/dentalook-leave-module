@@ -18,10 +18,20 @@ export default function useLeaveReq() {
     const [regionalManagers, setRegionalManagers] = useState([]);
     const [regionalManagersId, setRegionalManagersId] = useState('');
     const [formId, setFormId] = useState('');
-
     const [allClicnicData, setAllClinicData] = useState([]);
-
     const [docName, setDocName] = useState('');
+    const [isToggle, setIsToggle] = useState(false);
+    const [isModel, setIsModel] = useState(false);
+    const [multiDates, setMultiDates] = useState([{ leave_date: "" }]);
+    const [buttonName, setButtonName] = useState("");
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [startDate, endDate] = dateRange;
+    const handleDateChange = (update) => {
+        const [start, end] = update || [];
+        const formattedStart = start ? format(start, "yyyy-MM-dd") : "";
+        const formattedEnd = end ? format(end, "yyyy-MM-dd") : "";
+        console.log("start_Date=", formattedStart, "end_Date=", formattedEnd);
+    };
 
     // get province
     const getProvinces = async () => {
@@ -238,7 +248,8 @@ export default function useLeaveReq() {
 
             filterClinicByRM(currentRM?.regional_manager[0]?.id);
             filterRMByProvince(currentRM?.province?.id);
-
+            setDocName('');
+            setProviderId('')
         }
     }
 
@@ -291,6 +302,15 @@ export default function useLeaveReq() {
         clinics,
         handleChangeClinic,
         handleChangeProvider,
-        handleChangeProviderName
+        handleChangeProviderName,
+        isToggle, setIsToggle,
+        isModel, setIsModel,
+        setButtonName,
+        buttonName,
+        endDate,
+        startDate,
+        handleDateChange,
+        setDateRange,
+        multiDates, setMultiDates
     }
 }

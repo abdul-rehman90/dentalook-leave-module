@@ -13,7 +13,7 @@ import Image from "next/image";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../../utils/axios-instance";
 
@@ -51,6 +51,18 @@ function StepOne({ onSubmit, onNext }) {
     handleChangeClinic,
     handleChangeProvider,
     handleChangeProviderName,
+    isToggle,
+    setIsToggle,
+    isModel,
+    setIsModel,
+    setButtonName,
+    buttonName,
+    multiDates,
+    setMultiDates,
+    endDate,
+    startDate,
+    handleDateChange,
+    setDateRange,
   } = useLeaveReq();
 
   // Update field values
@@ -60,11 +72,85 @@ function StepOne({ onSubmit, onNext }) {
     setRows(newRows);
   };
 
-  const handleAddRow = () => {
-    setRows([...rows, { leave_date: "", leave_type: "", reason: "" }]);
+  const handleAddRow = (newType) => {
+    if (rows.length === 0) {
+      // No rows yet — just add the first one
+      setRows([
+        {
+          leave_date: "",
+          end_date: "",
+          leave_type: "",
+          reason: "",
+          entry_type: newType,
+        },
+      ]);
+    } else if (rows[0].entry_type === newType) {
+      // Same type — clone only if last row has a valid leave_date
+      const lastRow = rows[rows.length - 1];
+
+      if (
+        newType === "single" &&
+        (!lastRow.leave_date || lastRow.leave_date.trim() === "")
+      ) {
+        toast.error("Please select a Leave Date before adding a new row.");
+        return;
+      }
+
+      if (
+        newType === "date range" &&
+        (!lastRow.leave_date || !lastRow.end_date)
+      ) {
+        toast.error("Please select a complete Leave Request Date range.");
+        return;
+      }
+
+      setRows([
+        ...rows,
+        {
+          leave_date: "",
+          end_date: "",
+          leave_type: "",
+          reason: "",
+          entry_type: newType,
+        },
+      ]);
+    } else {
+      setRows([
+        {
+          leave_date: "",
+          end_date: "",
+          leave_type: "",
+          reason: "",
+          entry_type: newType,
+        },
+      ]);
+    }
+
+    setButtonName(
+      newType === "single"
+        ? "Single Leave"
+        : newType === "date range"
+        ? "Leave Range"
+        : "Multiple Leaves"
+    );
+
+    setIsToggle(false);
   };
+
+  useEffect(() => {
+    setRows([
+      {
+        leave_date: "",
+        end_date: "",
+        leave_type: "",
+        reason: "",
+        entry_type: "single",
+      },
+    ]);
+    setButtonName("Single Leave");
+  }, []);
+
   const lastRow = rows[rows.length - 1];
-  const canAddRow = lastRow.leave_date;
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Sequential validation
@@ -105,20 +191,48 @@ function StepOne({ onSubmit, onNext }) {
       }
     }
     setIsLoading(true);
-    const paylaod = {
+    const payload = {
       clinic: clinicId,
       provider: providerId,
-      leave_requests: rows?.map((row) => ({
-        leave_date: row.leave_date,
-        leave_type: row.leave_type,
-        reason: row.reason,
-      })),
+      leave_requests: rows?.map((row) => {
+        if (row.entry_type === "date range") {
+          const { leave_date, ...rest } = row;
+          return {
+            ...rest,
+            start_date: row.leave_date,
+            entry_type: "date range",
+          };
+        }
+
+        if (row.entry_type === "single") {
+          const { end_date, ...rest } = row;
+          return {
+            ...rest,
+            leave_date: row.leave_date,
+            entry_type:
+              row.entry_type === "multiple" ? "single" : row.entry_type,
+          };
+        }
+
+        if (row.entry_type === "multiple") {
+          const { end_date, ...rest } = row;
+          return {
+            ...rest,
+            leave_date: row.leave_date,
+            entry_type: "single",
+          };
+        }
+
+        // Default: return as-is
+        return row;
+      }),
     };
+    console.log(payload, "rows");
 
     try {
       const response = await axiosInstance.post(
         `api/v1/leave-requests/`,
-        paylaod
+        payload
       );
       if (response.status === 201) {
         localStorage.setItem("leaveRequestId", response.data?.id);
@@ -477,20 +591,51 @@ function StepOne({ onSubmit, onNext }) {
             {/* Plus Button */}
             <div className="flex items-center justify-between py-5 border-[#D9DADF] border-t w-[99%]">
               <Heading title="Add Leave Details" />
-              <button
-                type="button"
-                onClick={canAddRow ? handleAddRow : undefined}
-                disabled={!canAddRow ? true : false}
-                className="rounded-xl border flex disabled:cursor-not-allowed cursor-pointer items-center p-2 gap-1 w-full md:w-fit border-[#D0D5DD]"
-              >
-                <Plus className={`text-[#7DB02D]`} />
-                Add Leave Day(s)
-              </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsToggle(!isToggle)}
+                  className="rounded-xl border flex disabled:cursor-not-allowed cursor-pointer items-center p-2 gap-1 w-full md:w-fit border-[#D0D5DD]"
+                >
+                  <Plus className={`text-[#7DB02D]`} />
+                  Add Leave Day(s)
+                </button>
+
+                {isToggle && (
+                  <div className="absolute bg-white rounded-xl p-2 border-[#D0D5DD] border z-[9]">
+                    <button
+                      type="button"
+                      onClick={() => handleAddRow("single")}
+                      className="cursor-pointer"
+                    >
+                      Single Leave
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleAddRow("date range")}
+                      className="cursor-pointer"
+                    >
+                      Leave Range
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsModel(true);
+                        setIsToggle(false);
+                        setButtonName("Multiple Leaves");
+                      }}
+                      className="cursor-pointer"
+                    >
+                      Multiple Leaves
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="relative addBorderClass">
               <div className="border-to__Top absolute top-[49px] left-0 right-0 h-[1px] bg-[#D9DADF] w-full"></div>
-             
+
               <div className="relative addBorderClass">
                 <div className="border-to__Top absolute top-[49px] left-0 right-0 h-[1px] bg-[#D9DADF] w-full"></div>
 
@@ -513,7 +658,11 @@ function StepOne({ onSubmit, onNext }) {
                         index !== 0 && "border-t border-[#E6EAEE]"
                       }`}
                     >
-                     <div className={`w-[2%] flex items-center gap-2 ${index === 0 ? "md:mt-[46px]" : "md:mt-[12px]"}`}>
+                      <div
+                        className={`w-[2%] flex items-center gap-2 ${
+                          index === 0 ? "md:mt-[46px]" : "md:mt-[12px]"
+                        }`}
+                      >
                         <input
                           type="checkbox"
                           checked={isSelected}
@@ -522,35 +671,84 @@ function StepOne({ onSubmit, onNext }) {
                           }
                         />
                       </div>
-                      
+
                       {/* Leave Date */}
-                      <div className="flex flex-col gap-2 md:w-[20%] w-full">
-                        {index === 0 && (
-                          <label className="text-[13px] text-[#373940] font-semibold block">
-                            Leave Date
-                          </label>
-                        )}
-                        <DatePicker
-                          selected={
-                            row.leave_date
-                              ? new Date(row.leave_date + "T00:00:00")
-                              : null
-                          }
-                          minDate={new Date()}
-                          showMonthDropdown
-                          showYearDropdown
-                          dropdownMode="select"
-                          dateFormat="yyyy-MM-dd"
-                          className="py-[8px] w-full px-4 bg-white text-[#000] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
-                          name="leave_date"
-                          onChange={(date) => {
-                            const formatted = date
-                              ? format(date, "yyyy-MM-dd")
-                              : "";
-                            handleChange(index, "leave_date", formatted);
-                          }}
-                        />
-                      </div>
+                      {buttonName.includes("Leave Range") ? (
+                        <div className="request_Datepicker md:w-[31.5%] w-full">
+                          {index === 0 && (
+                            <label className="text-[13px] text-[#373940] font-semibold block">
+                              Leave Date
+                            </label>
+                          )}
+                          <DatePicker
+                            selectsRange
+                            startDate={
+                              row.leave_date
+                                ? new Date(row.leave_date + "T00:00:00")
+                                : null
+                            }
+                            endDate={
+                              row.end_date
+                                ? new Date(row.end_date + "T00:00:00")
+                                : null
+                            }
+                            minDate={new Date()}
+                            showMonthDropdown
+                            showYearDropdown
+                            dropdownMode="select"
+                            dateFormat="yyyy-MM-dd"
+                            isClearable={true}
+                            className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
+                            onChange={(dates) => {
+                              const [start, end] = dates;
+                              handleChange(
+                                index,
+                                "leave_date",
+                                start ? format(start, "yyyy-MM-dd") : ""
+                              );
+                              handleChange(
+                                index,
+                                "end_date",
+                                end ? format(end, "yyyy-MM-dd") : ""
+                              );
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          className={`flex flex-col gap-2 ${
+                            buttonName.includes("Leave Range")
+                              ? "md:w-[26.5%]"
+                              : "md:w-[20.5%]"
+                          } w-full`}
+                        >
+                          {index === 0 && (
+                            <label className="text-[13px] text-[#373940] font-semibold block">
+                              Leave Date
+                            </label>
+                          )}
+                          <DatePicker
+                            selected={
+                              row.leave_date
+                                ? new Date(row.leave_date + "T00:00:00")
+                                : null
+                            }
+                            minDate={new Date()}
+                            showMonthDropdown
+                            showYearDropdown
+                            dropdownMode="select"
+                            dateFormat="yyyy-MM-dd"
+                            className="py-[8px] w-full px-4 bg-white text-[#000] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                            name="leave_date"
+                            onChange={(date) => {
+                              const formatted = date
+                                ? format(date, "yyyy-MM-dd")
+                                : "";
+                              handleChange(index, "leave_date", formatted);
+                            }}
+                          />
+                        </div>
+                      )}
 
                       {/* Leave Type */}
                       <div className="md:w-[22%] w-full">
@@ -573,7 +771,13 @@ function StepOne({ onSubmit, onNext }) {
                       </div>
 
                       {/* Reason */}
-                      <div className="md:w-[47%] w-full">
+                      <div
+                        className={`${
+                          buttonName.includes("Leave Range")
+                            ? "md:w-[36.5%]"
+                            : "md:w-[46.5%]"
+                        }`}
+                      >
                         {index === 0 && (
                           <label className="text-[13px] text-[#373940] font-semibold block">
                             Reason
@@ -624,8 +828,8 @@ function StepOne({ onSubmit, onNext }) {
                           { name: "Planned", value: "planned" },
                         ]}
                         placeholder="Select Leave Type"
-                        onChange={(value) =>{
-                          setSelectedId(value)
+                        onChange={(value) => {
+                          setSelectedId(value);
                           handleBatchChange("leave_type", value);
                         }}
                         labelKey="name"
@@ -687,6 +891,126 @@ function StepOne({ onSubmit, onNext }) {
           )}
         </div>
       </form>
+      {isModel && (
+        <div className="fixed inset-0 flex items-center justify-center z-[9999]">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0 bg-black opacity-50"
+            onClick={() => {
+              setIsModel(false);
+              setMultiDates([{ leave_date: "" }]);
+            }}
+          />
+
+          <div className="relative bg-white rounded-lg shadow-lg p-[43px] z-10 min-w-[250px] h-[31vw] max-w-[42vw] w-full max-h-[90vh] overflow-auto">
+            {multiDates?.map((item, index) => (
+              <>
+               {index === 0 && (
+                            <label className="text-[13px] mb-2 block text-[#373940] font-semibold">
+                              Leave Date
+                            </label>
+                          )}
+                <div
+                  key={index}
+                  className="mb-4 flex items-center gap-2"
+                >
+                 
+                  <DatePicker
+                    selected={
+                      item.leave_date ? new Date(item.leave_date) : null
+                    }
+                    minDate={new Date()}
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    dateFormat="yyyy-MM-dd"
+                    className="py-[8px] w-full px-4 bg-white text-[#000] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                    onChange={(date) => {
+                      const formatted = date ? format(date, "yyyy-MM-dd") : "";
+                      const updated = [...multiDates];
+                      updated[index].leave_date = formatted;
+                      setMultiDates(updated);
+                    }}
+                  />
+
+                  {multiDates.length > 1 && (
+                    <button
+                      type="button"
+                      className="text-red-500 text-xl font-bold hover:text-red-700"
+                      onClick={() => {
+                        const updated = multiDates.filter(
+                          (_, i) => i !== index
+                        );
+                        setMultiDates(updated);
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+
+                {index === multiDates.length - 1 && (
+                  <button
+                    type="button"
+                    className="bg-[#335679] absolute top-[16px] right-[16px] cursor-pointer text-white px-3 py-1 rounded text-sm"
+                    onClick={() => {
+                      const last = multiDates[multiDates.length - 1];
+                      if (last.leave_date) {
+                        setMultiDates([...multiDates, { leave_date: "" }]);
+                      } else {
+                        toast.error(
+                          "Please select a date before adding another."
+                        );
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                )}
+              </>
+            ))}
+
+            {multiDates[0]?.leave_date && (
+              <button
+                type="button"
+                className="mt-4 bg-[#335679] text-white px-4 py-2 rounded cursor-pointer"
+                onClick={() => {
+                  const validDates = multiDates.filter((d) => d.leave_date);
+                  if (validDates.length === 0) {
+                    toast.error("Please select at least one date.");
+                    return;
+                  }
+                  const firstDate = validDates[0];
+                  const extraDates = validDates.slice(1);
+                  const updatedFirstRow = {
+                    ...rows[0],
+                    leave_date: firstDate.leave_date,
+                    end_date: "",
+                    leave_type: "",
+                    reason: "",
+                    entry_type: "multiple",
+                  };
+
+                  const newRows = extraDates.map((d) => ({
+                    leave_date: d.leave_date,
+                    end_date: "",
+                    leave_type: "",
+                    reason: "",
+                    entry_type: "multiple",
+                  }));
+
+                  setRows([updatedFirstRow, ...rows.slice(1), ...newRows]);
+                  setIsModel(false);
+                  setMultiDates([{ leave_date: "" }]);
+                  setButtonName("Multiple Leaves");
+                }}
+              >
+                Add Leaves
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -228,7 +228,7 @@ function ViewRequest() {
                                     handleDateChange(update);
                                 }}
                                 isClearable={true}
-                                className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between bg-transparent border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none text-[#1F1F1F]"
+                                className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
                             />
                         </div>
                         <div className='md:w-[31.5%] w-full'>
