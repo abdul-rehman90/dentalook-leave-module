@@ -1,12 +1,12 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { ChevronDown } from '../../../common/assets/icons';
-import loading from '../../../common/assets/icons/blue-loader.svg';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { FaEye } from 'react-icons/fa';
-import { IoClose } from 'react-icons/io5';
-import { CloudCog } from 'lucide-react';
+"use client";
+import React, { useEffect, useState } from "react";
+import { ChevronDown } from "../../../common/assets/icons";
+import loading from "../../../common/assets/icons/blue-loader.svg";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { FaEye } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
+import { CloudCog } from "lucide-react";
 
 export default function LeaveTable({ getReqData, isLoading }) {
   const [newData, setNewData] = useState([]);
@@ -15,66 +15,68 @@ export default function LeaveTable({ getReqData, isLoading }) {
   const router = useRouter();
   useEffect(() => {
     if (getReqData?.length > 0) {
-      const transformedData = getReqData?.flatMap((item) =>
-        ({
-          provider_name: item?.provider_name,
-          status: item?.status,
-          id: item?.id,
-          status: item?.status,
-          regional_manager_c: item?.regional_manager,
-          clinic_name_c: item?.clinic_name,
-          leave_date: item?.days?.map((nestedDay) => nestedDay?.leave_date),
-          leave_type: item?.days?.map((nestedDay) => nestedDay?.leave_type),
-          email: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.email
-          ),
-          user_type: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.user_type
-          ),
-         
-          province_name: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.province_name
-          ),
-          clinic_name: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.clinic_name
-          ),
-          regional_manager: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.regional_manager
-          ),
-          name: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.name
-          ),
-          city: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.city
-          ),
-          reason: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.provider_coverage
-          ),
-          coverage_provider: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_provider?.name
-          ),
-          coverage_status: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_status
-          ),
-          coverage_needed: item?.days?.map(
-            (nestedDay) => nestedDay?.coverage_needed
-          )
-        }))
+      const transformedData = getReqData?.flatMap((item) => ({
+        provider_name: item?.provider_name,
+        status: item?.status,
+        id: item?.id,
+        status: item?.status,
+        regional_manager_c: item?.regional_manager,
+        clinic_name_c: item?.clinic_name,
+        leave_date: item?.days?.map((nestedDay) => nestedDay?.leave_date),
+        leave_type: item?.days?.map((nestedDay) => nestedDay?.leave_type),
+        start_date: item?.days?.map((nestedDay) => nestedDay?.start_date),
+        end_date: item?.days?.map((nestedDay) => nestedDay?.end_date),
+        entry_type: item?.days?.map((nestedDay) => nestedDay?.entry_type),
+        email: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.email
+        ),
+        user_type: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.user_type
+        ),
+
+        province_name: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.province_name
+        ),
+        clinic_name: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.clinic_name
+        ),
+        regional_manager: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.regional_manager
+        ),
+        name: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.name
+        ),
+        city: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.city
+        ),
+        reason: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.provider_coverage
+        ),
+        coverage_provider: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_provider?.name
+        ),
+        coverage_status: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_status
+        ),
+        coverage_needed: item?.days?.map(
+          (nestedDay) => nestedDay?.coverage_needed
+        ),
+      }));
       setNewData(transformedData);
     }
   }, [getReqData]);
 
   const handelClick = (item) => {
-    localStorage.setItem('leaveRequestId', item.id);
-    if (item.status === 'pending') {
+    localStorage.setItem("leaveRequestId", item.id);
+    if (item.status === "pending") {
       router.push(
         `/leave-request?step=2&leaveRequestId=${item.id}&status=${item.status}`
       );
     }
-    if (item.status === 'decline') {
+    if (item.status === "decline") {
       return;
     }
-    if (item.status !== 'pending') {
+    if (item.status !== "pending") {
       router.push(
         `/leave-request?step=3&leaveRequestId=${item.id}&status=${item.status}`
       );
@@ -136,9 +138,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                     className="mx-auto "
                   />
                 </td>
-            </tr>
-              
-            ) : (getReqData.length === 0 && !isLoading) ? (
+              </tr>
+            ) : getReqData.length === 0 && !isLoading ? (
               <tr>
                 <td colSpan="7" className="text-center py-6 text-gray-500">
                   No data found
@@ -156,15 +157,15 @@ export default function LeaveTable({ getReqData, isLoading }) {
                   return (
                     <tr
                       className={`border-t border-[#EAECF0] ${
-                        !allPast ? 'cursor-pointer' : 'cursor-not-allowed'
+                        !allPast ? "cursor-pointer" : "cursor-not-allowed"
                       }`}
                       onClick={() => !allPast && handelClick(item)}
                     >
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                          <div >{item?.user_type[0]}</div>
+                        <div>{item?.user_type[0]}</div>
                       </td>
                       <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.provider_name || ''}
+                        {item?.provider_name || ""}
                       </td>
                       {/* <td className="pr-1 pl-2 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         {item?.regional_manager?.map((date, index) => (
@@ -172,22 +173,49 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         ))} */}
                       {/* </td> */}
                       {/* <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap"> */}
-{/*                         
+                      {/*                         
                         {item?.clinic_name?.map((date, index) => (
                           <div title={date} key={index}>{date ? date.slice(0, 7) + '...' : ''}</div>
                         ))}
                       </td> */}
                       <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.regional_manager_c || ''}
+                        {item?.regional_manager_c || ""}
                       </td>
-                       <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.clinic_name_c || ''}
+                      <td className="pl-3 pr-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                        {item?.clinic_name_c || ""}
                       </td>
-                      <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                        {item?.leave_date?.map((date, index) => (
-                          <div key={index}>{date}</div>
-                        ))}
-                      </td>
+                      {item.entry_type?.includes("single") ? (
+                        <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                          {item?.leave_date?.map((date, index) => (
+                            <div key={index}>{date}</div>
+                          ))}
+                        </td>
+                      ) : (
+                        <>
+                          <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                            <div className="flex">
+                              {item?.start_date?.map((date, index) => (
+                                <div key={index} className="flex items-center">
+                                  {date}
+                                  {index !== item.start_date.length - 1 && <span className="mx-1">-</span>}
+                                </div>
+                              ))}
+                            </div>
+
+                            <div className="flex">
+                              {item?.end_date?.map((date, index) => (
+                                <div key={index}>
+                                  {date}
+                                  {index !== item.end_date.length - 1 && <span className="mx-1">-</span>}
+                                </div>
+                              ))}
+                            </div>
+                             
+                            
+                          </td>
+                        </>
+                      )}
+
                       <td className="pr-3 pl-1 py-3 whitespace-nowrap">
                         {item?.leave_type.map((type, index) => (
                           <div
@@ -197,9 +225,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             <div className="flex items-center gap-2">
                               <span
                                 className={`w-2 h-2 inline-block rounded-full ${
-                                  type === 'emergency'
-                                    ? 'bg-red-600'
-                                    : 'bg-green-600'
+                                  type === "emergency"
+                                    ? "bg-red-600"
+                                    : "bg-green-600"
                                 }`}
                               />
                               <span className="text-xs font-normal text-[#475467]">
@@ -213,16 +241,16 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       <td className="pr-3 pl-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap border-r border-[#D9DADF]">
                         <span
                           className={`w-2 h-2 mr-[6px] inline-block rounded-full ${
-                            item?.status === 'decline'
-                              ? 'bg-red-600'
-                              : item?.status === 'pending'
-                              ? 'bg-orange-400'
-                              : 'bg-green-600'
+                            item?.status === "decline"
+                              ? "bg-red-600"
+                              : item?.status === "pending"
+                              ? "bg-orange-400"
+                              : "bg-green-600"
                           }`}
                         />
                         <span className="text-xs font-normal text-[#475467]">
-                          {item?.status === 'decline'
-                            ? 'Declined'
+                          {item?.status === "decline"
+                            ? "Declined"
                             : item?.status.charAt(0).toUpperCase() +
                               item?.status.slice(1)}
                         </span>
@@ -233,54 +261,61 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             key={index}
                             className="flex items-center gap-1 justify-between w-full"
                           >
-                           
-                              <div className="flex gap-2 items-center">
-                                <span
-                                  className={`w-2 h-2 inline-block rounded-full ${
-                                    needed !== true
-                                      ? ' bg-green-600'
-                                      : 'bg-red-600'
-                                  }`}
-                                />
-                                <span className="text-[#475467] text-xs">
-                                  {needed === true ? 'Yes' : 'No'}
-                                </span>
-                              </div>
-                            
+                            <div className="flex gap-2 items-center">
+                              <span
+                                className={`w-2 h-2 inline-block rounded-full ${
+                                  needed !== true
+                                    ? " bg-green-600"
+                                    : "bg-red-600"
+                                }`}
+                              />
+                              <span className="text-[#475467] text-xs">
+                                {needed === true ? "Yes" : "No"}
+                              </span>
+                            </div>
                           </div>
                         ))}
                       </td>
 
                       <td className="pr-3 pl-1 text-xs font-normal text-[#475467]">
-                        {
-                          item?.status === "pending" ? null :
+                        {item?.status === "pending" ? null : (
                           <>
                             {item?.reason?.map((detail, index) => {
                               if (item.coverage_needed?.[index] === false) {
                                 return (
-                                  <div key={index} className='whitespace-nowrap'>
+                                  <div
+                                    key={index}
+                                    className="whitespace-nowrap"
+                                  >
                                     {
-                                      item?.status === 'decline' ? null : ""
+                                      item?.status === "decline" ? null : ""
                                       // <span
                                       //   className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
-                                      // /> 
+                                      // />
                                     }
-                                    
-                                    {item?.status === 'decline' ? "" : <>
-                                    <span
-                                      className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
-                                    />
-                                    No Coverage Needed
-                                    </>}
+
+                                    {item?.status === "decline" ? (
+                                      ""
+                                    ) : (
+                                      <>
+                                        <span
+                                          className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
+                                        />
+                                        No Coverage Needed
+                                      </>
+                                    )}
                                   </div>
                                 );
                               }
                               if (
                                 item.coverage_needed?.[index] === true &&
-                                (!detail || detail === '')
+                                (!detail || detail === "")
                               ) {
                                 return (
-                                  <div key={index} className='whitespace-nowrap'>
+                                  <div
+                                    key={index}
+                                    className="whitespace-nowrap"
+                                  >
                                     <span
                                       className={`w-2 h-2 inline-block rounded-full bg-orange-400 mr-1`}
                                     />
@@ -288,45 +323,47 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                   </div>
                                 );
                               }
-                              return <div key={index}>
-                                <span
-                                  className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
-                                />
-                                {detail}
-                                </div>;
+                              return (
+                                <div key={index}>
+                                  <span
+                                    className={`w-2 h-2 inline-block rounded-full bg-green-600 mr-1`}
+                                  />
+                                  {detail}
+                                </div>
+                              );
                             })}
                           </>
-                        }
+                        )}
                       </td>
 
                       <td className="pr-3 pl-1 flex flex-col items-start gap-2 py-3 text-xs font-normal text-[#475467]">
-                        {
-                          item?.status === "pending" ? null :
+                        {item?.status === "pending" ? null : (
                           <>
                             {item?.coverage_provider?.map((provider, index) => {
                               let label = provider;
-                              let color = '';
+                              let color = "";
                               if (item.coverage_needed?.[index] === false) {
-                                label = 'No Coverage Needed';
-                                color = 'bg-green-600';
+                                label = "No Coverage Needed";
+                                color = "bg-green-600";
                               } else if (
                                 item.coverage_needed?.[index] === true &&
-                                (!provider || provider === '')
+                                (!provider || provider === "")
                               ) {
-                                label = 'Looking for Coverage';
-                                color = 'bg-orange-400';
+                                label = "Looking for Coverage";
+                                color = "bg-orange-400";
                               }
 
                               return (
                                 <div key={index} className="flex items-center">
-                                  {
-                                    item?.status === 'decline' ? null : 
+                                  {item?.status === "decline" ? null : (
                                     <span
                                       className={`w-2 mr-[5px] h-2 inline-block rounded-full ${color}`}
                                     />
-                                  }
-                                  
-                                  <span>{item?.status === 'decline' ? "" : label}</span>
+                                  )}
+
+                                  <span>
+                                    {item?.status === "decline" ? "" : label}
+                                  </span>
                                   {item.coverage_provider?.[index] !== null &&
                                     item.coverage_provider?.[index] !==
                                       undefined && (
@@ -335,15 +372,18 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                         className="cursor-pointer ml-2"
                                         onClick={(e) => {
                                           handleModelOpen({
-                                            province_name: item.province_name[index],
+                                            province_name:
+                                              item.province_name[index],
                                             user_type: item.user_type[index],
                                             email: item.email,
                                             reason: item.reason[index],
                                             coverage_provider: provider,
-                                            clinic_name: item.clinic_name[index],
-                                            regional_manager: item.regional_manager[index],
+                                            clinic_name:
+                                              item.clinic_name[index],
+                                            regional_manager:
+                                              item.regional_manager[index],
                                             name: item.name[index],
-                                            city: item.city[index]
+                                            city: item.city[index],
                                           });
                                           e.stopPropagation();
                                         }}
@@ -355,7 +395,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               );
                             })}
                           </>
-                        }
+                        )}
                       </td>
                     </tr>
                   );
@@ -381,7 +421,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
               <IoClose />
             </button>
             <h2 className="text-lg font-semibold mb-4">
-              Coverage Provider Details
+              Covering Provider Details
             </h2>
             <div className="space-y-2 text-sm">
               <div className="flex gap-3 justify-between">
@@ -392,49 +432,41 @@ export default function LeaveTable({ getReqData, isLoading }) {
                 <strong>Name:</strong>
                 <p>{modelData.name || ""}</p>
               </div>
-              
+
               <div className="flex gap-3 justify-between">
                 <strong>Coverage Type:</strong>
                 <p>{modelData.reason || ""}</p>
               </div>
-              
-             
-              {
-                modelData.reason.includes("Internal") && (
-                  <>
-                    <div className="flex gap-3 justify-between">
-                      <strong>Province:</strong>
-                      <p>{modelData.province_name || ""}</p>
-                    </div>
-                    <div className="flex gap-3 justify-between">
-                      <strong>Regional Manager:</strong>
-                      <p>{modelData.regional_manager || ""}</p>
-                    </div>
-                    <div className="flex gap-3 justify-between">
-                      <strong>Clinic:</strong>
-                      <p>{modelData.clinic_name || ""}</p>
-                    </div>
-                  </>
-                )
-              }
-              {
-                (modelData.reason.includes("ACE")) && (
-                  <div className="flex gap-3 justify-between">
-                    <strong>Name:</strong>
-                    <p>{modelData.name}</p>
-                  </div>
-                )}
 
-{
-                (modelData.reason.includes("External")) && (
+              {modelData.reason.includes("Internal") && (
+                <>
                   <div className="flex gap-3 justify-between">
-                    <strong>City:</strong>
-                    <p>{modelData.city}</p>
+                    <strong>Province:</strong>
+                    <p>{modelData.province_name || ""}</p>
                   </div>
-                )}
-              
+                  <div className="flex gap-3 justify-between">
+                    <strong>Regional Manager:</strong>
+                    <p>{modelData.regional_manager || ""}</p>
+                  </div>
+                  <div className="flex gap-3 justify-between">
+                    <strong>Clinic:</strong>
+                    <p>{modelData.clinic_name || ""}</p>
+                  </div>
+                </>
+              )}
+              {modelData.reason.includes("ACE") && (
+                <div className="flex gap-3 justify-between">
+                  <strong>Name:</strong>
+                  <p>{modelData.name}</p>
+                </div>
+              )}
 
-  
+              {modelData.reason.includes("External") && (
+                <div className="flex gap-3 justify-between">
+                  <strong>City:</strong>
+                  <p>{modelData.city}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
