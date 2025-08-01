@@ -989,32 +989,16 @@ function StepOne({ onSubmit, onNext }) {
                 </div>
               ))}
 
-              {/* Add Leaves button */}
               {multiDates[0]?.leave_date && (
                 <button
                   type="button"
                   className="mt-6 bg-[#335679] text-white px-4 py-2 rounded cursor-pointer self-start"
                   onClick={() => {
                     const validDates = multiDates.filter((d) => d.leave_date);
-                    validDates.sort((a, b) => new Date(a.leave_date) - new Date(b.leave_date));
-                    if (validDates.length === 0) {
-                      toast.error("Please select at least one date.");
-                      return;
-                    }
-
-                    const firstDate = validDates[0];
-                    const extraDates = validDates.slice(1);
-
-                    const updatedFirstRow = {
-                      ...rows[0],
-                      leave_date: firstDate.leave_date,
-                      end_date: "",
-                      leave_type: "",
-                      reason: "",
-                      entry_type: "multiple",
-                    };
-
-                    const newRows = extraDates.map((d) => ({
+                    validDates.sort(
+                      (a, b) => new Date(a.leave_date) - new Date(b.leave_date)
+                    );
+                    const newRows = validDates.map((d) => ({
                       leave_date: d.leave_date,
                       end_date: "",
                       leave_type: "",
@@ -1022,9 +1006,17 @@ function StepOne({ onSubmit, onNext }) {
                       entry_type: "multiple",
                     }));
 
-                    setRows([updatedFirstRow, ...rows.slice(1), ...newRows]);
+                    const updatedRows = [...rows, ...newRows]
+                      .filter((r) => r.leave_date) 
+                      .sort(
+                        (a, b) =>
+                          new Date(a.leave_date) - new Date(b.leave_date)
+                      );
+
+                    setRows(updatedRows);
                     setIsModel(false);
-                    setMultiDates([{ leave_date: "" }]);
+                    setMultiDates([{ leave_date: "" }]); 
+                    setWriteIndex(0);
                     setActiveIndex(0);
                     setButtonName("Multiple Leaves");
                   }}
