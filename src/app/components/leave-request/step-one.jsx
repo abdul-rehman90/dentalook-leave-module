@@ -59,10 +59,6 @@ function StepOne({ onSubmit, onNext }) {
     buttonName,
     multiDates,
     setMultiDates,
-    endDate,
-    startDate,
-    handleDateChange,
-    setDateRange,
   } = useLeaveReq();
 
   // Update field values
@@ -462,25 +458,29 @@ function StepOne({ onSubmit, onNext }) {
     );
     setRows(updatedRows);
   };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [writeIndex, setWriteIndex] = useState(0);
+  const handleDateChange2 = (date) => {
+    if (!date) return;
 
-  const datePickerRefs = useRef([]);
-  const scrollContainerRef = useRef(null);
+    const formatted = format(date, "yyyy-MM-dd");
+    const updated = [...multiDates];
+    updated[writeIndex].leave_date = formatted;
+    if (writeIndex === updated.length - 1) {
+      updated.push({ leave_date: "" });
+    }
 
-  // Focus the last date picker
+    setMultiDates(updated);
+    setWriteIndex(writeIndex + 1);
+  };
   useEffect(() => {
-    const lastIndex = multiDates.length - 1;
-    if (datePickerRefs.current[lastIndex]) {
-      datePickerRefs.current[lastIndex].setFocus?.();
+    if (writeIndex >= multiDates.length) {
+      const firstEmptyIndex = multiDates.findIndex((d) => !d.leave_date);
+      setWriteIndex(
+        firstEmptyIndex !== -1 ? firstEmptyIndex : multiDates.length - 1
+      );
     }
   }, [multiDates]);
-  useEffect(() => {
-  if (scrollContainerRef.current) {
-    scrollContainerRef.current.scrollTo({
-      left: scrollContainerRef.current.scrollWidth,
-      behavior: "smooth",
-    });
-  }
-}, [multiDates]);
 
   return (
     <div>
@@ -918,93 +918,120 @@ function StepOne({ onSubmit, onNext }) {
             onClick={() => {
               setIsModel(false);
               setMultiDates([{ leave_date: "" }]);
+              setActiveIndex(0);
             }}
           />
 
-          <div className="relative bg-white rounded-lg shadow-lg p-[43px] z-10 min-w-[250px] h-[31vw] max-w-[42vw] w-full max-h-[90vh] overflow-auto">
-            <label className="text-[13px] mb-2 block text-[#373940] font-semibold">
-              Leave Date
-            </label>
+          <div className="relative z-10 bg-white rounded-lg shadow-lg p-6 w-[45vw] max-h-[90vh] overflow-auto flex gap-6">
+            {/* Left - Calendar */}
+            <div>
+              <DatePicker
+                selected={
+                  multiDates[activeIndex]?.leave_date
+                    ? new Date(multiDates[activeIndex]?.leave_date)
+                    : null
+                }
+                onChange={handleDateChange2}
+                inline
+                minDate={new Date()}
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+              />
+            </div>
 
-           <div
-  ref={scrollContainerRef}
-  className="flex gap-3 overflow-x-auto border border-[#D9DADF] rounded-md p-1"
-  style={{ whiteSpace: "nowrap" }}
->
-  {multiDates.map((item, index) => (
-    <div key={index}>
-      <DatePicker
-        ref={(el) => (datePickerRefs.current[index] = el)}
-        selected={item.leave_date ? new Date(item.leave_date) : null}
-        onFocus={(e) => e.target.blur()}
-        minDate={new Date()}
-        showMonthDropdown
-        showYearDropdown
-        dropdownMode="select"
-        dateFormat="yyyy-MM-dd"
-        className={`py-[8px] px-[12px] bg-white text-[#000] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] transition-all duration-300 ease-in-out ${
-          item.leave_date ? "w-[160px]" : "w-[280px]"
-        }`}
-        onChange={(date) => {
-          const formatted = date ? format(date, "yyyy-MM-dd") : "";
-          const updated = [...multiDates];
-          updated[index].leave_date = formatted;
-          setMultiDates(updated);
+            {/* Right - Input List */}
+            <div className="flex flex-col gap-4 w-full overflow-x-auto">
+              <label className="text-sm text-[#373940] font-semibold block mb-1">
+                Leave Date
+              </label>
+              {multiDates.map((item, index) => (
+                <div key={index} className="relative">
+                  <input
+                    type="text"
+                    value={item.leave_date}
+                    placeholder="YYYY-MM-DD"
+                    readOnly
+                    className={`w-full py-2 px-4 border rounded-md text-sm ${
+                      writeIndex === index
+                        ? "border-[#335679]"
+                        : "border-gray-300"
+                    }`}
+                  />
 
-          if (
-            index === multiDates.length - 1 &&
-            formatted &&
-            !multiDates.some(
-              (d, i) => i !== index && d.leave_date === ""
-            )
-          ) {
-            setMultiDates([...updated, { leave_date: "" }]);
-          }
-        }}
-      />
-    </div>
-  ))}
-</div>
+                  {multiDates.length > 1 && (
+                    <button
+                      type="button"
+                      className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 text-red-500 text-sm"
+                      onClick={() => {
+                        const updated = multiDates.filter(
+                          (_, i) => i !== index
+                        );
 
+                        // Adjust writeIndex
+                        let newWriteIndex = writeIndex;
+                        if (index < writeIndex) {
+                          newWriteIndex = writeIndex - 1;
+                        } else if (
+                          index === writeIndex &&
+                          writeIndex === updated.length
+                        ) {
+                          newWriteIndex = updated.length - 1;
+                        }
 
+                        setMultiDates(updated);
+                        setWriteIndex(Math.max(newWriteIndex, 0));
+                      }}
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
 
-            {multiDates[0]?.leave_date && (
-              <button
-                type="button"
-                className="mt-4 bg-[#335679] text-white px-4 py-2 rounded cursor-pointer"
-                onClick={() => {
-                  const validDates = multiDates.filter((d) => d.leave_date);
-                  if (validDates.length === 0) {
-                    toast.error("Please select at least one date.");
-                    return;
-                  }
-                  const firstDate = validDates[0];
-                  const extraDates = validDates.slice(1);
-                  const updatedFirstRow = {
-                    ...rows[0],
-                    leave_date: firstDate.leave_date,
-                    end_date: "",
-                    leave_type: "",
-                    reason: "",
-                    entry_type: "multiple",
-                  };
-                  const newRows = extraDates.map((d) => ({
-                    leave_date: d.leave_date,
-                    end_date: "",
-                    leave_type: "",
-                    reason: "",
-                    entry_type: "multiple",
-                  }));
+              {/* Add Leaves button */}
+              {multiDates[0]?.leave_date && (
+                <button
+                  type="button"
+                  className="mt-6 bg-[#335679] text-white px-4 py-2 rounded cursor-pointer self-start"
+                  onClick={() => {
+                    const validDates = multiDates.filter((d) => d.leave_date);
+                    if (validDates.length === 0) {
+                      toast.error("Please select at least one date.");
+                      return;
+                    }
 
-                  setRows([updatedFirstRow, ...rows.slice(1), ...newRows]);
-                  setIsModel(false);
-                  setMultiDates([{ leave_date: "" }]);
-                  setButtonName("Multiple Leaves");
-                }}
-              >
-                Add Leaves
-              </button>
-            )}
+                    const firstDate = validDates[0];
+                    const extraDates = validDates.slice(1);
+
+                    const updatedFirstRow = {
+                      ...rows[0],
+                      leave_date: firstDate.leave_date,
+                      end_date: "",
+                      leave_type: "",
+                      reason: "",
+                      entry_type: "multiple",
+                    };
+
+                    const newRows = extraDates.map((d) => ({
+                      leave_date: d.leave_date,
+                      end_date: "",
+                      leave_type: "",
+                      reason: "",
+                      entry_type: "multiple",
+                    }));
+
+                    setRows([updatedFirstRow, ...rows.slice(1), ...newRows]);
+                    setIsModel(false);
+                    setMultiDates([{ leave_date: "" }]);
+                    setActiveIndex(0);
+                    setButtonName("Multiple Leaves");
+                  }}
+                >
+                  Add Leaves
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
