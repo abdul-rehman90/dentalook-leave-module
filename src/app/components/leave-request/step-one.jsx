@@ -941,7 +941,7 @@ function StepOne({ onSubmit, onNext }) {
             </div>
 
             {/* Right - Input List */}
-            <div className="flex flex-col gap-4 w-full overflow-x-auto">
+            <div className="flex flex-col gap-4 w-full overflow-x-auto h-[20vw]">
               <label className="text-sm text-[#373940] font-semibold block mb-1">
                 Leave Date
               </label>
@@ -996,6 +996,7 @@ function StepOne({ onSubmit, onNext }) {
                   className="mt-6 bg-[#335679] text-white px-4 py-2 rounded cursor-pointer self-start"
                   onClick={() => {
                     const validDates = multiDates.filter((d) => d.leave_date);
+                    validDates.sort((a, b) => new Date(a.leave_date) - new Date(b.leave_date));
                     if (validDates.length === 0) {
                       toast.error("Please select at least one date.");
                       return;
