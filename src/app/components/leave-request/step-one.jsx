@@ -86,7 +86,7 @@ function StepOne({ onSubmit, onNext }) {
 
       if (
         newType === "single" &&
-        (!lastRow.leave_date || lastRow.leave_date.trim() === "")
+        (!lastRow.leave_date || lastRow?.leave_date?.trim() === "")
       ) {
         toast.error("Please select a Leave Date before adding a new row.");
         return;
@@ -146,7 +146,6 @@ function StepOne({ onSubmit, onNext }) {
     setButtonName("Single Leave");
   }, []);
 
-  const lastRow = rows[rows.length - 1];
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Sequential validation
@@ -223,7 +222,7 @@ function StepOne({ onSubmit, onNext }) {
         return row;
       }),
     };
-    console.log(payload, "rows");
+
 
     try {
       const response = await axiosInstance.post(
@@ -321,7 +320,7 @@ function StepOne({ onSubmit, onNext }) {
     }
 
     if (getData?.province && allProvinces?.length > 0) {
-      const matchedProvince = allProvinces.find(
+      const matchedProvince = allProvinces?.find(
         (item) => item.name === getData.province
       );
       if (matchedProvince) {
@@ -335,7 +334,7 @@ function StepOne({ onSubmit, onNext }) {
         userData.provinces[0] &&
         allProvinces?.length > 0
       ) {
-        const matchedProvince = allProvinces.find(
+        const matchedProvince = allProvinces?.find(
           (item) => item.province_name === userData.provinces[0]?.province_name
         );
         if (matchedProvince) {
@@ -350,7 +349,7 @@ function StepOne({ onSubmit, onNext }) {
         regionalManagers?.length > 0 &&
         !regionalManagersId
       ) {
-        const matchedManager = regionalManagers.find(
+        const matchedManager = regionalManagers?.find(
           (item) =>
             item.regional_manager_name ===
             userData.regional_managers[0]?.regional_manager_name
@@ -369,10 +368,8 @@ function StepOne({ onSubmit, onNext }) {
       ) {
         const matchedManager = allClinics?.find(
           (item) =>
-            item.clinic_name.trim().toLowerCase() ===
-            userData.regional_managers[0]?.clinics[0].clinic_name
-              .trim()
-              .toLowerCase()
+            item.clinic_name?.trim().toLowerCase() ===
+            userData.regional_managers[0]?.clinics[0].clinic_name?.trim().toLowerCase()
         );
         if (matchedManager) {
           setClinicId(matchedManager.clinic_id);
@@ -385,7 +382,7 @@ function StepOne({ onSubmit, onNext }) {
       regionalManagers?.length > 0 &&
       !regionalManagersId
     ) {
-      const matchedManager = regionalManagers.find(
+      const matchedManager = regionalManagers?.find(
         (item) => item.name === getData?.regional_manager
       );
       if (matchedManager) {
@@ -397,8 +394,8 @@ function StepOne({ onSubmit, onNext }) {
     if (getData?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
       const matchedManager = allClinics?.find(
         (item) =>
-          item.name.trim().toLowerCase() ===
-          getData.clinic_name.trim().toLowerCase()
+          item.name?.trim().toLowerCase() ===
+          getData.clinic_name?.trim().toLowerCase()
       );
 
       if (matchedManager) {
@@ -409,7 +406,7 @@ function StepOne({ onSubmit, onNext }) {
     if (getData?.provider_name && allProviders?.length > 0) {
       const matchedManager = allProviders?.find((item) => {
         const isMatch =
-          item.name.trim().toLowerCase() ===
+          item.name?.trim().toLowerCase() ===
           getData?.provider_name?.name?.trim().toLowerCase();
         return isMatch;
       });
@@ -475,7 +472,7 @@ function StepOne({ onSubmit, onNext }) {
   };
   useEffect(() => {
     if (writeIndex >= multiDates.length) {
-      const firstEmptyIndex = multiDates.findIndex((d) => !d.leave_date);
+      const firstEmptyIndex = multiDates?.findIndex((d) => !d.leave_date);
       setWriteIndex(
         firstEmptyIndex !== -1 ? firstEmptyIndex : multiDates.length - 1
       );
