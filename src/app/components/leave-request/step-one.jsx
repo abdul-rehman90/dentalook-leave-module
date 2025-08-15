@@ -376,7 +376,8 @@ function StepOne({ onSubmit, onNext }) {
         }
       }
     }
-
+    // console.log(regionalManagers, "..regionalManagers")
+    // console.log(getData, "..getData")
     if (
       getData?.regional_manager &&
       regionalManagers?.length > 0 &&
@@ -385,21 +386,20 @@ function StepOne({ onSubmit, onNext }) {
       const matchedManager = regionalManagers?.find(
         (item) => item.name === getData?.regional_manager
       );
+      
       if (matchedManager) {
         setRegionalManagersId(matchedManager.id);
         setAllClinics(matchedManager.clinics);
       }
     }
-
     if (getData?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
       const matchedManager = allClinics?.find(
         (item) =>
-          item.name?.trim().toLowerCase() ===
+         ( item.name?.trim().toLowerCase() || item.clinic_name?.trim().toLowerCase()) ===
           getData.clinic_name?.trim().toLowerCase()
       );
-
       if (matchedManager) {
-        setClinicId(matchedManager.id);
+        setClinicId(matchedManager.clinic_id || matchedManager.id);
       }
     }
 
