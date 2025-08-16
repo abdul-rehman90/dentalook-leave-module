@@ -73,10 +73,12 @@ function StepThree({ onNext }) {
     lastName: '',
     city: ''
   });
+
   const handleProviderFormChange = (e) => {
     const { name, value } = e.target;
     setProviderFormData((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleProviderFormSubmit = async (e) => {
     e.preventDefault();
     setProviderLoader(true);
@@ -111,9 +113,7 @@ function StepThree({ onNext }) {
           lastName: '',
           city: ''
         });
-        // setDocName("");
         setProvinceId2('');
-        // setCoverageClinicId("");
         setRegionalManagersId2('');
       }
     } catch (error) {
@@ -129,6 +129,7 @@ function StepThree({ onNext }) {
     { name: 'RDT', value: 'RDT' }
   ];
   const [idd, setIdd] = useState('');
+
   useEffect(() => {
     if (getData?.province && allProvinces?.length > 0) {
       const matchedProvince = allProvinces.find(
@@ -194,29 +195,19 @@ function StepThree({ onNext }) {
     }
   }, [getData, allProvinces, regionalManagers, allClinics, allProviders]);
 
-  // Update field values
   const handleChange = (index, field, value) => {
     const newRows = [...rows];
 
-    // If all rows are selected, update all rows
     if (selectedRows.length === rows.length) {
       newRows.forEach((row) => {
         row[field] = value;
       });
-    }
-    // Otherwise, update only the specific row
-    else {
+    } else {
       newRows[index][field] = value;
     }
 
     setRows(newRows);
   };
-
-  // const handleChange = (index, field, value) => {
-  //   const newRows = [...rows];
-  //   newRows[index][field] = value;
-  //   setRows(newRows);
-  // };
 
   const handleCheckedSubmit = async (e) => {
     e.preventDefault();
@@ -296,15 +287,6 @@ function StepThree({ onNext }) {
     setIsAllSelected(newSelected.length === rows.length);
   };
 
-  // const handleSelectAll = (checked) => {
-  //   if (checked) {
-  //     setSelectedRows(rows.map((_, i) => i));
-  //   } else {
-  //     setSelectedRows([]);
-  //   }
-  //   setIsAllSelected(checked);
-  // };
-
   const handleBatchChange = (field, value) => {
     const updated = rows.map((row, idx) =>
       selectedRows.includes(idx) ? { ...row, [field]: value } : row
@@ -321,7 +303,7 @@ function StepThree({ onNext }) {
               <Heading title="Provider Requiring Coverage" subtitle="" />
               <div className="flex flex-wrap gap-6 py-5">
                 <div className="flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[99%] w-full">
-                  <div className="w-full">
+                  <div className="w-full md:w-[24%]">
                     <CustomSelector
                       onChange={(value) => setDocName(value)}
                       label="Provider Title"
@@ -333,7 +315,7 @@ function StepThree({ onNext }) {
                       className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                     />
                   </div>
-                  <div className="w-full">
+                  <div className="w-full md:w-[35%]">
                     <CustomSelector
                       onChange={(value) => setProviderId(value)}
                       label="Provider Name"
@@ -412,213 +394,238 @@ function StepThree({ onNext }) {
                 </button>
               </div>
 
-              <div>
-                {rows?.map((row, index) => {
-                  const isSelected = selectedRows.includes(index);
-                  return (
-                    <div
-                      key={index}
-                      className={`cursor-pointer flex gap-2 p-2 relative items-center ${
-                        index !== rows.length - 1
-                          ? 'border-b border-[#D9DADF]'
-                          : 'hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:rounded-lg hover:transition-all hover:duration-200 hover:z-10'
-                      }`}
-                    >
-                      <div
-                        className={`flex items-center gap-2 ${
-                          index === 0 ? 'md:mt-[28px]' : 'md:mt-[0px]'
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={(e) =>
-                            e.target.checked
-                              ? setSelectedRows(rows.map((_, idx) => idx))
-                              : setSelectedRows([])
-                          }
-                        />
-                      </div>
-
-                      <div
-                        className={`flex flex-col gap-2 ${
-                          row.entry_type?.includes('date range')
-                            ? 'md:w-[26%]'
-                            : 'md:w-[18%]'
-                        } md:w-[18%] w-full`}
-                      >
-                        {index === 0 && (
-                          <label className="text-[13px] text-[#373940] font-semibold block">
-                            Leave Date
-                          </label>
-                        )}
-                        {row.entry_type?.includes('date range') ? (
-                          <DatePicker
-                            selectsRange
-                            startDate={
-                              row.start_date
-                                ? new Date(row.start_date + 'T00:00:00')
-                                : null
+              {/* Table Structure for Coverage Details */}
+              <div className="relative addBorderClass">
+                <div className="relative">
+                  <table className="w-full">
+                    <thead className="border-b-[#D9DADF] border-b border-solid">
+                      <tr>
+                        <th className="text-left p-1 w-[5%]">
+                          <input
+                            type="checkbox"
+                            className="mx-2"
+                            checked={
+                              selectedRows.length === rows.length &&
+                              rows.length > 0
                             }
-                            endDate={
-                              row.end_date
-                                ? new Date(row.end_date + 'T00:00:00')
-                                : null
-                            }
-                            minDate={new Date()}
-                            showMonthDropdown
-                            showYearDropdown
-                            dropdownMode="select"
-                            dateFormat="yyyy-MM-dd"
-                            isClearable={false}
-                            className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
-                          />
-                        ) : (
-                          <DatePicker
-                            disabled
-                            selected={
-                              row.leave_date
-                                ? new Date(row.leave_date + 'T00:00:00')
-                                : null
-                            }
-                            minDate={new Date()}
-                            showMonthDropdown
-                            showYearDropdown
-                            dropdownMode="select"
-                            dateFormat="YYYY-MM-dd"
-                            className="py-[6px] bg-white text-[#000] disabled:cursor-not-allowed w-full px-4 block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
-                            name="leave_date"
-                            onChange={(date) => {
-                              const formatted = date
-                                ? format(date, 'yyyy-MM-dd')
-                                : '';
-                              handleChange(index, 'leave_date', formatted);
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedRows(rows.map((_, idx) => idx));
+                              } else {
+                                setSelectedRows([]);
+                              }
                             }}
                           />
-                        )}
-                      </div>
-                      <div className="md:w-[17%] w-full md:border-[#D9DADF] md:border-r custom__Selector">
-                        <CustomSelector
-                          disabled
-                          label={index === 0 && 'Leave Type'}
-                          options={[
-                            { name: 'Emergency', value: 'emergency' },
-                            { name: 'Planned', value: 'planned' }
-                          ]}
-                          placeholder="Select Leave Type"
-                          value={row.leave_type}
-                          onChange={(value) =>
-                            handleChange(index, 'leave_type', value)
-                          }
-                          labelKey="name"
-                          valueKey="value"
-                          className="disabled:cursor-not-allowed"
-                          labelClassName="text-[13px] text-[#373940] font-semibold block"
-                        />
-                      </div>
-                      <div className="md:w-[12%] w-full">
-                        <CustomSelector
-                          label={index === 0 && 'Coverage Needed'}
-                          options={[
-                            { name: 'Yes', value: 'yes' },
-                            { name: 'No', value: 'no' }
-                          ]}
-                          placeholder="Select Coverage Needed"
-                          onChange={(value) =>
-                            handleChange(index, 'coverage_needed', value)
-                          }
-                          labelKey="name"
-                          valueKey="value"
-                          value={
-                            row.coverage_needed === true
-                              ? 'yes'
-                              : row.coverage_needed === false
-                              ? 'no'
-                              : row.coverage_needed
-                          }
-                          // disabled={isSelected}
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
-                          labelClassName="text-[13px] text-[#373940] font-semibold block"
-                        />
-                      </div>
-                      <div className="md:w-[20%] w-full">
-                        <CustomSelector
-                          label={index === 0 && 'Covering Provider Name'}
-                          options={coverageProviderList}
-                          placeholder="Select Provider"
-                          value={
-                            typeof row.coverage_provider === 'object' &&
-                            row.coverage_provider !== null
-                              ? row.coverage_provider.id
-                              : row.coverage_provider
-                          }
-                          onChange={(value, option) => {
-                            handleChange(index, 'coverage_provider', option);
-                            setCoverageType(option);
-                          }}
-                          onOpen={() => handleGetProviderList(row.leave_date)}
-                          labelKey="name"
-                          valueKey="id"
-                          disabled={
-                            row.coverage_needed === 'no' ||
-                            row.coverage_needed === false
-                            // isSelected
-                          }
-                          showSearch={true}
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
-                          labelClassName="text-[13px] text-[#373940] font-semibold block"
-                        />
-                      </div>
-                      <div className="md:w-[19%] w-full">
-                        <CustomSelector
-                          label={index === 0 && 'Coverage Type'}
-                          options={[
-                            { name: 'Internal', value: 'Internal' },
-                            { name: 'External', value: 'External' },
-                            { name: 'ACE', value: 'ACE' }
-                          ]}
-                          placeholder="Select Type"
-                          // value={covergeType?.provider_coverage}
-                          value={
-                            typeof row.coverage_provider === 'object' &&
-                            row.coverage_provider !== null
-                              ? row.coverage_provider.provider_coverage
-                              : ''
-                          }
-                          onChange={(value) =>
-                            handleChange(index, 'coverage_type', value)
-                          }
-                          labelKey="name"
-                          valueKey="value"
-                          disabled={
-                            row.coverage_needed === 'no' ||
-                            row.coverage_needed === false
-                          }
-                          className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
-                          labelClassName="text-[13px] text-[#373940] font-semibold block"
-                        />
-                      </div>
-                      <div className="md:w-[14%] w-full">
-                        <Input
-                          label={index === 0 && 'Coverage Found By'}
-                          placeholder="Enter Coverage"
-                          name="coverage_found_by"
-                          value={userData?.name}
-                          onChange={(e) =>
-                            handleChange(
-                              index,
-                              'coverage_found_by',
-                              e.target.value
-                            )
-                          }
-                          disabled
-                          className="!py-[6px] disabled:cursor-not-allowed disabled:opacity-[0.8]"
-                          labelClassName="text-[13px] text-[#373940] font-semibold block"
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+                        </th>
+                        <th className="text-left p-1 w-[20%] text-[13px] text-[#373940] font-semibold">
+                          Leave Date
+                        </th>
+                        <th className="text-left p-1 w-[15%] text-[13px] text-[#373940] font-semibold">
+                          Leave Type
+                        </th>
+                        <th className="text-left p-1 w-[15%] text-[13px] text-[#373940] font-semibold">
+                          Coverage Needed
+                        </th>
+                        <th className="text-left p-1 w-[20%] text-[13px] text-[#373940] font-semibold">
+                          Covering Provider
+                        </th>
+                        <th className="text-left p-1 w-[15%] text-[13px] text-[#373940] font-semibold">
+                          Coverage Type
+                        </th>
+                        <th className="text-left p-1 w-[15%] text-[13px] text-[#373940] font-semibold">
+                          Coverage Found By
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows?.map((row, index) => {
+                        const isSelected = selectedRows.includes(index);
+                        const isRange = row.entry_type === 'date range';
+                        return (
+                          <tr
+                            key={index}
+                            className={`${
+                              index !== rows.length - 1
+                                ? 'border-b border-[#E6EAEE]'
+                                : ''
+                            } hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200 hover:z-10`}
+                          >
+                            <td className="p-1">
+                              <input
+                                type="checkbox"
+                                className="mx-2"
+                                checked={isSelected}
+                                onChange={(e) =>
+                                  handleRowSelect(index, e.target.checked)
+                                }
+                              />
+                            </td>
+                            <td className="p-1">
+                              <DatePicker
+                                disabled
+                                name="leave_date"
+                                minDate={new Date()}
+                                dropdownMode="select"
+                                selectsRange={isRange}
+                                dateFormat="MMM-dd-yyyy"
+                                endDate={
+                                  isRange ? new Date(row.end_date) : null
+                                }
+                                startDate={
+                                  isRange ? new Date(row.leave_date) : null
+                                }
+                                selected={
+                                  !isRange
+                                    ? row.leave_date
+                                      ? new Date(row.leave_date)
+                                      : null
+                                    : null
+                                }
+                                className="py-[6px] w-full px-4 bg-white text-[#000] placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                                onChange={(date) => {
+                                  if (!isRange) {
+                                    const formatted = date
+                                      ? format(date, 'MMM-dd-yyyy')
+                                      : '';
+                                    handleChange(
+                                      index,
+                                      'leave_date',
+                                      formatted
+                                    );
+                                  } else {
+                                    const [start, end] = date;
+                                    handleChange(
+                                      index,
+                                      'leave_date',
+                                      start ? format(date, 'MMM-dd-yyyy') : ''
+                                    );
+                                    handleChange(
+                                      index,
+                                      'end_date',
+                                      end ? format(date, 'MMM-dd-yyyy') : ''
+                                    );
+                                  }
+                                }}
+                              />
+                            </td>
+                            <td className="p-1">
+                              <CustomSelector
+                                disabled
+                                options={[
+                                  { name: 'Emergency', value: 'emergency' },
+                                  { name: 'Planned', value: 'planned' }
+                                ]}
+                                placeholder="Select Leave Type"
+                                value={row.leave_type}
+                                onChange={(value) =>
+                                  handleChange(index, 'leave_type', value)
+                                }
+                                labelKey="name"
+                                valueKey="value"
+                                className="disabled:cursor-not-allowed"
+                              />
+                            </td>
+                            <td className="p-1">
+                              <CustomSelector
+                                options={[
+                                  { name: 'Yes', value: 'yes' },
+                                  { name: 'No', value: 'no' }
+                                ]}
+                                placeholder="Select Coverage Needed"
+                                onChange={(value) =>
+                                  handleChange(index, 'coverage_needed', value)
+                                }
+                                labelKey="name"
+                                valueKey="value"
+                                value={
+                                  row.coverage_needed === true
+                                    ? 'yes'
+                                    : row.coverage_needed === false
+                                    ? 'no'
+                                    : row.coverage_needed
+                                }
+                                className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+                              />
+                            </td>
+                            <td className="p-1">
+                              <CustomSelector
+                                options={coverageProviderList}
+                                placeholder="Select Provider"
+                                value={
+                                  typeof row.coverage_provider === 'object' &&
+                                  row.coverage_provider !== null
+                                    ? row.coverage_provider.id
+                                    : row.coverage_provider
+                                }
+                                onChange={(value, option) => {
+                                  handleChange(
+                                    index,
+                                    'coverage_provider',
+                                    option
+                                  );
+                                  setCoverageType(option);
+                                }}
+                                onOpen={() =>
+                                  handleGetProviderList(row.leave_date)
+                                }
+                                labelKey="name"
+                                valueKey="id"
+                                disabled={
+                                  row.coverage_needed === 'no' ||
+                                  row.coverage_needed === false
+                                }
+                                showSearch={true}
+                                className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+                              />
+                            </td>
+                            <td className="p-1">
+                              <CustomSelector
+                                options={[
+                                  { name: 'Internal', value: 'Internal' },
+                                  { name: 'External', value: 'External' },
+                                  { name: 'ACE', value: 'ACE' }
+                                ]}
+                                placeholder="Select Type"
+                                value={
+                                  typeof row.coverage_provider === 'object' &&
+                                  row.coverage_provider !== null
+                                    ? row.coverage_provider.provider_coverage
+                                    : ''
+                                }
+                                onChange={(value) =>
+                                  handleChange(index, 'coverage_type', value)
+                                }
+                                labelKey="name"
+                                valueKey="value"
+                                disabled={
+                                  row.coverage_needed === 'no' ||
+                                  row.coverage_needed === false
+                                }
+                                className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+                              />
+                            </td>
+                            <td className="p-1">
+                              <Input
+                                placeholder="Enter Coverage"
+                                name="coverage_found_by"
+                                value={userData?.name}
+                                onChange={(e) =>
+                                  handleChange(
+                                    index,
+                                    'coverage_found_by',
+                                    e.target.value
+                                  )
+                                }
+                                disabled
+                                className="!py-[6px] disabled:cursor-not-allowed disabled:opacity-[0.8]"
+                              />
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -680,59 +687,3 @@ function StepThree({ onNext }) {
 }
 
 export default StepThree;
-
-//  <div className="flex items-center gap-2 py-3">
-//                 <input
-//                   type="checkbox"
-//                   checked={isAllSelected}
-//                   onChange={(e) => handleSelectAll(e.target.checked)}
-//                 />
-//                 <label className="font-semibold">Select All</label>
-//               </div>
-
-// {selectedRows.length > 0 && (
-//                 <div className="flex flex-wrap gap-6 py-4 border border-dashed border-[#ccc] rounded-md p-4 mb-4 bg-[#f9f9f9]">
-//                   <div className="md:w-[20%] w-full">
-//                     <CustomSelector
-//                       label="Coverage Needed (Selected)"
-//                       options={[
-//                         { name: 'Yes', value: 'yes' },
-//                         { name: 'No', value: 'no' }
-//                       ]}
-//                       placeholder="Select Coverage"
-//                       onChange={(value) => {
-//                         handleBatchChange('coverage_needed', value);
-//                         setAppendConerageNeeded(value);
-//                       }}
-//                       labelKey="name"
-//                       valueKey="value"
-//                       value={appendConerageNeeded}
-//                     />
-//                   </div>
-//                   <div className="md:w-[25%] w-full">
-//                     <CustomSelector
-//                       label="Covering Provider Name"
-//                       options={coverageProviderList}
-//                       placeholder="Select Provider"
-//                       onChange={(value, option) => {
-//                         handleBatchChange('coverage_provider', option);
-//                         setCoverageType(value);
-//                         setCheckCoveringProvider(value);
-//                       }}
-//                       onOpen={() => providerList()}
-//                       labelKey="name"
-//                       valueKey="id"
-//                       value={covergeType}
-//                       showSearch={true}
-//                       disabled={
-//                         appendConerageNeeded === 'no' ||
-//                         appendConerageNeeded === false ||
-//                         appendConerageNeeded === ''
-//                           ? true
-//                           : false
-//                       }
-//                       className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
-//                     />
-//                   </div>
-//                 </div>
-//               )}

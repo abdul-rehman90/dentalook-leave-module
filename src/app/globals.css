@@ -24,6 +24,10 @@ body {
   display: flex !important;
 }
 
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
 .react-datepicker .react-datepicker__header {
   background-color: transparent;
 }
