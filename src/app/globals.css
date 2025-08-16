@@ -1,8 +1,8 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @import url('https://api.fontshare.com/v2/css?f[]=plus-jakarta-sans@400,500,600,700&display=swap');
 
 body {
-  background: #F9FAFB;
+  background: #f9fafb;
   color: var(--foreground);
   font-family: 'Satoshi', sans-serif;
 }
@@ -10,21 +10,39 @@ body {
 .font-jakarta {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
-.request_Datepicker .react-datepicker-wrapper{
+.request_Datepicker .react-datepicker-wrapper {
   width: 100%;
 }
-.addBorderClass label{
+.addBorderClass label {
   margin-bottom: 20px;
 }
-.custom__Selector .custom__class{
+.custom__Selector .custom__class {
   width: 94%;
 }
 
-@media screen and (max-width:767px){
-  .addBorderClass .border-to__To{
+.react-datepicker {
+  display: flex !important;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker .react-datepicker__header {
+  background-color: transparent;
+}
+
+.react-datepicker .react-datepicker__month {
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 767px) {
+  .addBorderClass .border-to__To {
     display: none;
   }
-  .custom__Selector .custom__class{
+  .custom__Selector .custom__class {
     width: 100%;
   }
-} 
+}
