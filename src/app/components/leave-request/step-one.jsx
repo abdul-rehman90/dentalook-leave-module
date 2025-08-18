@@ -311,9 +311,19 @@ function StepOne({ onSubmit, onNext }) {
 
     if (dateSelectionMode === 'individual') {
       const formatted = format(date, 'EEE, MMM-dd-yyyy');
+      // Prevent duplicate dates
+      if (multiDates.some((d) => d.leave_date === formatted)) {
+        toast.error('This date is already selected.');
+        return;
+      }
       const updated = [...multiDates];
       updated[writeIndex].leave_date = formatted;
-      if (writeIndex === updated.length - 1) {
+      // Only add a new field if last field is filled and not a duplicate
+      if (
+        writeIndex === updated.length - 1 &&
+        formatted &&
+        !updated.some((d, idx) => d.leave_date === '' && idx !== writeIndex)
+      ) {
         updated.push({ leave_date: '' });
       }
       setMultiDates(updated);
