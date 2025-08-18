@@ -542,7 +542,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                                   minDate={new Date()}
                                   dropdownMode="select"
                                   selectsRange={isRange}
-                                  dateFormat="MMM-dd-yyyy"
+                                  dateFormat="yyyy-MM-dd"
                                   endDate={
                                     isRange ? new Date(day.end_date) : null
                                   }
@@ -560,7 +560,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                                   onChange={(date) => {
                                     if (!isRange) {
                                       const formatted = date
-                                        ? format(date, 'MMM-dd-yyyy')
+                                        ? format(date, 'yyyy-MM-dd')
                                         : '';
                                       handleChange(
                                         dayIdx,
@@ -572,12 +572,12 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                                       handleChange(
                                         dayIdx,
                                         'leave_date',
-                                        start ? format(date, 'MMM-dd-yyyy') : ''
+                                        start ? format(date, 'yyyy-MM-dd') : ''
                                       );
                                       handleChange(
                                         dayIdx,
                                         'end_date',
-                                        end ? format(date, 'MMM-dd-yyyy') : ''
+                                        end ? format(date, 'yyyy-MM-dd') : ''
                                       );
                                     }
                                   }}
@@ -706,6 +706,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
             onClick={() => {
               if (!isEditing) {
                 setIsEditing(true);
+                onPrev();
               } else {
                 handleUpdateLeaveRequest();
               }
