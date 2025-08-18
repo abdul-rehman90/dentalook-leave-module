@@ -205,11 +205,10 @@ function StepOne({ onSubmit, onNext }) {
           return {
             ...rest,
             leave_date: format(row.leave_date, 'yyyy-MM-dd'),
-            entry_type: row.entry_type
+           entry_type: 'single'
           };
         }
-
-        if (row.entry_type === 'multiple') {
+        if (row.entry_type === 'multiple' || row.entry_type === '') {
           const { end_date, ...rest } = row;
           return {
             ...rest,
@@ -310,7 +309,7 @@ function StepOne({ onSubmit, onNext }) {
     if (!date) return;
 
     if (dateSelectionMode === 'individual') {
-      const formatted = format(date, 'EEE, MMM-dd-yyyy');
+      const formatted = format(date, 'yyyy-MM-dd');
       // Prevent duplicate dates
       if (multiDates.some((d) => d.leave_date === formatted)) {
         toast.error('This date is already selected.');
@@ -331,8 +330,8 @@ function StepOne({ onSubmit, onNext }) {
     } else {
       // Multiple range selection logic
       if (Array.isArray(date) && date[0] && date[1]) {
-        const start = format(date[0], 'EEE, MMM-dd-yyyy');
-        const end = format(date[1], 'EEE, MMM-dd-yyyy');
+        const start = format(date[0], 'EEE, yyyy-MM-dd');
+        const end = format(date[1], 'EEE, yyyy-MM-dd');
         // Prevent duplicate ranges
         if (multiRanges.some(r => r.start === start && r.end === end)) {
           toast.error('This range is already selected.');
@@ -342,13 +341,13 @@ function StepOne({ onSubmit, onNext }) {
         setRangeDates({ start: '', end: '' }); // Reset picker for next range
       } else if (!rangeDates.start || rangeDates.end) {
         setRangeDates({
-          start: format(date[0], 'EEE, MMM-dd-yyyy'),
+          start: format(date[0], 'EEE, yyyy-MM-dd'),
           end: ''
         });
       } else {
         setRangeDates((prev) => ({
           ...prev,
-          end: format(date[1], 'EEE, MMM-dd-yyyy')
+          end: format(date[1], 'EEE, yyyy-MM-dd')
         }));
       }
     }
