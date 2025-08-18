@@ -226,15 +226,18 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             className="flex items-center gap-1 justify-between w-full"
                           >
                             <div className="flex items-center gap-2">
-                              <span
-                                className={`w-2 h-2 inline-block rounded-full ${
-                                  type === "emergency"
-                                    ? "bg-red-600"
-                                    : "bg-green-600"
-                                }`}
-                              />
+                              {
+                                type && 
+                                <span
+                                  className={`w-2 h-2 inline-block rounded-full ${
+                                    type === "emergency"
+                                      ? "bg-red-600"
+                                      : "bg-green-600"
+                                  }`}
+                                />
+                              }
                               <span className="text-xs font-normal text-[#475467]">
-                                {type.charAt(0).toUpperCase() + type.slice(1)}
+                                {type ? type.charAt(0).toUpperCase() + type.slice(1) : ""}
                               </span>
                             </div>
                           </div>
@@ -262,7 +265,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             className="flex gap-2 items-center"
                             key={index.toString()}
                           >
-                            <span
+                            {
+                              items &&
+                              <span
                               className={`w-2 h-2 mr-[6px] inline-block rounded-full ${
                                 items === "decline"
                                   ? "bg-red-600"
@@ -271,8 +276,10 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                   : "bg-green-600"
                               }`}
                             />
+                            }
+                            
                             <span className="text-[#475467] text-xs">
-                              {items.charAt(0).toUpperCase() + items.slice(1)}
+                              {items ? items.charAt(0).toUpperCase() + items.slice(1) : ""}
                             </span>
                           </div>
                         ))}
