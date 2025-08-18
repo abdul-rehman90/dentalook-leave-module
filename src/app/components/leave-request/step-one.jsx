@@ -667,11 +667,11 @@ function StepOne({ onSubmit, onNext }) {
     if (getData?.clinic_name && regionalManagers?.length > 0 && !clinicId) {
       const matchedManager = allClinics?.find(
         (item) =>
-          item.name?.trim().toLowerCase() ===
+         ( item.name?.trim().toLowerCase() || item.clinic_name?.trim().toLowerCase()) ===
           getData.clinic_name?.trim().toLowerCase()
       );
       if (matchedManager) {
-        setClinicId(matchedManager.id);
+        setClinicId(matchedManager.clinic_id || matchedManager.id);
       }
     }
 
