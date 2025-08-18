@@ -899,7 +899,7 @@ function StepOne({ onSubmit, onNext }) {
                               minDate={new Date()}
                               dropdownMode="select"
                               selectsRange={isRange}
-                              dateFormat="MMM-dd-yyyy"
+                              dateFormat="yyyy-MM-dd"
                               endDate={isRange ? new Date(row.end_date) : null}
                               startDate={
                                 isRange ? new Date(row.leave_date) : null
