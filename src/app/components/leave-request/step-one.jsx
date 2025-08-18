@@ -29,6 +29,7 @@ function StepOne({ onSubmit, onNext }) {
     start: '',
     end: ''
   });
+  const [multiRanges, setMultiRanges] = useState([]);
 
   const {
     allProvinces,
@@ -220,7 +221,6 @@ function StepOne({ onSubmit, onNext }) {
         return row;
       })
     };
-
     try {
       const response = await axiosInstance.post(
         `api/v1/leave-requests/`,
@@ -329,7 +329,18 @@ function StepOne({ onSubmit, onNext }) {
       setMultiDates(updated);
       setWriteIndex(writeIndex + 1);
     } else {
-      if (!rangeDates.start || rangeDates.end) {
+      // Multiple range selection logic
+      if (Array.isArray(date) && date[0] && date[1]) {
+        const start = format(date[0], 'EEE, MMM-dd-yyyy');
+        const end = format(date[1], 'EEE, MMM-dd-yyyy');
+        // Prevent duplicate ranges
+        if (multiRanges.some(r => r.start === start && r.end === end)) {
+          toast.error('This range is already selected.');
+          return;
+        }
+        setMultiRanges([...multiRanges, { start, end }]);
+        setRangeDates({ start: '', end: '' }); // Reset picker for next range
+      } else if (!rangeDates.start || rangeDates.end) {
         setRangeDates({
           start: format(date[0], 'EEE, MMM-dd-yyyy'),
           end: ''
@@ -443,33 +454,46 @@ function StepOne({ onSubmit, onNext }) {
               </div>
             ))}
 
-          {dateSelectionMode === 'range' && (
-            <div className="relative">
-              <input
-                readOnly
-                type="text"
-                placeholder="MMM-DD-YYYY"
-                value={
-                  rangeDates.start && rangeDates.end
-                    ? `${rangeDates.start} - ${rangeDates.end}`
-                    : ''
-                }
-                className="w-full py-2 px-4 border rounded-md text-sm border-gray-300"
-              />
-              {rangeDates.start && rangeDates.end && (
+          {dateSelectionMode === 'range' &&
+            multiRanges.map((range, idx) => (
+              <div key={idx} className="relative">
+                <input
+                  readOnly
+                  type="text"
+                  value={`${range.start} - ${range.end}`}
+                  placeholder="MMM-DD-YYYY"
+                  className="w-full py-2 px-4 border rounded-md text-sm border-gray-300"
+                />
                 <button
                   type="button"
                   className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 text-red-500 text-sm"
                   onClick={() => {
-                    setRangeDates({
-                      start: '',
-                      end: ''
-                    });
+                    setMultiRanges(multiRanges.filter((_, i) => i !== idx));
                   }}
                 >
                   ✕
                 </button>
-              )}
+              </div>
+            ))}
+
+          {dateSelectionMode === 'range' && rangeDates.start && rangeDates.end && (
+            <div className="relative">
+              <input
+                readOnly
+                type="text"
+                value={`${rangeDates.start} - ${rangeDates.end}`}
+                placeholder="MMM-DD-YYYY"
+                className="w-full py-2 px-4 border rounded-md text-sm border-gray-300"
+              />
+              <button
+                type="button"
+                className="absolute cursor-pointer right-2 top-1/2 -translate-y-1/2 text-red-500 text-sm"
+                onClick={() => {
+                  setRangeDates({ start: '', end: '' });
+                }}
+              >
+                ✕
+              </button>
             </div>
           )}
         </div>
@@ -508,15 +532,14 @@ function StepOne({ onSubmit, onNext }) {
         let newRows = [];
 
         if (dateSelectionMode === 'range') {
-          newRows = [
-            {
-              leave_date: rangeDates.start,
-              end_date: rangeDates.end,
-              leave_type: '',
-              reason: '',
-              entry_type: 'date range'
-            }
-          ];
+          // Add all selected ranges as rows, format as 'yyyy-MM-dd'
+          newRows = multiRanges.map((range) => ({
+            leave_date: format(new Date(range.start), 'yyyy-MM-dd'),
+            end_date: format(new Date(range.end), 'yyyy-MM-dd'),
+            leave_type: '',
+            reason: '',
+            entry_type: 'date range'
+          }));
         } else {
           const validDates = multiDates.filter((d) => d.leave_date);
           validDates.sort(
@@ -543,6 +566,7 @@ function StepOne({ onSubmit, onNext }) {
         setDateSelectionMode('individual');
         setMultiDates([{ leave_date: '' }]);
         setRangeDates({ start: '', end: '' });
+        setMultiRanges([]);
       }
     };
 
@@ -933,7 +957,7 @@ function StepOne({ onSubmit, onNext }) {
                                   handleChange(
                                     index,
                                     'leave_date',
-                                    start ? format(date, 'MMM-dd-yyyy') : ''
+                                    start ? format(date, 'yyyy-MM-dd') : ''
                                   );
                                   handleChange(
                                     index,
