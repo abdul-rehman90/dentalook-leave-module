@@ -343,11 +343,11 @@ function StepFour({ setCurrentStep }) {
                         label={index === 0 && "Covering Provider Name"}
                         placeholder="Enter Coverage"
                         name="coverage_provider"
-                        value={
-                          typeof row.coverage_provider === "object" &&
-                          row.coverage_provider !== null
+                        value={row.coverage_needed === false ? null :
+                          ((typeof row.coverage_provider === "object" &&
+                          row.coverage_provider !== null)
                             ? row.coverage_provider.name
-                            : row.coverage_provider
+                            : row.coverage_provider)
                         }
                         disabled
                         className="disabled:cursor-not-allowed disabled:opacity-[0.8]"

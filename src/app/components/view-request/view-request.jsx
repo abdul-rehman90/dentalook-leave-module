@@ -113,47 +113,44 @@ function ViewRequest() {
                             />
                         </div>
                     </div>
-                    <div className="flex flex-wrap gap-5 py-5">
-                        <div className='flex flex-wrap md:flex-nowrap items-center gap-6 md:w-[98.5%] w-full'>
-
-                            <div className=' w-full'>
-                                <CustomSelector
-                                    onChange={(value) => {
-                                        setDocName(value);
-                                        role === "LT" && handleChangeProvider(value)
-                                    }}
-                                    label="Provider Title"
-                                    options={[
-                                        { name: 'DDS', value: 'DDS' },
-                                        { name: 'RDH', value: 'RDH' },
-                                        { name: 'RDT', value: 'RDT' },
-                                    ]}
-                                    placeholder="Select Provider Title"
-                                    labelKey="name"
-                                    value={docName}
-                    
-                                    className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                                />
+                    <div className="py-5">
+                        <div className='grid md:grid-cols-5 grid-cols-1 gap-2 mb-4'>
+                            <div>
+                                    <CustomSelector
+                                        onChange={(value) => {
+                                            setDocName(value);
+                                            role === "LT" && handleChangeProvider(value)
+                                        }}
+                                        label="Provider Title"
+                                        options={[
+                                            { name: 'DDS', value: 'DDS' },
+                                            { name: 'RDH', value: 'RDH' },
+                                            { name: 'RDT', value: 'RDT' },
+                                        ]}
+                                        placeholder="Select Provider Title"
+                                        labelKey="name"
+                                        value={docName}
+                        
+                                        className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                                    />
                             </div>
-                            <div className=' w-full'>
-                                <CustomSelector
-                                    onChange={(value, options) => {
-                                        setProviderId(value); 
-                                        role === "LT" && handleChangeProviderName(value, options)
-                                    }}
-                                    label="Provider Name"
-                                    options={allClicnicData}
-                                    placeholder="Select Provider Name"
-                                    labelKey="name"
-                                    valueKey="id"
-                                    value={providerId}
-                                    showSearch={true}
-                                    className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                                />
+                            <div>
+                                    <CustomSelector
+                                        onChange={(value, options) => {
+                                            setProviderId(value); 
+                                            role === "LT" && handleChangeProviderName(value, options)
+                                        }}
+                                        label="Provider Name"
+                                        options={allClicnicData}
+                                        placeholder="Select Provider Name"
+                                        labelKey="name"
+                                        valueKey="id"
+                                        value={providerId}
+                                        showSearch={true}
+                                        className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                                    />
                             </div>
-                        </div>
-                 
-                        <div className='md:w-[31.5%] w-full'>
+                            <div>
                             <CustomSelector
                                 onChange={(value) => {
                                    setProvinceId(value);
@@ -171,94 +168,100 @@ function ViewRequest() {
                                 disabled={(role === "RM" || role === "PM") ? true : false}
                                 className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
                             />
+                            </div>
+                            <div>
+                                <CustomSelector
+                                    onChange={(value, options) => {
+                                        setRegionalManagersId(value); 
+                                        role === "LT" && handleChangeRM(value)
+                                        // setAllClinics(options?.clinics)
+                                    }}
+                                    label="Regional Manager"
+                                    options={regionalManagers}
+                                    placeholder="Select Regional Manager"
+                                    labelKey={
+                                        role === 'PM'
+                                            ? 'regional_manager_name'
+                                            : 'name'
+                                    }
+                                    valueKey={
+                                        role === 'PM' ? 'regional_manager_id' : 'id'
+                                    }
+                                    showSearch={true}
+                                    value={regionalManagersId}
+                                    disabled={(role === "RM" || role === "PM") ? true : false }
+                                    className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                                />
+                            </div>
+                            <div>
+                                <CustomSelector
+                                    onChange={(value, options) => {
+                                        setClinicId(value);
+                                        role === "LT" && handleChangeClinic(value, options)
+                                    }}
+                                    label="Clinic"
+                                    options={ role === "LT" ? clinics : allClinics}
+                                    placeholder="Select Clinic"
+                                    labelKey={role === "LT" ? "name" : (role === "PM" || role === "RM") ? "clinic_name" : "name" }
+                                    valueKey={role === "LT" ? "id" : (role === "PM" || role === "RM" )? "clinic_id" : "id" }
+                                    value={clinicId}
+                                    showSearch={true}
+                                    disabled={(role === "PM") ? true : false }
+                                    className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
+                                />
+                            </div>
                         </div>
-                        <div className='md:w-[31.5%] w-full'>
-                            <CustomSelector
-                                onChange={(value, options) => {
-                                    setRegionalManagersId(value); 
-                                    role === "LT" && handleChangeRM(value)
-                                    // setAllClinics(options?.clinics)
-                                }}
-                                label="Regional Manager"
-                                options={regionalManagers}
-                                placeholder="Select Regional Manager"
-                                labelKey={
-                                    role === 'PM'
-                                        ? 'regional_manager_name'
-                                        : 'name'
-                                }
-                                valueKey={
-                                    role === 'PM' ? 'regional_manager_id' : 'id'
-                                }
-                                showSearch={true}
-                                value={regionalManagersId}
-                                disabled={(role === "RM" || role === "PM") ? true : false }
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
-                        </div>
-                        <div className='md:w-[31.5%] w-full'>
-                            <CustomSelector
-                                onChange={(value, options) => {
-                                    setClinicId(value);
-                                    role === "LT" && handleChangeClinic(value, options)
-                                }}
-                                label="Clinic"
-                                options={ role === "LT" ? clinics : allClinics}
-                                placeholder="Select Clinic"
-                                labelKey={role === "LT" ? "name" : (role === "PM" || role === "RM") ? "clinic_name" : "name" }
-                                valueKey={role === "LT" ? "id" : (role === "PM" || role === "RM" )? "clinic_id" : "id" }
-                                value={clinicId}
-                                showSearch={true}
-                                disabled={(role === "PM") ? true : false }
-                                className="disabled:opacity-[0.8] disabled:cursor-not-allowed"
-                            />
-                        </div>
-                        
-                        <div className="request_Datepicker md:w-[31.5%] w-full">
-                            <label className="text-[13px] mb-2 block font-semibold text-[#373940]">
-                                Leave Request Date
-                            </label>
-                            <DatePicker
-                                selectsRange={true}
-                                startDate={startDate}
-                                endDate={endDate}
-                                dateFormat="yyyy-MM-dd"
-                                onChange={(update) => {
-                                    setDateRange(update);
-                                    handleDateChange(update);
-                                }}
-                                isClearable={true}
-                                className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
-                            />
-                        </div>
-                        <div className='md:w-[31.5%] w-full'>
-                            <CustomSelector
-                                label="Leave Type"
-                                options={[
-                                    { name: 'Emergency', value: 'emergency' },
-                                    { name: 'Planned', value: 'planned' },
-                                ]}
-                                placeholder="Select Leave Type"
-                                labelKey="name"
-                                valueKey="value"
-                                value={leavePlanned}
-                                onChange={(value) => setLeavePlanned(value)}
-                            />
-                        </div>
-                        <div className='md:w-[31.5%] w-full'>
-                            <CustomSelector
-                                label="Status"
-                                options={[
-                                    { name: 'Pending', value: 'pending' },
-                                    { name: 'Declined', value: 'decline' },
-                                    { name: 'Approved', value: 'approved' },
-                                ]}
-                                placeholder="Select Status"
-                                labelKey="name"
-                                valueKey="value"
-                                value={leaveStatus}
-                                onChange={(value) => setLeaveStatus(value)}
-                            />
+        
+                    
+                                      
+                       
+                        <div className='grid md:grid-cols-3 grid-cols-1 gap-2'>
+                            <div className="request_Datepicker">
+                                <label className="text-[13px] mb-[5px] block font-semibold text-[#373940]">
+                                    Leave Request Date
+                                </label>
+                                <DatePicker
+                                    selectsRange={true}
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    dateFormat="yyyy-MM-dd"
+                                    onChange={(update) => {
+                                        setDateRange(update);
+                                        handleDateChange(update);
+                                    }}
+                                    isClearable={true}
+                                    className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
+                                />
+                            </div>
+                            <div >
+                                <CustomSelector
+                                    label="Leave Type"
+                                    options={[
+                                        { name: 'Emergency', value: 'emergency' },
+                                        { name: 'Planned', value: 'planned' },
+                                    ]}
+                                    placeholder="Select Leave Type"
+                                    labelKey="name"
+                                    valueKey="value"
+                                    value={leavePlanned}
+                                    onChange={(value) => setLeavePlanned(value)}
+                                />
+                            </div>
+                            <div >
+                                <CustomSelector
+                                    label="Status"
+                                    options={[
+                                        { name: 'Pending', value: 'pending' },
+                                        { name: 'Declined', value: 'decline' },
+                                        { name: 'Approved', value: 'approved' },
+                                    ]}
+                                    placeholder="Select Status"
+                                    labelKey="name"
+                                    valueKey="value"
+                                    value={leaveStatus}
+                                    onChange={(value) => setLeaveStatus(value)}
+                                />
+                            </div>
                         </div>
                         
                     </div>

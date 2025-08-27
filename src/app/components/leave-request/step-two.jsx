@@ -126,7 +126,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                 </div>
                 <>
                   {formData1?.map((day, dayIdx) => (
-                    <div className={`grid grid-cols-1 md:grid-cols-2 ${day.entry_type?.includes("date range") ? "lg:[grid-template-columns:205px_123px_124px]" : "lg:[grid-template-columns:133px_123px_184px]" } gap-2 ${dayIdx === 0 && "mt-[27px] border-[#D9DADF] border-t"} pt-2 md:pt-5 `} key={dayIdx}>
+                    <div className={`hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200 hover:z-10 grid grid-cols-1 md:grid-cols-2 ${day.entry_type?.includes("date range") ? "lg:[grid-template-columns:205px_123px_124px]" : "lg:[grid-template-columns:133px_123px_184px]" } gap-2 ${dayIdx === 0 && "mt-[27px] border-[#D9DADF] border-t"} pt-2 md:pt-5 `} key={dayIdx}>
                       <div className="flex flex-col gap-2 mb-1">
                         {dayIdx === 0 && (
                           <label className="text-[13px] text-[#373940] font-medium block">
