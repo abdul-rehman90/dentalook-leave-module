@@ -125,106 +125,106 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                   ))}
                 </div>
                 <>
-                  {formData1?.map((day, dayIdx) => (
-                    <div className={`hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200 hover:z-10 grid grid-cols-1 md:grid-cols-2 ${day.entry_type?.includes("date range") ? "lg:[grid-template-columns:205px_123px_124px]" : "lg:[grid-template-columns:133px_123px_184px]" } gap-2 ${dayIdx === 0 && "mt-[27px] border-[#D9DADF] border-t"} pt-2 md:pt-5 `} key={dayIdx}>
-                      <div className="flex flex-col gap-2 mb-1">
-                        {dayIdx === 0 && (
-                          <label className="text-[13px] text-[#373940] font-medium block">
-                            Leave Date
-                          </label>
-                        )}
-                        {
-                          day.entry_type?.includes("date range") ?
-                          <DatePicker
-                            selectsRange
-                            startDate={
-                              day.start_date ? new Date(day.start_date + "T00:00:00") : null
-                            }
-                            endDate={
-                              day.end_date ? new Date(day.end_date + "T00:00:00") : null
-                            }
-                            minDate={new Date()}
-                            showMonthDropdown
-                            showYearDropdown
-                            dropdownMode="select"
-                            dateFormat="yyyy-MM-dd"
-                            isClearable={false}
-                            className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
-                          />
+                  <table className="w-full border border-[#D9DADF] rounded-[8px] overflow-hidden">
+                    <thead className="bg-[#F9FAFB]">
+                      <tr>
+                        <th className="text-left px-1 py-2 text-[13px] text-[#373940] font-bold">Leave Date</th>
+                        <th className="text-left px-1 py-2 text-[13px] text-[#373940] font-bold">Leave Type</th>
+                        <th className="text-left px-1 py-2 text-[13px] text-[#373940] font-bold">Reason</th>
+                      </tr>
+                    </thead>
 
-                          : 
-                        
-                          <DatePicker
-                            
-                            selected={
-                              day.leave_date
-                                ? new Date(day.leave_date + 'T00:00:00')
-                                : null
-                            }
-                            minDate={new Date()}
-                            showMonthDropdown
-                            showYearDropdown
-                            dropdownMode="select"
-                            dateFormat="YYYY-MM-dd"
-                            className="py-[8px] w-full px-4 bg-white text-[#000] disabled:opacity-[0.8] disabled:cursor-not-allowed  block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
-                            name="leave_date"
-                            placeholderText="Leave Date"
-                            onChange={(date) => {
-                              const updated = [...formData1];
-                              updated[dayIdx].leave_date = date
-                                ? format(date, 'yyyy-MM-dd')
-                                : '';
-                              setFormData2(updated);
-                            }}
-                            disabled
-                          />
-                        }
-                      </div>
-                      <div>
-                        <CustomSelector
-                          label={dayIdx === 0 && "Leave Type"}
-                          options={[
-                            { name: "Emergency", value: "emergency" },
-                            { name: "Planned", value: "planned" },
-                          ]}
-                          value={day.leave_type}
-                          onChange={(value, option) => {
-                            const updated = [...formData1];
-                            updated[dayIdx].leave_type = value;
-                            setFormData2(updated);
-                          }}
-                          labelKey="name"
-                          disabled
-                          className="disabled:opacity-[0.9] disabled:cursor-not-allowed"
-                        />
-                      </div>
-                    
-                      <div>
-                        {dayIdx === 0 && (
-                          <label className="text-[13px] font-[600] text-[#373940] block">
-                            Reason
-                          </label>
-                        )}
-                        <textarea
-                          title={day.reason}
-                          disabled
-                          rows={1}
-                          value={day.reason}
-                          typ="text"
-                          placeholder="Enter Reason"
-                          name="reason"
-                          className={`disabled:cursor-not-allowed bg-white text-[#000] resize-none ${dayIdx === 0 && "mt-[8px]"}  w-full disabled:opacity-[0.9] pb-[10px] pt-[6px]  px-4  placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]`}
-                          onChange={(e) => {
-                            const updated = [...formData1];
-                            updated[dayIdx].reason = e.target.value;
-                            setFormData2(updated);
-                          }}
+                    <tbody>
+                      {formData1?.map((day, dayIdx) => (
+                        <tr
+                          key={dayIdx}
+                          className="hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200"
                         >
-                          {day.reason}
-                        </textarea>
-                      </div>
-                    </div>
-                  ))}
+                          {/* Leave Date */}
+                          <td className="px-1 py-2 border-t border-[#D9DADF]">
+                            {day.entry_type?.includes("date range") ? (
+                              <DatePicker
+                                selectsRange
+                                startDate={
+                                  day.start_date ? new Date(day.start_date + "T00:00:00") : null
+                                }
+                                endDate={
+                                  day.end_date ? new Date(day.end_date + "T00:00:00") : null
+                                }
+                                minDate={new Date()}
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
+                                dateFormat="yyyy-MM-dd"
+                                isClearable={false}
+                                className="w-full rounded-[8px] bg-white text-[#000] border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
+                              />
+                            ) : (
+                              <DatePicker
+                                selected={
+                                  day.leave_date ? new Date(day.leave_date + "T00:00:00") : null
+                                }
+                                minDate={new Date()}
+                                showMonthDropdown
+                                showYearDropdown
+                                dropdownMode="select"
+                                dateFormat="yyyy-MM-dd"
+                                className="py-[8px] w-full px-4 bg-white text-[#000] disabled:opacity-[0.8] disabled:cursor-not-allowed placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                                name="leave_date"
+                                placeholderText="Leave Date"
+                                onChange={(date) => {
+                                  const updated = [...formData1];
+                                  updated[dayIdx].leave_date = date
+                                    ? format(date, "yyyy-MM-dd")
+                                    : "";
+                                  setFormData2(updated);
+                                }}
+                                disabled
+                              />
+                            )}
+                          </td>
+
+                          {/* Leave Type */}
+                          <td className="px-1 py-2 border-t border-[#D9DADF]">
+                            <CustomSelector
+                              options={[
+                                { name: "Emergency", value: "emergency" },
+                                { name: "Planned", value: "planned" },
+                              ]}
+                              value={day.leave_type}
+                              onChange={(value, option) => {
+                                const updated = [...formData1];
+                                updated[dayIdx].leave_type = value;
+                                setFormData2(updated);
+                              }}
+                              labelKey="name"
+                              disabled
+                              className="disabled:opacity-[0.9] disabled:cursor-not-allowed"
+                            />
+                          </td>
+
+                          {/* Reason */}
+                          <td className="px-1 py-2 border-t border-[#D9DADF]">
+                            <textarea
+                              title={day.reason}
+                              disabled
+                              rows={1}
+                              value={day.reason}
+                              placeholder="Enter Reason"
+                              name="reason"
+                              className="disabled:cursor-not-allowed bg-white text-[#000] resize-none w-full disabled:opacity-[0.9] pb-[10px] pt-[6px] px-4 placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                              onChange={(e) => {
+                                const updated = [...formData1];
+                                updated[dayIdx].reason = e.target.value;
+                                setFormData2(updated);
+                              }}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+
                 </>
               </div>
             </div>
