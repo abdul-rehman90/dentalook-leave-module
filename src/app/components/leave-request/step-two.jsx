@@ -137,8 +137,9 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                     <tbody>
                       {formData1?.map((day, dayIdx) => (
                         <tr
-                          key={dayIdx}
-                          className="hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200"
+                          className={`${
+                                dayIdx !== 0 ? 'border-t border-[#E6EAEE]' : ''
+                              } hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200 hover:z-10`}
                         >
                           {/* Leave Date */}
                           <td className="px-1 py-2 border-t border-[#D9DADF]">
@@ -199,7 +200,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                               }}
                               labelKey="name"
                               disabled
-                              className="disabled:opacity-[0.9] disabled:cursor-not-allowed"
+                              className="disabled:opacity-[0.9] disabled:cursor-not-allowed !py-[8px]"
                             />
                           </td>
 
@@ -212,7 +213,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                               value={day.reason}
                               placeholder="Enter Reason"
                               name="reason"
-                              className="disabled:cursor-not-allowed bg-white text-[#000] resize-none w-full disabled:opacity-[0.9] pb-[10px] pt-[6px] px-4 placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+                              className="disabled:cursor-not-allowed mt-[4px] bg-white text-[#000] resize-none w-full disabled:opacity-[0.9] pb-[10px] pt-[6px] px-4 placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                               onChange={(e) => {
                                 const updated = [...formData1];
                                 updated[dayIdx].reason = e.target.value;

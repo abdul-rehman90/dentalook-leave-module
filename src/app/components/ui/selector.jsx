@@ -16,7 +16,9 @@ const CustomSelector = ({
   showSearch = false,
   handleClick,
   labelClassName = '',
-  onOpen
+  onOpen,
+  // Optional: force display text when selected option isn't in options yet
+  displayLabel
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const selectorRef = useRef(null);
@@ -87,7 +89,7 @@ const CustomSelector = ({
             <span className={`w-2 h-2 rounded-full ${dotColor}`} />
           )}
           <span className="text-[#000]">
-            {selected ? selected[labelKey] : placeholder}
+            {selected ? selected[labelKey] : displayLabel || placeholder}
           </span>
           <ChevronDown
             className={`transition-transform duration-200 ${

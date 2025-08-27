@@ -211,7 +211,7 @@ function StepFour({ setCurrentStep }) {
                 <Heading title="Covering Provider Details" />
               </div>
               <div>
-                {rows?.map((row, index) => (
+                {/* {rows?.map((row, index) => (
                   <div
                     key={index}
                     className={`flex gap-2 ${
@@ -320,38 +320,19 @@ function StepFour({ setCurrentStep }) {
                       />
                     </div>
                     <div className="md:w-[20%] w-full pb-3 pt-3">
-                      {/* <CustomSelector
-                        label={index === 0 && "Covering Provider Name"}
-                        options={coverageProviderList}
-                        placeholder="Select Type"
-                        value={
-                            typeof row.coverage_provider === "object" && row.coverage_provider !== null
-                            ? row.coverage_provider.name
-                            : row.coverage_provider
-                        }
-                        onChange={(value) =>
-                          handleChange(index, "coverage_provider", value)
-                        }
-                        labelKey="name"
-                        valueKey="name"
-                        disabled={row.coverage_needed === "no" || step === "4" ? true : false}
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
-                        
-                      /> */}
-
                       <Input
-                        label={index === 0 && "Covering Provider Name"}
-                        placeholder="Enter Coverage"
-                        name="coverage_provider"
-                        value={row.coverage_needed === false ? null :
-                          ((typeof row.coverage_provider === "object" &&
-                          row.coverage_provider !== null)
-                            ? row.coverage_provider.name
-                            : row.coverage_provider)
-                        }
-                        disabled
-                        className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
-                      />
+                          label={index === 0 && "Covering Provider Name"}
+                          placeholder="Enter Coverage"
+                          name="coverage_provider"
+                          value={(row.coverage_needed === false || row.coverage_needed === "no") ? null : row.coverage_needed === false ? null :
+                            ((typeof row.coverage_provider === "object" &&
+                            row.coverage_provider !== null)
+                              ? row.coverage_provider.name
+                              : row.coverage_provider)
+                          }
+                          disabled
+                          className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+                        />
                     </div>
                     <div className="md:w-[19%] w-full pb-3 pt-3">
                       <CustomSelector
@@ -400,7 +381,167 @@ function StepFour({ setCurrentStep }) {
                       />
                     </div>
                   </div>
-                ))}
+                ))} */}
+                <table className="w-full border-collapse">
+  <thead className="border-b border-[#D9DADF]">
+    <tr>
+      <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Leave Date</th>
+      <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Leave Type</th>
+      <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Coverage Needed</th>
+      <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Covering Provider Name</th>
+      <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Coverage Type</th>
+      <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Coverage Found By</th>
+    </tr>
+  </thead>
+  <tbody>
+    {rows?.map((row, index) => (
+      <tr
+  key={index}
+  className={`${
+    index !== rows.length - 1
+      ? 'border-b border-[#E6EAEE]'
+      : ''
+  } hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200 hover:z-10`}
+>
+        {/* Leave Date */}
+        <td className="p-1">
+          {row.entry_type?.includes("date range") ? (
+            <DatePicker
+              selectsRange
+              startDate={
+                row.start_date ? new Date(row.start_date + "T00:00:00") : null
+              }
+              endDate={
+                row.end_date ? new Date(row.end_date + "T00:00:00") : null
+              }
+              minDate={new Date()}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              dateFormat="yyyy-MM-dd"
+              isClearable={false}
+              className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
+            />
+          ) : (
+            <DatePicker
+              disabled
+              selected={
+                row.leave_date ? new Date(row.leave_date + "T00:00:00") : null
+              }
+              minDate={new Date()}
+              showMonthDropdown
+              showYearDropdown
+              dropdownMode="select"
+              dateFormat="yyyy-MM-dd"
+              className="py-[8px] bg-white text-[#000] disabled:cursor-not-allowed w-full px-4 block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
+              name="leave_date"
+              onChange={(date) => {
+                const formatted = date ? format(date, "yyyy-MM-dd") : "";
+                handleChange(index, "leave_date", formatted);
+              }}
+            />
+          )}
+        </td>
+
+        {/* Leave Type */}
+        <td className="p-1">
+          <CustomSelector
+            options={[
+              { name: "Emergency", value: "emergency" },
+              { name: "Planned", value: "planned" },
+            ]}
+            placeholder="Select Leave Type"
+            value={row.leave_type}
+            onChange={(value) => handleChange(index, "leave_type", value)}
+            labelKey="name"
+            valueKey="value"
+            disabled={step === "4"}
+            className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+          />
+        </td>
+
+        {/* Coverage Needed */}
+        <td className="p-1">
+          <CustomSelector
+            options={[
+              { name: "Yes", value: "yes" },
+              { name: "No", value: "no" },
+            ]}
+            placeholder="Select Type"
+            value={
+              row.coverage_needed === true
+                ? "yes"
+                : row.coverage_needed === false
+                ? "no"
+                : row.coverage_needed
+            }
+            onChange={(value) => handleChange(index, "coverage_needed", value)}
+            labelKey="name"
+            valueKey="value"
+            disabled={step === "4"}
+            className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+          />
+        </td>
+
+        {/* Covering Provider */}
+        <td className="p-1">
+          <Input
+            placeholder="Enter Coverage"
+            name="coverage_provider"
+            value={
+              row.coverage_needed === false || row.coverage_needed === "no"
+                ? null
+                : typeof row.coverage_provider === "object" &&
+                  row.coverage_provider !== null
+                ? row.coverage_provider.name
+                : row.coverage_provider
+            }
+            disabled
+            className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+          />
+        </td>
+
+        {/* Coverage Type */}
+        <td className="p-1">
+          <CustomSelector
+            options={[
+              { name: "Internal", value: "Internal" },
+              { name: "External", value: "External" },
+              { name: "ACE", value: "ACE" },
+            ]}
+            placeholder="Select Type"
+            value={
+              typeof row.coverage_provider === "object" &&
+              row.coverage_provider !== null
+                ? row.coverage_provider.provider_coverage
+                : row.coverage_provider
+            }
+            onChange={(value) => handleChange(index, "coverage_type", value)}
+            labelKey="name"
+            valueKey="value"
+            disabled={row.coverage_needed === "no" || step === "4"}
+            className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+          />
+        </td>
+
+        {/* Coverage Found By */}
+        <td className="p-2">
+          <Input
+            placeholder="Enter Coverage"
+            name="coverage_found_by"
+            value={userData?.name}
+            onChange={(e) =>
+              handleChange(index, "coverage_found_by", e.target.value)
+            }
+            disabled
+            className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
+          />
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
               </div>
             </div>
           </div>

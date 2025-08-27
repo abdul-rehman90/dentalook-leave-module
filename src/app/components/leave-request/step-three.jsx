@@ -189,7 +189,10 @@ function StepThree({ onNext }) {
           console.log(row, "...row")
           return {
             ...row,
-            coverage_needed: row.coverage_needed ? 'yes' : 'no'
+            coverage_needed: row.coverage_needed ? 'yes' : 'no',
+            // Ensure provider is null when coverage is not needed
+            coverage_provider:
+              row.coverage_needed === false ? null : row.coverage_provider || null
           };
         })
       );
@@ -202,9 +205,23 @@ function StepThree({ onNext }) {
     if (selectedRows.length === rows.length) {
       newRows.forEach((row) => {
         row[field] = value;
+        if (field === 'coverage_needed') {
+          const normalized = value === true || value === 'yes' ? 'yes' : 'no';
+          row.coverage_needed = normalized;
+          if (normalized === 'no') {
+            row.coverage_provider = null;
+          }
+        }
       });
     } else {
       newRows[index][field] = value;
+      if (field === 'coverage_needed') {
+        const normalized = value === true || value === 'yes' ? 'yes' : 'no';
+        newRows[index].coverage_needed = normalized;
+        if (normalized === 'no') {
+          newRows[index].coverage_provider = null;
+        }
+      }
     }
 
     setRows(newRows);
@@ -553,6 +570,12 @@ function StepThree({ onNext }) {
                               <CustomSelector
                                 options={coverageProviderList}
                                 placeholder="Select Provider"
+                                displayLabel={
+                                  typeof row.coverage_provider === 'object' &&
+                                  row.coverage_provider !== null
+                                    ? row.coverage_provider.name
+                                    : undefined
+                                }
                                 value={
                                   (typeof row.coverage_provider === 'object' &&
                                   row.coverage_provider !== null)
