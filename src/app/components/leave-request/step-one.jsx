@@ -189,6 +189,7 @@ function StepOne({ onSubmit, onNext }) {
     const payload = {
       clinic: clinicId,
       provider: providerId,
+      regional_manager: regionalManagersId,
       leave_requests: rows?.map((row) => {
         if (row.entry_type === "date range") {
           const { leave_date, ...rest } = row;
@@ -272,6 +273,7 @@ function StepOne({ onSubmit, onNext }) {
     const paylaod = {
       clinic: clinicId,
       provider: providerId,
+      regional_manager: regionalManagersId,
       leave_requests: rows?.map((row) => ({
         leave_date: format(row.leave_date, "yyyy-MM-dd"),
         leave_type: row.leave_type,
