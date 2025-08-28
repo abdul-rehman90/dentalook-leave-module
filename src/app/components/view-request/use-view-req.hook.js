@@ -12,7 +12,6 @@ export default function useViewReq() {
     const [allRegionalManagers, setAllRegionalManagers] = useState([]);
     const [regionalManagers, setRegionalManagers] = useState([]);
     const [regionalManagersId, setRegionalManagersId] = useState('');
-    // console.log(regionalManagersId, "...regionalManagersId")
 
     const [allClinics, setAllClinics] = useState([]);
     const [clinics, setClinics] = useState([]);
@@ -22,7 +21,6 @@ export default function useViewReq() {
 
     const [allProviders, setAllProviders] = useState([]);
     const [providerId, setProviderId] = useState('');
-    // console.log(allProviders, "...allProviders")
     const [leavePlanned, setLeavePlanned] = useState([]);
     const [leaveStatus, setLeaveStatus] = useState([]);
 
@@ -112,6 +110,7 @@ export default function useViewReq() {
             if (clinicId) params.clinic_id = clinicId;
             if (provinceId) params.province_id = provinceId;
             if (regionalManagersId) params.regional_manager = regionalManagersId;
+            if (docName) params.provider_title = docName;
             if (startDate && endDate) {
                 params.start_date = format(startDate, "yyyy-MM-dd");
                 params.end_date = format(endDate, "yyyy-MM-dd");
@@ -132,7 +131,7 @@ export default function useViewReq() {
         if (token) {
             getViewRequests();
         }
-    }, [token, token, providerId, clinicId, startDate, endDate, provinceId, regionalManagersId, leavePlanned, leaveStatus]);
+    }, [token, token, docName, providerId, clinicId, startDate, endDate, provinceId, regionalManagersId, leavePlanned, leaveStatus]);
 
     const [userData, setUserData] = useState({});
     const userDetail = async () => {

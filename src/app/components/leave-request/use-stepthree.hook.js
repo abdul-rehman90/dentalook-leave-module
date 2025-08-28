@@ -25,6 +25,7 @@ export default function useStepThree() {
     const [formId, setFormId] = useState('');
     const [selectedRows, setSelectedRows] = useState([]);
     const [isAllSelected, setIsAllSelected] = useState(false);
+    const [getDataLoader, setGetDataLoader]= useState(false);
 
     // get province
     const getProvinces = async () => {
@@ -92,7 +93,7 @@ export default function useStepThree() {
     // get patch method for update step 1
     const [getData, setGetData] = useState('');
     const getLeaveDeatils = async (id) => {
-        // setIsLoading(true);
+        setGetDataLoader(true);
         try {
             const response = await axiosInstance.get(
                 `api/v1/leave-requests/${id}`
@@ -104,7 +105,7 @@ export default function useStepThree() {
             console.log(error);
         }
         finally{
-        // setIsLoading(false);
+        setGetDataLoader(false);
         }
     };
     useEffect(() => {
@@ -173,6 +174,7 @@ export default function useStepThree() {
         regionalManagersId2, setRegionalManagersId2,
         setAllClinics,
         isAllSelected, setIsAllSelected,
-        selectedRows, setSelectedRows
+        selectedRows, setSelectedRows,
+        getDataLoader
     }
 }

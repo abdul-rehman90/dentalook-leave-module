@@ -26,7 +26,6 @@ function Sidebar({ isSidebarOpen = false, onClose = () => { } }) {
 
     useEffect(() => {
         if (pathname === '/select-role' || pathname === '/') {
-            // console.log('Do something OR return early 💅');
         }
     }, [pathname])
 

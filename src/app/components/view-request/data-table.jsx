@@ -13,14 +13,13 @@ export default function LeaveTable({ getReqData, isLoading }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modelData, setModelData] = useState({});
   const router = useRouter();
-   console.log(newData, "...newData")
   useEffect(() => {
     if (getReqData?.length > 0) {
       
       const transformedData = getReqData?.flatMap((item) => ({
         provider_name: item?.provider_name,
         title: item?.provider_title,
-        status: item?.days?.map((nestedDay) => nestedDay?.status),
+        status: item?.status,
         id: item?.id,
         regional_manager_c: item?.regional_manager,
         clinic_name_c: item?.clinic_name,
@@ -67,6 +66,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
       setNewData(transformedData);
     }
   }, [getReqData]);
+
 
   const handelClick = (item) => {
     localStorage.setItem("leaveRequestId", item.id);
@@ -237,7 +237,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       </td>
 
                       <td className="pr-3 pl-1 py-3 text-xs font-normal text-[#475467] whitespace-nowrap border-r border-[#D9DADF]">
-                        {/* <span
+                        <span
                           className={`w-2 h-2 mr-[6px] inline-block rounded-full ${
                             item?.status === 'decline'
                               ? 'bg-red-600'
@@ -251,8 +251,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             ? 'Declined'
                             : item?.status.charAt(0).toUpperCase() +
                               item?.status.slice(1)}
-                        </span> */}
-                        {item?.status?.map((items, index) => (
+                        </span>
+                        {/* {item?.status?.map((items, index) => (
                           <div
                             className="flex gap-2 items-center pb-1.5"
                             key={index.toString()}
@@ -274,7 +274,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               {items ? items.charAt(0).toUpperCase() + items.slice(1) : ""}
                             </span>
                           </div>
-                        ))}
+                        ))} */}
                       </td>
                       <td className="px-3 text-xs font-normal text-[#475467]">
                         {item?.coverage_needed.map((needed, index) => (
@@ -310,7 +310,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               <div key={index} className="whitespace-nowrap pb-1.5">
                                 {status === "decline" ? null : (
                                   <>
-                                    <span className="w-2 h-2 inline-block rounded-full bg-green-600 mr-1" />
+                                    <span className="w-2 h-2 inline-block rounded-full bg-orange-400 mr-1" />
                                     No Coverage Needed
                                   </>
                                 )}
@@ -323,7 +323,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                           ) {
                             return (
                               <div key={index} className="whitespace-nowrap pb-1.5">
-                                <span className="w-2 h-2 inline-block rounded-full bg-orange-400 mr-1" />
+                                <span className="w-2 h-2 inline-block rounded-full  mr-1 bg-green-600 " />
                                 Looking for Coverage
                               </div>
                             );
@@ -345,13 +345,13 @@ export default function LeaveTable({ getReqData, isLoading }) {
                           let color = "";
                           if (item.coverage_needed?.[index] === false) {
                             label = "No Coverage Needed";
-                            color = "bg-green-600";
+                            color = "bg-orange-400";
                           } else if (
                             item.coverage_needed?.[index] === true &&
                             (!provider || provider === "")
                           ) {
                             label = "Looking for Coverage";
-                            color = "bg-orange-400";
+                            color = " bg-green-600";
                           }
                           return (
                             <div key={index} className="flex items-center pb-1.5" >
@@ -360,10 +360,10 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                   className={`w-2 mr-[5px] h-2 inline-block rounded-full ${color}`}
                                 />
                               )}
+                              
                               <span>{status === "decline" ? "" : label}</span>
-                              {item.coverage_provider?.[index] !== null &&
-                                item.coverage_provider?.[index] !==
-                                  undefined && (
+                              {(item.coverage_needed?.[index] === true && (item.coverage_provider?.[index] !== null ||
+                                item.coverage_provider?.[index] !== undefined)) && (
                                   <button
                                     type="button"
                                     className="cursor-pointer ml-2"
@@ -384,6 +384,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                       e.stopPropagation();
                                     }}
                                   >
+                                    
                                     <FaEye className="text-[16px]" />
                                   </button>
                                 )}
