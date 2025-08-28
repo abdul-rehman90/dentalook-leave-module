@@ -313,11 +313,13 @@ function StepOne({ onSubmit, onNext }) {
 
     if (dateSelectionMode === "individual") {
       const formatted = format(date, "yyyy-MM-dd");
+      
       // Prevent duplicate dates within modal selection list
       if (multiDates.some((d) => d.leave_date === formatted)) {
         toast.error("This date is already selected.");
         return;
       }
+      
       // Instant validate against already added rows (single and ranges)
       const conflictsWithSingles = rows.some(
         (r) =>
@@ -330,6 +332,7 @@ function StepOne({ onSubmit, onNext }) {
         toast.error(`Date ${formatted} is already added.`);
         return;
       }
+      
       const insideExistingRange = rows.some((r) => {
         if (r.entry_type !== "date range" || !r.leave_date || !r.end_date)
           return false;
@@ -342,6 +345,19 @@ function StepOne({ onSubmit, onNext }) {
         toast.error(`Date ${formatted} is already included in a range.`);
         return;
       }
+      
+      // Check against existing ranges in multiRanges
+      const insideMultiRange = multiRanges.some((r) => {
+        const d = new Date(formatted);
+        const start = new Date(r.start);
+        const end = new Date(r.end);
+        return start <= d && d <= end;
+      });
+      if (insideMultiRange) {
+        toast.error(`Date ${formatted} is already included in a selected range.`);
+        return;
+      }
+      
       const updated = [...multiDates];
       updated[writeIndex].leave_date = formatted;
       // Only add a new field if last field is filled and not a duplicate
@@ -359,14 +375,32 @@ function StepOne({ onSubmit, onNext }) {
       if (Array.isArray(date) && date[0] && date[1]) {
         const start = format(date[0], "EEE, yyyy-MM-dd");
         const end = format(date[1], "EEE, yyyy-MM-dd");
+        const startYMD = format(date[0], "yyyy-MM-dd");
+        const endYMD = format(date[1], "yyyy-MM-dd");
+        
         // Prevent duplicate ranges inside modal list
         if (multiRanges.some((r) => r.start === start && r.end === end)) {
           toast.error("This range is already selected.");
           return;
         }
+        
+        // Check for overlapping ranges in multiRanges
+        const overlappingMultiRange = multiRanges.some((r) => {
+          const newStart = new Date(startYMD);
+          const newEnd = new Date(endYMD);
+          const existingStart = new Date(r.start);
+          const existingEnd = new Date(r.end);
+          return (
+            (newStart <= existingEnd && newEnd >= existingStart) ||
+            (existingStart <= newEnd && existingEnd >= newStart)
+          );
+        });
+        if (overlappingMultiRange) {
+          toast.error("This range overlaps with an already selected range.");
+          return;
+        }
+        
         // Instant validate against already added rows
-        const startYMD = format(date[0], "yyyy-MM-dd");
-        const endYMD = format(date[1], "yyyy-MM-dd");
         const duplicateExistingRange = rows.some(
           (r) =>
             r.entry_type === "date range" &&
@@ -381,6 +415,25 @@ function StepOne({ onSubmit, onNext }) {
           toast.error(`Range ${startYMD} - ${endYMD} is already added.`);
           return;
         }
+        
+        // Check for overlapping ranges in existing rows
+        const overlappingExistingRange = rows.some((r) => {
+          if (r.entry_type !== "date range" || !r.leave_date || !r.end_date)
+            return false;
+          const newStart = new Date(startYMD);
+          const newEnd = new Date(endYMD);
+          const existingStart = new Date(r.leave_date);
+          const existingEnd = new Date(r.end_date);
+          return (
+            (newStart <= existingEnd && newEnd >= existingStart) ||
+            (existingStart <= newEnd && existingEnd >= newStart)
+          );
+        });
+        if (overlappingExistingRange) {
+          toast.error("This range overlaps with an already added range.");
+          return;
+        }
+        
         const singleInsideRange = rows.some((r) => {
           if (r.entry_type !== "single" || !r.leave_date) return false;
           const d = new Date(r.leave_date);
@@ -394,6 +447,22 @@ function StepOne({ onSubmit, onNext }) {
           );
           return;
         }
+        
+        // Check if any individual dates in multiDates fall within this range
+        const multiDateInRange = multiDates.some((d) => {
+          if (!d.leave_date) return false;
+          const date = new Date(d.leave_date);
+          const s = new Date(startYMD);
+          const e = new Date(endYMD);
+          return s <= date && date <= e;
+        });
+        if (multiDateInRange) {
+          toast.error(
+            `Some selected individual dates fall within this range ${startYMD} - ${endYMD}.`
+          );
+          return;
+        }
+        
         setMultiRanges([...multiRanges, { start, end }]);
         setRangeDates({ start: "", end: "" }); // Reset picker for next range
       } else if (!rangeDates.start || rangeDates.end) {
@@ -454,6 +523,8 @@ function StepOne({ onSubmit, onNext }) {
               : null
           }
           selectsRange={dateSelectionMode === "range"}
+          showYearDropdown
+          showMonthDropdown
           startDate={
             dateSelectionMode === "range" && rangeDates.start
               ? new Date(rangeDates.start)
@@ -1050,6 +1121,8 @@ function StepOne({ onSubmit, onNext }) {
                               minDate={new Date()}
                               dropdownMode="select"
                               selectsRange={isRange}
+                              showYearDropdown
+                              showMonthDropdown
                               dateFormat="yyyy-MM-dd"
                               endDate={isRange ? new Date(row.end_date) : null}
                               startDate={

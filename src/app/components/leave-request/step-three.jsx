@@ -269,8 +269,8 @@ function StepThree({ onNext }) {
       leave_requests: rows?.map((row) => ({
         id: row.id,
         coverage_needed: row.coverage_needed === 'yes' ? true : false,
+        coverage_provider: row.coverage_needed === 'no' ? null : row?.coverage_provider?.id,
         ...(row.coverage_needed === 'yes' && {
-          coverage_provider: row?.coverage_provider?.id,
           coverage_found_by: userData?.id
         })
       }))

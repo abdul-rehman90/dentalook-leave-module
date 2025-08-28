@@ -84,6 +84,10 @@ export default function LeaveTable({ getReqData, isLoading }) {
       );
     }
   };
+  const handlePastClick = (item) =>{
+    localStorage.setItem("leaveRequestId", item.id);
+    router.push(`/leave-request?step=4`);
+  }
 
   const handleModelOpen = (item) => {
     setModelData(item);
@@ -159,10 +163,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
                   });
                   return (
                     <tr
-                      className={`border-t border-[#EAECF0] ${
-                        !allPast ? "cursor-pointer" : "cursor-not-allowed"
-                      }`}
-                      onClick={() => !allPast && handelClick(item)}
+                      className={`border-t border-[#EAECF0] cursor-pointer `}
+                      onClick={() => allPast ? handlePastClick(item) : handelClick(item)} 
                     >
                       <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                         <div>{item?.title}</div>
