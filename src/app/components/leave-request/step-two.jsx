@@ -145,6 +145,16 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                           <td className="px-1 py-2 border-t border-[#D9DADF]">
                             {day.entry_type?.includes("date range") ? (
                               <DatePicker
+                                title={
+                                  day.start_date && day.end_date
+                                    ? `${format(new Date(day.start_date + "T00:00:00"), "MMM-dd-yyyy")} - ${format(
+                                        new Date(day.end_date + "T00:00:00"),
+                                        "MMM-dd-yyyy"
+                                      )}`
+                                    : day.start_date
+                                    ? format(new Date(day.start_date + "T00:00:00"), "MMM-dd-yyyy")
+                                    : ""
+                                }
                                 selectsRange
                                 disabled
                                 startDate={

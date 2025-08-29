@@ -7,12 +7,24 @@ import { useRouter } from "next/navigation";
 import { FaEye } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { CloudCog } from "lucide-react";
+import { format } from "date-fns";
 
 export default function LeaveTable({ getReqData, isLoading }) {
   const [newData, setNewData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modelData, setModelData] = useState({});
   const router = useRouter();
+
+     // Format date to MMM-dd-yyyy (e.g., Aug-24-2089)
+   const formatDate = (dateString) => {
+     if (!dateString) return "";
+     try {
+       const date = new Date(dateString);
+       return format(date, "MMM-dd-yyyy");
+     } catch (error) {
+       return dateString;
+     }
+   };
   useEffect(() => {
     if (getReqData?.length > 0) {
       
@@ -154,15 +166,30 @@ export default function LeaveTable({ getReqData, isLoading }) {
               </tr>
             ) : (
               <>
-                {newData?.map((item) => {
-                  const allPast = item.leave_date?.every((dateStr) => {
-                    const date = new Date(dateStr);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    return date < today;
-                  });
+                                 {newData?.map((item, i) => {
+                   // Check if all dates are in the past
+                   const allPast = (() => {
+                     if (item.entry_type?.includes("single")) {
+                       // For single dates, check leave_date
+                       return item.leave_date?.every((dateStr) => {
+                         const date = new Date(dateStr);
+                         const today = new Date();
+                         today.setHours(0, 0, 0, 0);
+                         return date < today;
+                       });
+                     } else {
+                       // For date ranges, check end_date (since that's when the leave ends)
+                       return item.end_date?.every((dateStr) => {
+                         const date = new Date(dateStr);
+                         const today = new Date();
+                         today.setHours(0, 0, 0, 0);
+                         return date < today;
+                       });
+                     }
+                   })();
                   return (
                     <tr
+                      key={i.toString()}
                       className={`border-t border-[#EAECF0] cursor-pointer `}
                       onClick={() => allPast ? handlePastClick(item) : handelClick(item)} 
                     >
@@ -182,36 +209,23 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       {item.entry_type?.includes("single") ? (
                         <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                           {item?.leave_date?.map((date, index) => (
-                            <div key={index} className="pb-1.5">{date}</div>
+                            <div key={index} className="pb-1.5">{formatDate(date)}</div>
                           ))}
                         </td>
-                      ) : (
-                        <>
-                          <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
-                            <div className="flex">
-                              {item?.start_date?.map((date, index) => (
-                                <div key={index} className="flex items-center pb-1.5">
-                                  {date}
-                                  {index !== item.start_date.length - 1 && (
-                                    <span className="mx-1">-</span>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-
-                            <div className="flex">
-                              {item?.end_date?.map((date, index) => (
-                                <div key={index} className="pb-1.5">
-                                  {date}
-                                  {index !== item.end_date.length - 1 && (
-                                    <span className="mx-1">-</span>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </td>
-                        </>
-                      )}
+                                             ) : (
+                         <>
+                           <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
+                             {item?.start_date?.map((startDate, index) => {
+                               const endDate = item?.end_date?.[index];
+                               return (
+                                 <div key={index} className="pb-1.5">
+                                   {formatDate(startDate)} - {formatDate(endDate)}
+                                 </div>
+                               );
+                             })}
+                           </td>
+                         </>
+                       )}
 
                       <td className="pr-3 pl-1 py-3 whitespace-nowrap">
                         {item?.leave_type.map((type, index) => (

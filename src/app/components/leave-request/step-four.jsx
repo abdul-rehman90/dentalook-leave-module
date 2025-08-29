@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "../../utils/AuthContext";
 import useStepThree from "./use-stepthree.hook";
 import blueLoader from "../../../common/assets/icons/blue-loader.svg";
-
+import { format, parse } from 'date-fns';
 function StepFour({ setCurrentStep }) {
   const {
     allProvinces,
@@ -31,7 +31,7 @@ function StepFour({ setCurrentStep }) {
     setRegionalManagersId,
     coverageProviderList,
     setAllClinics,
-    getDataLoader
+    getDataLoader,
   } = useStepThree();
   const router = useRouter();
   const [docName, setDocName] = useState("");
@@ -121,11 +121,14 @@ function StepFour({ setCurrentStep }) {
   };
 
   return (
-
     <>
-      {
-        getDataLoader ?
-        <Image src={blueLoader} alt="" className='w-[70px] h-[70px] block m-auto' /> :
+      {getDataLoader ? (
+        <Image
+          src={blueLoader}
+          alt=""
+          className="w-[70px] h-[70px] block m-auto"
+        />
+      ) : (
         <>
           <div className="relative">
             <div className="">
@@ -211,38 +214,63 @@ function StepFour({ setCurrentStep }) {
                   <Heading title="Covering Provider Details" />
                 </div>
                 <div>
-                  
                   <table className="w-full border-collapse">
                     <thead className="border-b border-[#D9DADF]">
                       <tr>
-                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Leave Date</th>
-                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Leave Type</th>
-                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Coverage Needed</th>
-                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Covering Provider Name</th>
-                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Coverage Type</th>
-                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">Coverage Found By</th>
+                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">
+                          Leave Date
+                        </th>
+                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">
+                          Leave Type
+                        </th>
+                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">
+                          Coverage Needed
+                        </th>
+                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">
+                          Covering Provider Name
+                        </th>
+                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">
+                          Coverage Type
+                        </th>
+                        <th className="text-left p-1 text-[11px] font-bold text-[#373940]">
+                          Coverage Found By
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
                       {rows?.map((row, index) => (
                         <tr
-                    key={index}
-                    className={`${
-                      index !== rows.length - 1
-                        ? 'border-b border-[#E6EAEE]'
-                        : ''
-                    } hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200 hover:z-10`}
-                  >
+                          key={index}
+                          className={`${
+                            index !== rows.length - 1
+                              ? "border-b border-[#E6EAEE]"
+                              : ""
+                          } hover:shadow-[0_2px_4px_0_rgba(60,64,67,0.1),0_2px_6px_2px_rgba(60,64,67,0.15)] hover:transition-all hover:duration-200 hover:z-10`}
+                        >
                           {/* Leave Date */}
                           <td className="p-1">
                             {row.entry_type?.includes("date range") ? (
                               <DatePicker
+                                
+                              title={
+                                    row.start_date && row.end_date
+                                      ? `${format(new Date(row.start_date + "T00:00:00"), "MMM-dd-yyyy")} - ${format(new Date(row.end_date + "T00:00:00"),
+                                          "MMM-dd-yyyy"
+                                        )}`
+                                      : row.start_date
+                                      ? format(new Date(row.start_date + "T00:00:00"), "MMM-dd-yyyy")
+                                      : ""
+                                  }
                                 selectsRange
                                 startDate={
-                                  row.start_date ? new Date(row.start_date + "T00:00:00") : null
+                                  row.start_date
+                                    ? new Date(row.start_date + "T00:00:00")
+                                    : null
                                 }
                                 endDate={
-                                  row.end_date ? new Date(row.end_date + "T00:00:00") : null
+                                  row.end_date
+                                    ? new Date(row.end_date + "T00:00:00")
+                                    : null
                                 }
                                 minDate={new Date()}
                                 showMonthDropdown
@@ -256,7 +284,9 @@ function StepFour({ setCurrentStep }) {
                               <DatePicker
                                 disabled
                                 selected={
-                                  row.leave_date ? new Date(row.leave_date + "T00:00:00") : null
+                                  row.leave_date
+                                    ? new Date(row.leave_date + "T00:00:00")
+                                    : null
                                 }
                                 minDate={new Date()}
                                 showMonthDropdown
@@ -266,7 +296,9 @@ function StepFour({ setCurrentStep }) {
                                 className="py-[8px] bg-white text-[#000] disabled:cursor-not-allowed w-full px-4 block placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                                 name="leave_date"
                                 onChange={(date) => {
-                                  const formatted = date ? format(date, "yyyy-MM-dd") : "";
+                                  const formatted = date
+                                    ? format(date, "yyyy-MM-dd")
+                                    : "";
                                   handleChange(index, "leave_date", formatted);
                                 }}
                               />
@@ -282,7 +314,9 @@ function StepFour({ setCurrentStep }) {
                               ]}
                               placeholder="Select Leave Type"
                               value={row.leave_type}
-                              onChange={(value) => handleChange(index, "leave_type", value)}
+                              onChange={(value) =>
+                                handleChange(index, "leave_type", value)
+                              }
                               labelKey="name"
                               valueKey="value"
                               disabled={step === "4"}
@@ -305,7 +339,9 @@ function StepFour({ setCurrentStep }) {
                                   ? "no"
                                   : row.coverage_needed
                               }
-                              onChange={(value) => handleChange(index, "coverage_needed", value)}
+                              onChange={(value) =>
+                                handleChange(index, "coverage_needed", value)
+                              }
                               labelKey="name"
                               valueKey="value"
                               disabled={step === "4"}
@@ -319,7 +355,8 @@ function StepFour({ setCurrentStep }) {
                               placeholder="Enter Coverage"
                               name="coverage_provider"
                               value={
-                                row.coverage_needed === false || row.coverage_needed === "no"
+                                row.coverage_needed === false ||
+                                row.coverage_needed === "no"
                                   ? null
                                   : typeof row.coverage_provider === "object" &&
                                     row.coverage_provider !== null
@@ -346,10 +383,14 @@ function StepFour({ setCurrentStep }) {
                                   ? row.coverage_provider.provider_coverage
                                   : row.coverage_provider
                               }
-                              onChange={(value) => handleChange(index, "coverage_type", value)}
+                              onChange={(value) =>
+                                handleChange(index, "coverage_type", value)
+                              }
                               labelKey="name"
                               valueKey="value"
-                              disabled={row.coverage_needed === "no" || step === "4"}
+                              disabled={
+                                row.coverage_needed === "no" || step === "4"
+                              }
                               className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
                             />
                           </td>
@@ -361,7 +402,11 @@ function StepFour({ setCurrentStep }) {
                               name="coverage_found_by"
                               value={userData?.name}
                               onChange={(e) =>
-                                handleChange(index, "coverage_found_by", e.target.value)
+                                handleChange(
+                                  index,
+                                  "coverage_found_by",
+                                  e.target.value
+                                )
                               }
                               disabled
                               className="disabled:cursor-not-allowed disabled:opacity-[0.8]"
@@ -371,7 +416,6 @@ function StepFour({ setCurrentStep }) {
                       ))}
                     </tbody>
                   </table>
-
                 </div>
               </div>
             </div>
@@ -396,9 +440,8 @@ function StepFour({ setCurrentStep }) {
             />
           </div>
         </>
-      }
+      )}
     </>
-
   );
 }
 

@@ -217,7 +217,7 @@ function ViewRequest() {
                   selectsRange={true}
                   startDate={startDate}
                   endDate={endDate}
-                  dateFormat="yyyy-MM-dd"
+                  dateFormat="MMM-dd-yyyy"
                   onChange={(update) => {
                     setDateRange(update);
                     handleDateChange(update);

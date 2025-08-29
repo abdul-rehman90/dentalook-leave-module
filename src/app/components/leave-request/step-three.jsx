@@ -503,6 +503,15 @@ function StepThree({ onNext }) {
                               </td>
                               <td className="p-1">
                                 <DatePicker
+                                  title={
+                                    isRange
+                                      ? `${row.start_date ? format(parseLocalDate(row.start_date), "MMM-dd-yyyy") : ""}${
+                                          row.end_date ? ` - ${format(parseLocalDate(row.end_date), "MMM-dd-yyyy")}` : ""
+                                        }`
+                                      : row.leave_date
+                                      ? format(parseLocalDate(row.leave_date), "MMM-dd-yyyy")
+                                      : ""
+                                  }
                                   disabled
                                   name="leave_date"
                                   minDate={new Date()}
