@@ -157,7 +157,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                                 showMonthDropdown
                                 showYearDropdown
                                 dropdownMode="select"
-                                dateFormat="yyyy-MM-dd"
+                                dateFormat="MMM-dd-yyyy"
                                 isClearable={false}
                                 className="w-full rounded-[8px] bg-white text-[#000] border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none disabled:opacity-[0.8] disabled:cursor-not-allowed"
                               />
@@ -170,7 +170,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                                 showMonthDropdown
                                 showYearDropdown
                                 dropdownMode="select"
-                                dateFormat="yyyy-MM-dd"
+                                dateFormat="MMM-dd-yyyy"
                                 className="py-[8px] w-full px-4 bg-white text-[#000] disabled:opacity-[0.8] disabled:cursor-not-allowed placeholder:text-[#1f1f1fa9] focus:outline-0 text-sm rounded-[8px] border border-[#D9DADF]"
                                 name="leave_date"
                                 placeholderText="Leave Date"

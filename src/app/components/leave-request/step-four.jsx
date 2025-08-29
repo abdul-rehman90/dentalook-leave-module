@@ -248,7 +248,7 @@ function StepFour({ setCurrentStep }) {
                                 showMonthDropdown
                                 showYearDropdown
                                 dropdownMode="select"
-                                dateFormat="yyyy-MM-dd"
+                                dateFormat="MMM-dd-yyyy"
                                 isClearable={false}
                                 className="w-full flex rounded-[8px] bg-white text-[#000] items-center justify-between border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
                               />

@@ -569,6 +569,7 @@ function StepOne({ onSubmit, onNext }) {
           monthsShown={dateSelectionMode === "individual" ? null : 2}
           minDate={new Date()}
           dropdownMode="select"
+          dateFormat="MMM-dd-yyyy"
           onChange={handleDateChange2}
         />
 
@@ -1154,7 +1155,7 @@ function StepOne({ onSubmit, onNext }) {
                               selectsRange={isRange}
                               showYearDropdown
                               showMonthDropdown
-                              dateFormat="yyyy-MM-dd"
+                              dateFormat="MMM-dd-yyyy"
                               endDate={isRange ? parseLocalDate(row.end_date) : null}
                               startDate={
                                 isRange ? parseLocalDate(row.leave_date) : null

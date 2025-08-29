@@ -279,7 +279,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
                         ))} */}
                       </td>
                       <td className="px-3 text-xs font-normal text-[#475467]">
-                        {item?.coverage_needed.map((needed, index) => (
+                        {
+                        (item?.status === 'decline' || item?.status === 'pending') ? null :
+                        item?.coverage_needed.map((needed, index) => (
                           <div
                             key={index}
                             className="flex items-center gap-1 justify-between w-full pb-1.5"
@@ -304,7 +306,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
 
 
                       <td className="pr-3 pl-1 text-xs font-normal text-[#475467]">
-                        {item?.reason?.map((detail, index) => {
+                        {
+                        (item?.status === 'decline' || item?.status === 'pending') ? null :
+                        item?.reason?.map((detail, index) => {
                           const status = item?.status?.[index];
                           if (status === "pending") return null;
                           if (item.coverage_needed?.[index] === false) {
@@ -325,7 +329,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                           ) {
                             return (
                               <div key={index} className="whitespace-nowrap pb-1.5">
-                                <span className="w-2 h-2 inline-block rounded-full  mr-1 bg-green-600 " />
+                                <span className="w-2 h-2 inline-block rounded-full  mr-1 bg-red-600 " />
                                 Looking for Coverage
                               </div>
                             );
@@ -340,7 +344,9 @@ export default function LeaveTable({ getReqData, isLoading }) {
                       </td>
 
                       <td className="pr-3 pl-1 flex flex-col items-start py-3 text-xs font-normal text-[#475467]">
-                        {item?.coverage_provider?.map((provider, index) => {
+                        {
+                        (item?.status === 'decline' || item?.status === 'pending') ? null :
+                        item?.coverage_provider?.map((provider, index) => {
                           const status = item?.status?.[index];
                           if (status === "pending") return null;
                           let label = provider;
@@ -353,7 +359,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             (!provider || provider === "")
                           ) {
                             label = "Looking for Coverage";
-                            color = " bg-green-600";
+                            color = "bg-red-600";
                           }
                           return (
                             <div key={index} className="flex items-center pb-1.5" >
