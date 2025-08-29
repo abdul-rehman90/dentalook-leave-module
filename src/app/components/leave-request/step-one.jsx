@@ -406,6 +406,7 @@ function StepOne({ onSubmit, onNext }) {
         // Prevent duplicate ranges inside modal list
         if (multiRanges.some((r) => r.start === start && r.end === end)) {
           toast.error("This range is already selected.");
+          setRangeDates({ start: "", end: "" });
           return;
         }
         
@@ -422,6 +423,7 @@ function StepOne({ onSubmit, onNext }) {
         });
         if (overlappingMultiRange) {
           toast.error("This range overlaps with an already selected range.");
+          setRangeDates({ start: "", end: "" });
           return;
         }
         
@@ -438,6 +440,7 @@ function StepOne({ onSubmit, onNext }) {
         );
         if (duplicateExistingRange) {
           toast.error(`Range ${startYMD} - ${endYMD} is already added.`);
+          setRangeDates({ start: "", end: "" });
           return;
         }
         
@@ -456,6 +459,7 @@ function StepOne({ onSubmit, onNext }) {
         });
         if (overlappingExistingRange) {
           toast.error("This range overlaps with an already added range.");
+          setRangeDates({ start: "", end: "" });
           return;
         }
         
@@ -470,6 +474,7 @@ function StepOne({ onSubmit, onNext }) {
           toast.error(
             `Some dates in range ${startYMD} - ${endYMD} are already added as single leave.`
           );
+          setRangeDates({ start: "", end: "" });
           return;
         }
         
@@ -485,6 +490,7 @@ function StepOne({ onSubmit, onNext }) {
           toast.error(
             `Some selected individual dates fall within this range ${startYMD} - ${endYMD}.`
           );
+          setRangeDates({ start: "", end: "" });
           return;
         }
         

@@ -513,7 +513,7 @@ function StepThree({ onNext }) {
                                     isRange ? parseLocalDate(row.end_date) : null
                                   }
                                   startDate={
-                                    isRange ? parseLocalDate(row.leave_date) : null
+                                    isRange ? parseLocalDate(row.start_date) : null
                                   }
                                   selected={
                                     !isRange
@@ -537,7 +537,7 @@ function StepThree({ onNext }) {
                                       const [start, end] = date;
                                       handleChange(
                                         index,
-                                        'leave_date',
+                                        'start_date',
                                         start ? format(date, 'MMM-dd-yyyy') : ''
                                       );
                                       handleChange(

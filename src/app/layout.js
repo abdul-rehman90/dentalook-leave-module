@@ -4,6 +4,7 @@ import Sidebar from "./components/sidebar";
 import Header from "./components/header";
 import toast, { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './utils/AuthContext';
+import ClientCleanup from './components/ClientCleanup';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({ children }) {
         reverseOrder={false}
       />
         <div className='flex min-h-screen relative'>
+          <ClientCleanup />
           <Sidebar />
           <div className='flex-1 max-w-full w-[83%]'>
             <Header />

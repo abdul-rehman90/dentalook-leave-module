@@ -146,6 +146,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                             {day.entry_type?.includes("date range") ? (
                               <DatePicker
                                 selectsRange
+                                disabled
                                 startDate={
                                   day.start_date ? new Date(day.start_date + "T00:00:00") : null
                                 }
@@ -158,7 +159,7 @@ function StepTwo({ onPrev, onNext, setCurrentStep }) {
                                 dropdownMode="select"
                                 dateFormat="yyyy-MM-dd"
                                 isClearable={false}
-                                className="w-full rounded-[8px] bg-white text-[#000] border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none"
+                                className="w-full rounded-[8px] bg-white text-[#000] border border-[#D9DADF] px-4 py-2 text-sm font-medium focus:outline-none disabled:opacity-[0.8] disabled:cursor-not-allowed"
                               />
                             ) : (
                               <DatePicker
