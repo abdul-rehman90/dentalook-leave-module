@@ -11,7 +11,7 @@ import Image from "next/image";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import toast from "react-hot-toast";
-import { format, set } from "date-fns";
+import { format, set, parse } from "date-fns";
 import { useRouter } from "next/navigation";
 import axiosInstance from "../../../utils/axios-instance";
 
@@ -91,6 +91,31 @@ function StepOne({ onSubmit, onNext }) {
 
       return updated;
     });
+  };
+
+  // Parse a date string into a local Date (avoids timezone shifting)
+  const parseLocalDate = (value) => {
+    if (!value) return null;
+    if (value instanceof Date) return value;
+    if (typeof value === "string") {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        const [y, m, d] = value.split("-").map(Number);
+        return new Date(y, m - 1, d);
+      }
+      try {
+        return parse(value, "MMM-dd-yyyy", new Date());
+      } catch (e) {
+        return new Date(value);
+      }
+    }
+    return new Date(value);
+  };
+
+  // Ensure payload gets exact 'yyyy-MM-dd' string
+  const toYMD = (val) => {
+    if (!val) return "";
+    if (typeof val === "string") return val;
+    return format(val, "yyyy-MM-dd");
   };
 
   const handleAddRow = (newType) => {
@@ -195,8 +220,8 @@ function StepOne({ onSubmit, onNext }) {
           const { leave_date, ...rest } = row;
           return {
             ...rest,
-            start_date: format(row.leave_date, "yyyy-MM-dd"),
-            end_date: format(row.end_date, "yyyy-MM-dd"),
+            start_date: toYMD(row.leave_date),
+            end_date: toYMD(row.end_date),
             entry_type: "date range",
           };
         }
@@ -205,7 +230,7 @@ function StepOne({ onSubmit, onNext }) {
           const { end_date, ...rest } = row;
           return {
             ...rest,
-            leave_date: format(row.leave_date, "yyyy-MM-dd"),
+            leave_date: toYMD(row.leave_date),
             entry_type: "single",
           };
         }
@@ -213,7 +238,7 @@ function StepOne({ onSubmit, onNext }) {
           const { end_date, ...rest } = row;
           return {
             ...rest,
-            leave_date: format(row.leave_date, "yyyy-MM-dd"),
+            leave_date: toYMD(row.leave_date),
             entry_type: "single",
           };
         }
@@ -275,7 +300,7 @@ function StepOne({ onSubmit, onNext }) {
       provider: providerId,
       regional_manager: regionalManagersId,
       leave_requests: rows?.map((row) => ({
-        leave_date: format(row.leave_date, "yyyy-MM-dd"),
+        leave_date: toYMD(row.leave_date),
         leave_type: row.leave_type,
         reason: row.reason,
       })),
@@ -1124,14 +1149,14 @@ function StepOne({ onSubmit, onNext }) {
                               showYearDropdown
                               showMonthDropdown
                               dateFormat="yyyy-MM-dd"
-                              endDate={isRange ? new Date(row.end_date) : null}
+                              endDate={isRange ? parseLocalDate(row.end_date) : null}
                               startDate={
-                                isRange ? new Date(row.leave_date) : null
+                                isRange ? parseLocalDate(row.leave_date) : null
                               }
                               selected={
                                 !isRange
                                   ? row.leave_date
-                                    ? new Date(row.leave_date)
+                                    ? parseLocalDate(row.leave_date)
                                     : null
                                   : null
                               }
@@ -1139,7 +1164,7 @@ function StepOne({ onSubmit, onNext }) {
                               onChange={(date) => {
                                 if (!isRange) {
                                   const formatted = date
-                                    ? format(date, "MMM-dd-yyyy")
+                                    ? format(date, "yyyy-MM-dd")
                                     : "";
                                   handleChange(index, "leave_date", formatted);
                                 } else {
@@ -1147,12 +1172,12 @@ function StepOne({ onSubmit, onNext }) {
                                   handleChange(
                                     index,
                                     "leave_date",
-                                    start ? format(date, "yyyy-MM-dd") : ""
+                                    start ? format(start, "yyyy-MM-dd") : ""
                                   );
                                   handleChange(
                                     index,
                                     "end_date",
-                                    end ? format(date, "MMM-dd-yyyy") : ""
+                                    end ? format(end, "yyyy-MM-dd") : ""
                                   );
                                 }
                               }}

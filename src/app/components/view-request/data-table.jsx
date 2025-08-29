@@ -364,8 +364,11 @@ export default function LeaveTable({ getReqData, isLoading }) {
                               )}
                               
                               <span>{status === "decline" ? "" : label}</span>
-                              {(item.coverage_needed?.[index] === true && (item.coverage_provider?.[index] !== null ||
-                                item.coverage_provider?.[index] !== undefined)) && (
+                              {((item.coverage_needed?.[index] === true || item.coverage_needed?.[index] === false) && (item.coverage_provider?.[index] === null ||
+                                item.coverage_provider?.[index] === undefined)) ? (
+                                  null
+
+                                ): 
                                   <button
                                     type="button"
                                     className="cursor-pointer ml-2"
@@ -389,7 +392,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                                     
                                     <FaEye className="text-[16px]" />
                                   </button>
-                                )}
+                                }
                             </div>
                           );
                         })}

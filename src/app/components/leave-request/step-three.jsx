@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../utils/AuthContext';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import blueLoader from "../../../common/assets/icons/blue-loader.svg";
 import axiosInstance from '../../../utils/axios-instance';
 
@@ -75,6 +75,25 @@ function StepThree({ onNext }) {
     lastName: '',
     city: ''
   });
+
+  // Parse a date string into a local Date (avoids timezone shifting)
+  const parseLocalDate = (value) => {
+    if (!value) return null;
+    if (value instanceof Date) return value;
+    if (typeof value === 'string') {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+        const [y, m, d] = value.split('-').map(Number);
+        return new Date(y, m - 1, d);
+      }
+      try {
+        return parse(value, 'MMM-dd-yyyy', new Date());
+      } catch (e) {
+        // Fallback to native Date parsing
+        return new Date(value);
+      }
+    }
+    return new Date(value);
+  };
 
   const handleProviderFormChange = (e) => {
     const { name, value } = e.target;
@@ -202,26 +221,26 @@ function StepThree({ onNext }) {
   const handleChange = (index, field, value) => {
     const newRows = [...rows];
 
-    if (selectedRows.length === rows.length) {
-      newRows.forEach((row) => {
-        row[field] = value;
-        if (field === 'coverage_needed') {
-          const normalized = value === true || value === 'yes' ? 'yes' : 'no';
-          row.coverage_needed = normalized;
-          if (normalized === 'no') {
-            row.coverage_provider = null;
-          }
-        }
-      });
-    } else {
-      newRows[index][field] = value;
+    // If the edited row is selected and there are selected rows,
+    // apply the change to all selected rows; otherwise apply only to this row
+    const shouldApplyToSelected =
+      selectedRows.length > 0 && selectedRows.includes(index);
+
+    const applyChange = (row) => {
+      row[field] = value;
       if (field === 'coverage_needed') {
         const normalized = value === true || value === 'yes' ? 'yes' : 'no';
-        newRows[index].coverage_needed = normalized;
+        row.coverage_needed = normalized;
         if (normalized === 'no') {
-          newRows[index].coverage_provider = null;
+          row.coverage_provider = null;
         }
       }
+    };
+
+    if (shouldApplyToSelected) {
+      selectedRows.forEach((idx) => applyChange(newRows[idx]));
+    } else {
+      applyChange(newRows[index]);
     }
 
     setRows(newRows);
@@ -491,15 +510,15 @@ function StepThree({ onNext }) {
                                   selectsRange={isRange}
                                   dateFormat="MMM-dd-yyyy"
                                   endDate={
-                                    isRange ? new Date(row.end_date) : null
+                                    isRange ? parseLocalDate(row.end_date) : null
                                   }
                                   startDate={
-                                    isRange ? new Date(row.leave_date) : null
+                                    isRange ? parseLocalDate(row.leave_date) : null
                                   }
                                   selected={
                                     !isRange
                                       ? row.leave_date
-                                        ? new Date(row.leave_date)
+                                        ? parseLocalDate(row.leave_date)
                                         : null
                                       : null
                                   }
