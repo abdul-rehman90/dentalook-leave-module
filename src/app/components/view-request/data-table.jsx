@@ -15,16 +15,18 @@ export default function LeaveTable({ getReqData, isLoading }) {
   const [modelData, setModelData] = useState({});
   const router = useRouter();
 
-     // Format date to MMM-dd-yyyy (e.g., Aug-24-2089)
-   const formatDate = (dateString) => {
-     if (!dateString) return "";
-     try {
-       const date = new Date(dateString);
-       return format(date, "MMM-dd-yyyy");
-     } catch (error) {
-       return dateString;
-     }
-   };
+  // Format date to MMM-dd-yyyy (e.g., Aug-24-2089)
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    try {
+      const [year, month, day] = dateString.split("-");
+      // Create date in local time without timezone shift
+      const date = new Date(Number(year), Number(month) - 1, Number(day));
+      return format(date, "MMM-dd-yyyy");
+    } catch (error) {
+      return dateString;
+    }
+  };
   useEffect(() => {
     if (getReqData?.length > 0) {
       
@@ -212,7 +214,7 @@ export default function LeaveTable({ getReqData, isLoading }) {
                             <div key={index} className="pb-1.5">{formatDate(date)}</div>
                           ))}
                         </td>
-                                             ) : (
+                            ) : (
                          <>
                            <td className="px-3 py-3 text-xs font-normal text-[#475467] whitespace-nowrap">
                              {item?.start_date?.map((startDate, index) => {

@@ -398,8 +398,8 @@ function StepOne({ onSubmit, onNext }) {
     } else {
       // Multiple range selection logic
       if (Array.isArray(date) && date[0] && date[1]) {
-        const start = format(date[0], "EEE, yyyy-MM-dd");
-        const end = format(date[1], "EEE, yyyy-MM-dd");
+        const start = format(date[0], "MMM-dd-yyyy");
+        const end = format(date[1], "MMM-dd-yyyy");
         const startYMD = format(date[0], "yyyy-MM-dd");
         const endYMD = format(date[1], "yyyy-MM-dd");
         
@@ -498,17 +498,28 @@ function StepOne({ onSubmit, onNext }) {
         setRangeDates({ start: "", end: "" }); // Reset picker for next range
       } else if (!rangeDates.start || rangeDates.end) {
         setRangeDates({
-          start: format(date[0], "EEE, yyyy-MM-dd"),
+          start: format(date[0], "MMM-dd-yyyy"),
           end: "",
         });
       } else {
         setRangeDates((prev) => ({
           ...prev,
-          end: format(date[1], "EEE, yyyy-MM-dd"),
+          end: format(date[1], "MMM-dd-yyyy"),
         }));
       }
     }
+  };  
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    try {
+      const [year, month, day] = dateString.split("-");
+      const date = new Date(Number(year), Number(month) - 1, Number(day));
+      return format(date, "MMM-dd-yyyy");
+    } catch (error) {
+      return dateString;
+    }
   };
+
 
   const renderModalContent = () => (
     <div
@@ -580,7 +591,7 @@ function StepOne({ onSubmit, onNext }) {
                 <input
                   readOnly
                   type="text"
-                  value={item.leave_date}
+                  value={formatDate(item.leave_date)}
                   placeholder="MMM-DD-YYYY"
                   className={`w-full py-2 px-4 border rounded-md text-sm ${
                     writeIndex === index
