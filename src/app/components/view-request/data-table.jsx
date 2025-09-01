@@ -478,8 +478,8 @@ export default function LeaveTable({ getReqData, isLoading }) {
               )}
               {modelData.reason.includes("ACE") && (
                 <div className="flex gap-3 justify-between">
-                  <strong>Name:</strong>
-                  <p>{modelData.name}</p>
+                  <strong>Province:</strong>
+                  <p>{modelData.province_name || ""}</p>
                 </div>
               )}
 
