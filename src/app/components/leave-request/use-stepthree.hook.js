@@ -136,18 +136,27 @@ export default function useStepThree() {
         try {
             let url = "api/v1/provider-list/";
             if (item) {
-                const providerType = getData?.provider_name?.user_type;
-                url += `?provider_title=${providerType}&date=${item}`;
+            let providerType = getData?.provider_name?.user_type;
+
+            if (providerType === "RDH" || providerType === "DDS") {
+                providerType = "RDH,DDS";
+            } else if (providerType === "RDT") {
+                providerType = "RDT";
             }
+
+            url += `?provider_title=${providerType}&date=${item}`;
+            }
+
             const response = await axiosInstance.get(url);
+
             if (response.status === 200) {
-                setCoverageProviderList(response.data);
+            setCoverageProviderList(response.data);
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error("Error fetching coverage providers:", error);
         }
     };
+
 
     return {
         allProvinces,
