@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from "js-cookie";
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import axiosInstance from '../../../utils/axios-instance';
 import { format } from "date-fns";
 
@@ -23,6 +23,7 @@ export default function useViewReq() {
     const [providerId, setProviderId] = useState('');
     const [leavePlanned, setLeavePlanned] = useState([]);
     const [leaveStatus, setLeaveStatus] = useState([]);
+    const [coverageNeeded, setCoverageNeeded] = useState(null);
 
     const [getReqData, setGetReqData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -111,6 +112,8 @@ export default function useViewReq() {
             if (provinceId) params.province_id = provinceId;
             if (regionalManagersId) params.regional_manager = regionalManagersId;
             if (docName) params.provider_title = docName;
+            if (coverageNeeded == true) params.coverage_needed = 'True';
+            if (coverageNeeded == false) params.coverage_needed = 'False';
             if (startDate && endDate) {
                 params.start_date = format(startDate, "yyyy-MM-dd");
                 params.end_date = format(endDate, "yyyy-MM-dd");
@@ -131,7 +134,7 @@ export default function useViewReq() {
         if (token) {
             getViewRequests();
         }
-    }, [token, token, docName, providerId, clinicId, startDate, endDate, provinceId, regionalManagersId, leavePlanned, leaveStatus]);
+    }, [token, token, docName, providerId, clinicId, startDate, endDate, provinceId, regionalManagersId, leavePlanned, leaveStatus, coverageNeeded]);
 
     const [userData, setUserData] = useState({});
     const userDetail = async () => {
@@ -359,6 +362,7 @@ export default function useViewReq() {
         userData,
         leavePlanned, setLeavePlanned,
         leaveStatus, setLeaveStatus,
+        coverageNeeded, setCoverageNeeded,
         handleProvice,
         handleChangeRM,
         clinics,

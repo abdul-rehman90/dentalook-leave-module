@@ -42,6 +42,8 @@ function ViewRequest() {
     setLeavePlanned,
     leaveStatus,
     setLeaveStatus,
+    coverageNeeded,
+    setCoverageNeeded,
     handleProvice,
     handleChangeRM,
     clinics,
@@ -61,6 +63,7 @@ function ViewRequest() {
       setProviderId("");
       setLeaveStatus("");
       setLeavePlanned("");
+      setCoverageNeeded(null);
       setDateRange([null, null]);
     } else if (role === "RM") {
       setClinicId("");
@@ -69,12 +72,14 @@ function ViewRequest() {
       setProviderId("");
       setLeaveStatus("");
       setLeavePlanned("");
+      setCoverageNeeded(null);
       setDateRange([null, null]);
     } else if (role === "PM") {
       setDocName("");
       setProviderId("");
       setLeaveStatus("");
       setLeavePlanned("");
+      setCoverageNeeded(null);
       setDateRange([null, null]);
     }
     setTimeout(() => {
@@ -208,7 +213,7 @@ function ViewRequest() {
                 />
             </div>
 
-            <div className="grid md:grid-cols-3 grid-cols-1 gap-2">
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-2">
               <div className="request_Datepicker">
                 <label className="text-[13px] mb-[5px] block font-semibold text-[#373940]">
                   Leave Request Date
@@ -253,6 +258,20 @@ function ViewRequest() {
                   valueKey="value"
                   value={leaveStatus}
                   onChange={(value) => setLeaveStatus(value)}
+                />
+              </div>
+              <div>
+                <CustomSelector
+                  label="Coverage Needed"
+                  options={[
+                    { name: "Yes", value: true },
+                    { name: "No", value: false }
+                  ]}
+                  placeholder="Select Coverage Needed"
+                  labelKey="name"
+                  valueKey="value"
+                  value={coverageNeeded}
+                  onChange={(value) => setCoverageNeeded(value)}
                 />
               </div>
             </div>
