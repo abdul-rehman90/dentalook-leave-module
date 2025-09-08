@@ -67,7 +67,7 @@ const Login = () => {
                 className="bg-white shadow-xl rounded-2xl p-6 w-full max-w-sm"
             >
                 <Image src={logo} alt="" width={150} height={150} className='mx-auto' />
-                <h2 className="text-2xl font-bold text-center mb-5 mt-5">Login</h2>
+                <h2 className="text-xl font-bold text-center mb-5 mt-5">Provider Leave Request App Login</h2>
 
                 {/* Email */}
                 <div className="mb-4">
