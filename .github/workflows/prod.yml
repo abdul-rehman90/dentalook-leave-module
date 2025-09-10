@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: [self-hosted, dentalook-prod-eod-runner]
+    runs-on: [self-hosted, dental-prod-leave-runner]
 
     steps:
     
