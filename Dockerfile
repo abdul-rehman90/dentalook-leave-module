@@ -32,7 +32,7 @@ COPY --from=builder /app/public ./public
 
 # Copy service-entry.sh
 COPY service-entry.sh /app/service-entry.sh
-RUN chmod +x /app/service-entry.sh
+RUN chmod 755 /app/service-entry.sh
 
 ENV NODE_ENV=production
 ENV PORT=3000
