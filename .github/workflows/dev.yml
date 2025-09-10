@@ -10,6 +10,10 @@ jobs:
     runs-on: [self-hosted, dentalook-frontend-runner]
 
     steps:
+      - name: Fix workspace permissions
+        run: |
+          sudo chown -R $USER:$USER /home/azureuser/frontend-runner/actions-runner/_work
+    
       - name: Checkout code
         uses: actions/checkout@v4
 
